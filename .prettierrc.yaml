@@ -1,0 +1,16 @@
+tabWidth: 4
+useTabs: false
+semi: true
+singleQuote: true
+trailingComma: 'es5'
+bracketSpacing: true
+printWidth: 120
+endOfLine: 'lf'
+htmlWhitespaceSensitivity: 'ignore'
+css:
+    singleQuote: true
+    trailingComma: 'none'
+svelteSortOrder: 'scripts-markup-styles'
+bracketSameLine: false
+jsxBracketSameLine: false
+arrowParens: always
