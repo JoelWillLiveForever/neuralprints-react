@@ -1,3 +1,26 @@
+# Зависимости
+node_modules/
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Файлы сборки
+dist/
+build/
+
+# Скомпилированные файлы CSS (если используешь SCSS)
+*.css
+*.css.map
+
+# Скомпилированные файлы JS (если используешь TypeScript)
+*.js
+*.js.map
+
+# IDE/OS файлы
+.vscode/
+!.vscode/extensions.json
+.DS_Store
+
 # Logs
 logs
 *.log
@@ -6,19 +29,3 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
