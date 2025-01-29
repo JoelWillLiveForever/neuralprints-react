@@ -1,26 +1,30 @@
-import { Link } from 'react-router-dom';
-import { Nav } from 'react-bootstrap';
-import { MenuProps } from './MenuProps';
+import { NavLink } from 'react-router-dom';
 
-const Menu = ({ width = '7vw', height = '100%' }: MenuProps) => {
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import './Menu.scss';
+
+const Menu = () => {
+    const setActive = ({ isActive }: { isActive: boolean }) =>
+        isActive ? "nav-item active-page" : "nav-item";
+
     return (
-        <Nav className="d-flex flex-column bg-dark text-white p-3" style={{ width, height }}>
-            <Nav.Link as={Link} to="/" className="text-white py-2 px-3 rounded">
-                📂 Датасет
-            </Nav.Link>
-            <Nav.Link as={Link} to="/training" className="text-white py-2 px-3 rounded">
-                📈 Обучение
-            </Nav.Link>
-            <Nav.Link as={Link} to="/evaluation" className="text-white py-2 px-3 rounded">
-                📊 Оценка модели
-            </Nav.Link>
-            <Nav.Link as={Link} to="/settings" className="text-white py-2 px-3 rounded">
-                ⚙️ Настройки
-            </Nav.Link>
-            <Nav.Link as={Link} to="/about" className="text-white py-2 px-3 rounded">
-                ℹ️ О программе
-            </Nav.Link>
-        </Nav>
+        <nav className="nav-container">
+            <NavLink to="/" className={setActive} id='menu_button_dataset'>
+                <i className="bi bi-file-earmark-text-fill" id='menu_button_dataset__icon'></i>
+            </NavLink>
+            <NavLink to="/training" className={setActive} id='menu_button_training'>
+                <i className="bi bi-mortarboard-fill" id='menu_button_training__icon'></i>
+            </NavLink>
+            <NavLink to="/evaluation" className={setActive} id='menu_button_evaluation'>
+                <i className="bi bi-clipboard-check-fill" id='menu_button_evaluation__icon'></i>
+            </NavLink>
+            <NavLink to="/settings" className={setActive} id='menu_button_settings'>
+                <i className="bi bi-gear-fill" id='menu_button_settings__icon'></i>
+            </NavLink>
+            <NavLink to="/about" className={setActive} id='menu_button_about'>
+                <i className="bi bi-info-circle-fill" id='menu_button_about__icon'></i>
+            </NavLink>
+        </nav>
     );
 };
 

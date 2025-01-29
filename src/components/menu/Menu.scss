@@ -1,0 +1,92 @@
+.nav-container {
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    bottom: 0;
+    
+    padding: 20px;
+    padding-left: 20px !important;
+
+    background-color: #121212;
+    color: #ffffff;
+
+    .nav-item {
+        background-color: none;
+        border-radius: 16%;
+
+        padding: 10px 30px;
+        margin-bottom: 20px;
+
+        font-size: 32px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        &#menu_button_dataset {
+            color: #EF9A9A;
+
+            &:hover {
+                background-color: #EF9A9A14;
+            }
+
+            &.active-page {
+                background-color: #EF9A9A29;
+            }
+        }
+
+        &#menu_button_training {
+            color: #FFF59D;
+
+            &:hover {
+                background-color: #FFF59D14;
+            }
+
+            &.active-page {
+                background-color: #FFF59D29;
+            }
+        }
+
+        &#menu_button_evaluation {
+            color: #A5D6A7;
+
+            &:hover {
+                background-color: #A5D6A714;
+            }
+
+            &.active-page {
+                background-color: #A5D6A729;
+            }
+        }
+
+        &#menu_button_settings {
+            color: #90CAF9;
+
+            &:hover {
+                background-color: #90CAF914;
+            }
+
+            &.active-page {
+                background-color: #90CAF929;
+            }
+        }
+
+        &#menu_button_about {
+            color: #B39DDB;
+
+            &:hover {
+                background-color: #B39DDB14;
+            }
+
+            &.active-page {
+                background-color: #B39DDB29;
+            }
+        }
+    }
+}
