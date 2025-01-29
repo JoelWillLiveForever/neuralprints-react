@@ -13,8 +13,8 @@ build/
 *.css.map
 
 # Скомпилированные файлы JS (если используешь TypeScript)
-*.js
-*.js.map
+# *.js
+# *.js.map
 
 # IDE/OS файлы
 .vscode/
