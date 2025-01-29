@@ -1,0 +1,13 @@
+.app-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    overflow: hidden;
+    width: 100vw;
+}
+
+.page-container {
+    padding: 10px;
+
+    overflow: auto;
+}

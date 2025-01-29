@@ -1,9 +1,9 @@
 // import
 
-const EvaluationPage = () => {
+const PageEvaluation = () => {
     return(
         <h1>Evaluation Page</h1>
     )
 }
 
-export default EvaluationPage
+export default PageEvaluation

@@ -76,7 +76,7 @@ const initialEdges: Edge[] = [
   },
 ];
 
-const TrainingPage = () => {
+const PageTraining = () => {
   const [colorMode, setColorMode] = useState<ColorMode>('dark');
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -117,4 +117,4 @@ const TrainingPage = () => {
   )
 }
 
-export default TrainingPage;
+export default PageTraining;

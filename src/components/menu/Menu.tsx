@@ -1,7 +1,8 @@
 import { NavLink } from 'react-router-dom';
+// import { forwardRef } from 'react';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import './Menu.scss';
+import './menu.scss';
 
 const Menu = () => {
     const setActive = ({ isActive }: { isActive: boolean }) =>
