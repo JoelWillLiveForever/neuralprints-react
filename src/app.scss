@@ -1,13 +1,20 @@
 .app-container {
-    display: grid;
-    grid-template-columns: auto 1fr;
+    // display: grid;
+    // grid-template-columns: auto 1fr;
 
-    overflow: hidden;
-    width: 100vw;
+    // overflow: hidden;
+    width: 100%;
 }
 
 .page-container {
-    padding: 10px;
+    margin-left: 140px;
+    padding: 16px;
 
-    overflow: auto;
+    overflow-y: auto;
+    height: 100vh;
+
+    box-sizing: border-box;
+
+    // max-width: calc(100% - 140px);
+    min-width: calc(100vw - 140px);
 }
