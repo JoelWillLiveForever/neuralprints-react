@@ -380,23 +380,23 @@ const PageDataset: React.FC = () => {
                     <DropdownButton
                         className="main-controls__dataset-dropdown-button"
                         variant="outline-primary"
-                        title="Управление датасетом"
+                        title="Dataset management"
                     >
-                        <Dropdown.Item onClick={action_dataset_upload_handler}>Загрузить</Dropdown.Item>
+                        <Dropdown.Item onClick={action_dataset_upload_handler}>Upload</Dropdown.Item>
                         <Dropdown.Item onClick={action_dataset_save_handler} disabled={!dataset.length}>
-                            Сохранить
+                            Save
                         </Dropdown.Item>
                         <Dropdown.Divider />
                         <Dropdown.Item onClick={action_dataset_clear_handler} disabled={!dataset.length}>
-                            Очистить
+                            Clear
                         </Dropdown.Item>
                     </DropdownButton>
                     <Form.Control
                         className="main-controls__dataset-filename-field"
                         type="text"
                         readOnly
-                        placeholder="Имя файла датасета"
-                        aria-label="Имя файла датасета"
+                        placeholder="The file name of your dataset will be displayed here."
+                        aria-label="The file name of your dataset will be displayed here."
                         value={dataset_file !== null ? dataset_file.name : ''}
                     />
                     <input
@@ -447,7 +447,7 @@ const PageDataset: React.FC = () => {
                 // <Alert className="table-block__info-message" variant="primary">
                 //     Загрузите датасет в *.CSV формате!
                 // </Alert>
-                <strong className="info-message">Загрузите датасет в *.CSV формате!</strong>
+                <strong className="info-message">Please, upload Your dataset in *.CSV file format!</strong>
             )}
 
             <div className="pagination-controls">
