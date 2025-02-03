@@ -18,3 +18,27 @@
     // max-width: calc(100% - 140px);
     min-width: calc(100vw - 140px);
 }
+
+.separator {
+    width: 1px;
+    height: 100%;
+
+    margin: 0 10px;
+
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+
+        top: 5px;
+        bottom: 5px;
+
+        left: 0;
+
+        width: 100%;
+
+        border-radius: 10px;
+        background-color: #9E9E9E;
+    }
+}

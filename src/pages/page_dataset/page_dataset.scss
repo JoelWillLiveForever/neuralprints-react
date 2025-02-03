@@ -39,6 +39,10 @@
             margin-left: 10px;
             width: 250px;
         }
+
+        #add_entry_button {
+            width: 250px;
+        }
     }
 
     .table-container {
@@ -88,43 +92,126 @@
             // thead {
             //     position: sticky;
             //     top: 0;
-            //     background: white;
+            //     // background: white;
             //     z-index: 1;
             // }
 
             // Стиль для строки при наведении
-            tbody tr {
+            tbody {
 
-                td {
-                    input {
-                        text-align: center;
-    
-                        background: transparent;
-                        border: transparent;
-    
-                        &:focus {
-                            background: #f0f3fc;
+                // стили для обычных строк
+                tr {
+                    td {
+                        vertical-align: middle;
+
+                        input {
+                            text-align: center;
+
+                            background: transparent;
+                            border: transparent;
+
+                            border: solid 2px transparent;
+
+                            &:focus {
+                                // background-color: rgba(255, 87, 34, 0.02);
+
+                                border: solid 2px rgb(255, 87, 34);
+                                box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.25); // Тень при фокусе
+                            }
+                        }
+
+                        .danger-action-button {
+                            width: 100%;
                         }
                     }
 
-                    .danger-action-button {
-                        width: 100%;
+                    // &:hover {
+                    //     // background-color: var(--bs-primary-bg-subtle); // Цвет фона при наведении
+                    //     background-color: transparent; // Цвет фона при наведении
+
+                    //     // outline: 2px solid #121212; // Чёрная обводка при наведении
+                    //     // outline-offset: -2px; // Чтобы обводка была внутри элемента/ Чёрная обводка при наведении
+
+                    //     cursor: pointer; // Изменение курсора на указатель
+                    // }
+
+                    // // Стиль для ячеек при наведении (опционально)
+                    // &:hover td {
+                    //     background-color: transparent; // Убедимся, что ячейки не переопределяют цвет строки
+                    // }
+                }
+
+                // tr:nth-child(odd) {
+                //     background-color: transparent !important;
+                // }
+
+                // tr:nth-child(even) {
+                //     background-color: red !important;
+                // }
+
+                // стиль для строки добавления
+                tr.adding-entry-row {
+                    // background-color: #ffccbc !important;
+
+                    &:hover {
+                        // background-color: #FFCCBC !important; // Цвет фона при наведении
+
+                        outline: 0px solid transparent;     // обводка при наведении
+                        outline-offset: 0px;                // Чтобы обводка была внутри элемента, обводка при наведении
+
+                        cursor: pointer; // Изменение курсора на указатель
+                    }
+
+                    td {
+                        background-color: inherit !important;
+                        
+                        vertical-align: middle;
+                        padding: 16px !important;
+
+                        input {
+                            background: white !important;
+
+                            font-weight: 700;
+                            color: black;
+
+                            text-align: center;
+
+                            border: solid 2px #FF5722;
+
+                            &:focus {
+                                border: solid 2px rgb(255, 87, 34);
+                                box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.25); // Тень при фокусе
+                            }
+                        }
+                    }
+
+                    .actions-buttons-container {
+                        background-color: white !important;
+
+                        display: flex;
+                        flex-direction: row;
+
+                        &:hover {
+                            background-color: white !important; // Цвет фона при наведении
+                        }
+
+                        #add_entry_save_button {
+                            width: 100%;
+                            height: auto;
+                        }
+
+                        #add_entry_cancel_button {
+                            min-width: max-content;
+                            height: auto;
+                        }
                     }
                 }
 
-                &:hover {
-                    background-color: var(--bs-primary-bg-subtle) !important; // Цвет фона при наведении
-                    
-                    outline: 2px solid #121212; // Чёрная обводка при наведении
-                    outline-offset: -2px;       // Чтобы обводка была внутри элемента/ Чёрная обводка при наведении
-
-                    cursor: pointer; // Изменение курсора на указатель
-                }
-
-                // Стиль для ячеек при наведении (опционально)
-                &:hover td {
-                    background-color: transparent; // Убедимся, что ячейки не переопределяют цвет строки
-                }
+                // tr.adding-entry-row {
+                //     &, &:nth-child(odd), &:nth-child(even) {
+                //         background-color: #FFFFFF !important;
+                //     }
+                // }
             }
         }
     }

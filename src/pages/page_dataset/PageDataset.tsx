@@ -26,6 +26,9 @@ const PageDataset: React.FC = () => {
     const [dataset_file, set_dataset_file] = useState<File | null>(null);
     const [current_part_of_dataset, set_current_part_of_dataset] = useState<string[][]>([]);
 
+    const [is_adding_entry, set_is_adding_entry] = useState(false);
+    const [new_entry, set_new_entry] = useState<string[]>([]);
+
     // Обновление текущих данных при изменении страницы или размера страницы
     useEffect(() => {
         const start = stored_current_page * stored_page_size; // начало диапазона
@@ -142,6 +145,29 @@ const PageDataset: React.FC = () => {
         set_dataset(new_dataset);
     };
 
+    const action_dataset_add_entry_handler = () => {
+        if (headers.length === 0) return;
+
+        // Генерация нового ID
+        const current_ids = dataset.map((row) => {
+            const id = parseInt(row[0], 10);
+            return isNaN(id) ? 0 : id;
+        });
+
+        let new_id = current_ids.length > 0 ? Math.max(...current_ids) + 1 : 1;
+
+        // Проверка уникальности
+        while (current_ids.includes(new_id)) {
+            new_id++;
+        }
+
+        // Создание пустой записи
+        const empty_entry = headers.map((_, i) => (i === 0 ? new_id.toString() : ''));
+
+        set_new_entry(empty_entry);
+        set_is_adding_entry(true);
+    };
+
     const get_total_pages = () => {
         return Math.ceil(dataset.length / stored_page_size);
     };
@@ -217,14 +243,23 @@ const PageDataset: React.FC = () => {
                         onChange={action_dataset_change_handler}
                     />
                 </InputGroup>
-                <Button variant="primary" id="normalize_button">
+                <Button variant="primary" id="normalize_button" disabled={dataset === null || dataset.length === 0}>
                     Normalize
+                </Button>
+                <div className="separator"></div>
+                <Button
+                    variant="outline-primary"
+                    id="add_entry_button"
+                    onClick={action_dataset_add_entry_handler}
+                    disabled={headers.length === 0}
+                >
+                    Add entry
                 </Button>
             </div>
 
             {dataset.length > 0 ? (
                 <div className="table-container">
-                    <Table className="table-container__dataset-table" striped bordered hover responsive>
+                    <Table className="table-container__dataset-table" bordered hover responsive>
                         <thead>
                             <tr>
                                 {headers.map((header, index) => (
@@ -234,8 +269,57 @@ const PageDataset: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
+                            {is_adding_entry && (
+                                <tr className="table-default adding-entry-row">
+                                    {headers.map((_header, index) => (
+                                        <td key={`new-${index}`}>
+                                            <Form.Control
+                                                type="text"
+                                                value={new_entry[index] || ''}
+                                                disabled={index === 0}
+                                                onChange={(e) => {
+                                                    const updated = [...new_entry];
+                                                    updated[index] = e.target.value;
+                                                    set_new_entry(updated);
+                                                }}
+                                            />
+                                        </td>
+                                    ))}
+                                    <td className='table-default actions-buttons-container'>
+                                        <Button
+                                            id='add_entry_save_button'
+                                            variant="outline-success"
+                                            onClick={() => {
+                                                if (new_entry.slice(1).some((field) => !field.trim())) {
+                                                    alert('Please fill in all fields below!');
+                                                    return;
+                                                }
+
+                                                set_dataset([...dataset, new_entry]);
+                                                set_is_adding_entry(false);
+
+                                                // Переход на последнюю страницу
+                                                const total = Math.ceil((dataset.length + 1) / stored_page_size);
+                                                set_pagination(total - 1, stored_page_size);
+                                            }}
+                                        >
+                                            <i className="bi bi-floppy2-fill me-2"></i>
+                                            Save
+                                        </Button>
+                                        <Button
+                                            id='add_entry_cancel_button'
+                                            variant="outline-danger"
+                                            className="ms-2"
+                                            onClick={() => set_is_adding_entry(false)}
+                                        >
+                                            <i className="bi bi-x-circle me-2"></i>
+                                            Cancel
+                                        </Button>
+                                    </td>
+                                </tr>
+                            )}
                             {current_part_of_dataset.map((row, row_index) => (
-                                <tr key={row_index}>
+                                <tr key={row_index} className='table-default'>
                                     {row.map((cell, cell_index) => (
                                         <td key={cell_index}>
                                             <Form.Control
@@ -257,7 +341,8 @@ const PageDataset: React.FC = () => {
                                             className="danger-action-button"
                                             onClick={() => action_dataset_delete_row_handler(row_index)}
                                         >
-                                            <i className="bi bi-trash-fill"></i>
+                                            <i className="bi bi-trash-fill me-2"></i>
+                                            Delete
                                         </Button>
                                     </td>
                                 </tr>
@@ -294,6 +379,10 @@ const PageDataset: React.FC = () => {
                         <option value={dataset.length}>All</option>
                     </Form.Select>
                 </div>
+
+                {/* <span>
+                    {dataset_file !== null ? dataset_file.name : 'Dataset file not uploaded'}
+                </span> */}
 
                 <Pagination className="pagination-controls__page-selector-block">
                     <Pagination.First

@@ -1,10 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.scss'
+
 import App from './App.tsx'
 
-// import Bootstrap
-import "bootstrap/dist/css/bootstrap.min.css";
+// styles
+import './styles/_custom_bootstrap.scss'
+import './index.scss'
+
+// // import Bootstrap
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 // React theme provider
 // import { ThemeProvider, useTheme } from './context/ThemeContext';
