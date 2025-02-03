@@ -1,16 +1,17 @@
 .page-dataset-container {
     // 80px - 16px (app-container-padding)
-    // padding-top: 64px;
-    // padding-bottom: 80px;
+    padding-top: 64px;
+    padding-bottom: 80px;
 
     width: 100%;
-    // height: auto;
-    height: calc(100% - 80px);
+    height: 100%;
+    // height: calc(100%);
 
     .dataset-table {
+        // 80px + 16px (app-container-padding)
+        margin: 0 0 96px 0 !important;
+        
         text-align: center;
-
-        margin: 0;
         
         input {
             text-align: center;
@@ -23,7 +24,6 @@
             }
         }
     }
-
     .info-message {
         display: block;
 

@@ -373,7 +373,7 @@ const PageDataset: React.FC = () => {
 
     const get_total_pages = () => {
         return Math.ceil(dataset.length / stored_page_size);
-    }
+    };
 
     const action_pagination_change_page_size_handler = (e: React.ChangeEvent<HTMLSelectElement>) => {
         // новое количество строк, которые будут отображаться на одной странице
@@ -516,19 +516,41 @@ const PageDataset: React.FC = () => {
                         onClick={action_pagination_goto_previous_page_handler}
                     />
 
-                    {stored_current_page > 2 && <Pagination.Item onClick={action_pagination_goto_first_page_handler}>{1}</Pagination.Item>}
+                    {stored_current_page > 2 && (
+                        <Pagination.Item onClick={action_pagination_goto_first_page_handler}>{1}</Pagination.Item>
+                    )}
                     {stored_current_page > 3 && <Pagination.Ellipsis />}
 
-                    {stored_current_page > 1 && <Pagination.Item onClick={() => set_pagination(stored_current_page - 2, stored_page_size)}>{stored_current_page - 1}</Pagination.Item>}
-                    {stored_current_page > 0 && <Pagination.Item onClick={() => set_pagination(stored_current_page - 1, stored_page_size)}>{stored_current_page}</Pagination.Item>}
+                    {stored_current_page > 1 && (
+                        <Pagination.Item onClick={() => set_pagination(stored_current_page - 2, stored_page_size)}>
+                            {stored_current_page - 1}
+                        </Pagination.Item>
+                    )}
+                    {stored_current_page > 0 && (
+                        <Pagination.Item onClick={() => set_pagination(stored_current_page - 1, stored_page_size)}>
+                            {stored_current_page}
+                        </Pagination.Item>
+                    )}
 
                     <Pagination.Item active>{stored_current_page + 1}</Pagination.Item>
 
-                    {stored_current_page < get_total_pages() - 1 && <Pagination.Item onClick={() => set_pagination(stored_current_page + 1, stored_page_size)}>{stored_current_page + 2}</Pagination.Item>}
-                    {stored_current_page < get_total_pages() - 2 && <Pagination.Item onClick={() => set_pagination(stored_current_page + 2, stored_page_size)}>{stored_current_page + 3}</Pagination.Item>}
+                    {stored_current_page < get_total_pages() - 1 && (
+                        <Pagination.Item onClick={() => set_pagination(stored_current_page + 1, stored_page_size)}>
+                            {stored_current_page + 2}
+                        </Pagination.Item>
+                    )}
+                    {stored_current_page < get_total_pages() - 2 && (
+                        <Pagination.Item onClick={() => set_pagination(stored_current_page + 2, stored_page_size)}>
+                            {stored_current_page + 3}
+                        </Pagination.Item>
+                    )}
 
                     {stored_current_page < get_total_pages() - 4 && <Pagination.Ellipsis />}
-                    {stored_current_page < get_total_pages() - 3 && <Pagination.Item onClick={action_pagination_goto_last_page_handler}>{get_total_pages()}</Pagination.Item>}
+                    {stored_current_page < get_total_pages() - 3 && (
+                        <Pagination.Item onClick={action_pagination_goto_last_page_handler}>
+                            {get_total_pages()}
+                        </Pagination.Item>
+                    )}
 
                     <Pagination.Next
                         disabled={(stored_current_page + 1) * stored_page_size >= dataset.length}
