@@ -7,24 +7,129 @@
     height: 100%;
     // height: calc(100%);
 
-    .dataset-table {
-        // 80px + 16px (app-container-padding)
-        margin: 0 0 96px 0 !important;
-        
-        text-align: center;
-        
-        input {
+    .main-controls {
+        background-color: #fff;
+
+        width: auto;
+        height: 80px;
+
+        display: flex;
+        flex-direction: row;
+
+        position: fixed !important;
+
+        top: 0;
+        left: 140px;
+        right: 0;
+
+        padding: 16px;
+
+        &__dataset-dropdown-button {
+            // width: max-content;
+        }
+
+        &__dataset-filename-field {
+            // min-width: 100% !important;
+            // width: 100%;
+
+            // margin: 0;
+        }
+
+        #normalize_button {
+            margin-left: 10px;
+            width: 250px;
+        }
+    }
+
+    .table-container {
+        max-height: calc(100vh - 64px - 96px - 16px);
+
+        overflow-y: auto;
+        overflow-x: auto;
+
+        margin: 0;
+
+        // /* Стилизация скроллбара */
+        // &::-webkit-scrollbar {
+        //     width: 8px;
+        // }
+
+        // &::-webkit-scrollbar-track {
+        //     background: #f8f9fa;
+        //     border-radius: 4px;
+        // }
+
+        // &::-webkit-scrollbar-thumb {
+        //     background: #adb5bd;
+        //     border-radius: 4px;
+        // }
+
+        // &::-webkit-scrollbar-thumb:hover {
+        //     background: #6c757d;
+        // }
+
+        /* Для Firefox */
+        scrollbar-width: auto;
+        scrollbar-color: #adb5bd #f8f9fa;
+
+        &__dataset-table {
+            // 80px + 16px (app-container-padding)
+            // margin: 0 0 96px 0 !important;
+            margin: 0 !important;
+
+            // для горизонтального скролла при необходимости
+            min-width: 600px;
+
+            // текст по центру ячейки
             text-align: center;
 
-            background: transparent;
-            border: transparent;
+            // overflow: auto;
 
-            &:focus {
-                background: #f0f3fc;
+            // thead {
+            //     position: sticky;
+            //     top: 0;
+            //     background: white;
+            //     z-index: 1;
+            // }
+
+            // Стиль для строки при наведении
+            tbody tr {
+
+                td {
+                    input {
+                        text-align: center;
+    
+                        background: transparent;
+                        border: transparent;
+    
+                        &:focus {
+                            background: #f0f3fc;
+                        }
+                    }
+
+                    .danger-action-button {
+                        width: 100%;
+                    }
+                }
+
+                &:hover {
+                    background-color: var(--bs-primary-bg-subtle) !important; // Цвет фона при наведении
+                    
+                    outline: 2px solid #121212; // Чёрная обводка при наведении
+                    outline-offset: -2px;       // Чтобы обводка была внутри элемента/ Чёрная обводка при наведении
+
+                    cursor: pointer; // Изменение курсора на указатель
+                }
+
+                // Стиль для ячеек при наведении (опционально)
+                &:hover td {
+                    background-color: transparent; // Убедимся, что ячейки не переопределяют цвет строки
+                }
             }
         }
     }
-    .info-message {
+
+    .info-message-block {
         display: block;
 
         width: 100%;
@@ -33,72 +138,42 @@
         text-align: center;
         align-content: center;
     }
-}
 
+    .pagination-controls {
+        background-color: #fafafa;
 
-.main-controls {
-    background-color: #fff;
+        position: fixed;
 
-    width: auto;
-    height: 80px;
+        bottom: 0;
+        right: 0;
+        left: 140px;
 
-    display: flex;
-    flex-direction: row;
+        // padding-left: 156px;
+        padding: 0 16px;
+        margin: 0;
 
-    position: fixed !important;
+        height: 80px;
+        align-items: center;
 
-    top: 0;
-    left: 140px;
-    right: 0;
-
-    padding: 16px;
-
-    &__dataset-dropdown-button {
-        // width: max-content;
-    }
-
-    &__dataset-filename-field {
-        // min-width: 100% !important;
-        // width: 100%;
-
-        // margin: 0;
-    }
-}
-
-.pagination-controls {
-    background-color: #FAFAFA;
-
-    position: fixed;
-
-    bottom: 0;
-    right: 0;
-    left: 140px;
-
-    // padding-left: 156px;
-    padding: 0 16px;
-    margin: 0;
-
-    height: 80px;
-    align-items: center;
-
-    display: inline-flex;
-    flex-direction: row;
-
-    justify-content: space-between;
-
-    &__current-page-size-selector-block {
         display: inline-flex;
         flex-direction: row;
 
-        align-items: center;
+        justify-content: space-between;
 
-        .mine-bootstrap-label {
-            min-width: max-content;
-            margin: 0 10px 0 0;
+        &__current-page-size-selector-block {
+            display: inline-flex;
+            flex-direction: row;
+
+            align-items: center;
+
+            .mine-bootstrap-label {
+                min-width: max-content;
+                margin: 0 10px 0 0;
+            }
         }
-    }
 
-    &__page-selector-block {
-        margin: 0;
+        &__page-selector-block {
+            margin: 0;
+        }
     }
 }

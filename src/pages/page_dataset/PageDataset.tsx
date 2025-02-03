@@ -254,7 +254,7 @@ import { useDatasetStore } from '../../store/DatasetStore';
 import Papa from 'papaparse';
 
 // компоненты и стили
-import { Dropdown, DropdownButton, Form, InputGroup, Pagination, Table, Alert } from 'react-bootstrap';
+import { Dropdown, DropdownButton, Form, InputGroup, Pagination, Table, Button } from 'react-bootstrap';
 import './page_dataset.scss';
 
 const PageDataset: React.FC = () => {
@@ -371,6 +371,27 @@ const PageDataset: React.FC = () => {
         URL.revokeObjectURL(url);
     };
 
+    const action_dataset_delete_row_handler = (row_index: number) => {
+        const actual_index = stored_current_page * stored_page_size + row_index;
+        const new_dataset = dataset.filter((_, index) => index !== actual_index);
+
+        set_dataset(new_dataset);
+
+        // Автоматический переход на предыдущую страницу если текущая пустая
+        if (current_part_of_dataset.length === 1 && stored_current_page > 0) {
+            // setPage((prev) => prev - 1);
+            set_pagination(stored_current_page - 1, stored_page_size);
+        }
+    };
+
+    const action_dataset_cell_value_change_handler = (row_index: number, cell_index: number, value: string) => {
+        const new_dataset = [...dataset];
+        const actual_index = stored_current_page * stored_page_size + row_index;
+
+        new_dataset[actual_index][cell_index] = value;
+        set_dataset(new_dataset);
+    };
+
     const get_total_pages = () => {
         return Math.ceil(dataset.length / stored_page_size);
     };
@@ -446,45 +467,59 @@ const PageDataset: React.FC = () => {
                         onChange={action_dataset_change_handler}
                     />
                 </InputGroup>
+                <Button variant="primary" id="normalize_button">
+                    Normalize
+                </Button>
             </div>
 
             {dataset.length > 0 ? (
-                <Table className="dataset-table" striped bordered hover responsive>
-                    <thead>
-                        <tr>
-                            {headers.map((header, index) => (
-                                <th key={index}>{header}</th>
-                            ))}
-                            {/* <th>Actions</th> */}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {current_part_of_dataset.map((row, row_index) => (
-                            <tr key={row_index}>
-                                {row.map((cell, cell_index) => (
-                                    <td key={cell_index}>
-                                        <Form.Control
-                                            type="text"
-                                            value={cell}
-                                            // onChange={(e) =>
-                                            //     action_dataset_cell_value_change_handler(
-                                            //         row_index,
-                                            //         cell_index,
-                                            //         e.target.value
-                                            //     )
-                                            // }
-                                        />
-                                    </td>
+                <div className="table-container">
+                    <Table className="table-container__dataset-table" striped bordered hover responsive>
+                        <thead>
+                            <tr>
+                                {headers.map((header, index) => (
+                                    <th key={index}>{header}</th>
                                 ))}
+                                <th>Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                        </thead>
+                        <tbody>
+                            {current_part_of_dataset.map((row, row_index) => (
+                                <tr key={row_index}>
+                                    {row.map((cell, cell_index) => (
+                                        <td key={cell_index}>
+                                            <Form.Control
+                                                type="text"
+                                                value={cell}
+                                                onChange={(e) =>
+                                                    action_dataset_cell_value_change_handler(
+                                                        row_index,
+                                                        cell_index,
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </td>
+                                    ))}
+                                    <td>
+                                        <Button
+                                            variant="outline-danger"
+                                            className="danger-action-button"
+                                            onClick={() => action_dataset_delete_row_handler(row_index)}
+                                        >
+                                            <i className="bi bi-trash-fill"></i>
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </div>
             ) : (
                 // <Alert className="table-block__info-message" variant="primary">
                 //     Загрузите датасет в *.CSV формате!
                 // </Alert>
-                <strong className="info-message">Please, upload Your dataset in *.CSV file format!</strong>
+                <strong className="info-message-block">Please, upload Your dataset in *.CSV file format!</strong>
             )}
 
             <div className="pagination-controls">
@@ -503,6 +538,10 @@ const PageDataset: React.FC = () => {
                         <option value="30">30</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
+                        <option value="250">250</option>
+                        {/* <option value="500">500</option>
+                        <option value="1000">1000</option> */}
+                        <option value={dataset.length}>All</option>
                     </Form.Select>
                 </div>
 
