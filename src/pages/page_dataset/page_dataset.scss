@@ -1,9 +1,11 @@
 .page-dataset-container {
     // 80px - 16px (app-container-padding)
-    padding-top: 64px;
+    // padding-top: 64px;
+    // padding-bottom: 80px;
 
     width: 100%;
-    height: calc(100% - 64px);
+    // height: auto;
+    height: calc(100% - 80px);
 
     .dataset-table {
         text-align: center;
@@ -73,7 +75,11 @@
     left: 140px;
 
     // padding-left: 156px;
-    padding: 16px;
+    padding: 0 16px;
+    margin: 0;
+
+    height: 80px;
+    align-items: center;
 
     display: inline-flex;
     flex-direction: row;

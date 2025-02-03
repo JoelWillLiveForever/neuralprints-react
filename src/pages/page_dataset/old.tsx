@@ -87,7 +87,7 @@ const PageDataset: React.FC = () => {
         setPagination(page + 1, pageSize);
     };
 
-    const handleFirstPage = () => setPagination(0, pageSize);
+    const shandleFirstPage = () => setPagination(0, pageSize);
     const handleLastPage = () => {
         const lastPage = Math.ceil(dataset.length / pageSize) - 1;
         setPagination(lastPage, pageSize);

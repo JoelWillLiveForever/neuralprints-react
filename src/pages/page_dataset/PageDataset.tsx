@@ -371,6 +371,43 @@ const PageDataset: React.FC = () => {
         URL.revokeObjectURL(url);
     };
 
+    const get_total_pages = () => {
+        return Math.ceil(dataset.length / stored_page_size);
+    }
+
+    const action_pagination_change_page_size_handler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        // новое количество строк, которые будут отображаться на одной странице
+        const new_page_size = parseInt(e.target.value);
+
+        // перерасчёт номера текущей страницы, с учётом того, на какой странице пользователь уже находился
+        const new_current_page = Math.floor((stored_page_size * stored_current_page) / new_page_size);
+
+        // перезаписываем текущие настройки
+        set_pagination(new_current_page, new_page_size);
+    };
+
+    const action_pagination_goto_first_page_handler = () => {
+        // на первую страницу
+        set_pagination(0, stored_page_size);
+    };
+
+    const action_pagination_goto_previous_page_handler = () => {
+        // на предыдущую страницу
+        set_pagination(Math.max(stored_current_page - 1, 0), stored_page_size);
+    };
+
+    const action_pagination_goto_next_page_handler = () => {
+        // на следующую страницу
+        set_pagination(Math.min(stored_current_page + 1, get_total_pages()), stored_page_size);
+    };
+
+    const action_pagination_goto_last_page_handler = () => {
+        const last_page = get_total_pages() - 1;
+
+        // на последнюю страницу
+        set_pagination(last_page, stored_page_size);
+    };
+
     return (
         <div className="page-dataset-container">
             {/* <h2>Dataset Page</h2> */}
@@ -459,7 +496,7 @@ const PageDataset: React.FC = () => {
                     <Form.Select
                         id="current_page_size_selector"
                         value={stored_page_size}
-                        // onChange={change_handler_for_current_page_size}
+                        onChange={action_pagination_change_page_size_handler}
                     >
                         <option value="5">5</option>
                         <option value="10">10</option>
@@ -470,21 +507,37 @@ const PageDataset: React.FC = () => {
                 </div>
 
                 <Pagination className="pagination-controls__page-selector-block">
-                    <Pagination.First />
-                    <Pagination.Prev />
-                    <Pagination.Item>{1}</Pagination.Item>
-                    <Pagination.Ellipsis />
+                    <Pagination.First
+                        disabled={stored_current_page === 0}
+                        onClick={action_pagination_goto_first_page_handler}
+                    />
+                    <Pagination.Prev
+                        disabled={stored_current_page === 0}
+                        onClick={action_pagination_goto_previous_page_handler}
+                    />
 
-                    <Pagination.Item>{10}</Pagination.Item>
-                    <Pagination.Item>{11}</Pagination.Item>
-                    <Pagination.Item active>{12}</Pagination.Item>
-                    <Pagination.Item>{13}</Pagination.Item>
-                    <Pagination.Item disabled>{14}</Pagination.Item>
+                    {stored_current_page > 2 && <Pagination.Item onClick={action_pagination_goto_first_page_handler}>{1}</Pagination.Item>}
+                    {stored_current_page > 3 && <Pagination.Ellipsis />}
 
-                    <Pagination.Ellipsis />
-                    <Pagination.Item>{20}</Pagination.Item>
-                    <Pagination.Next />
-                    <Pagination.Last />
+                    {stored_current_page > 1 && <Pagination.Item onClick={() => set_pagination(stored_current_page - 2, stored_page_size)}>{stored_current_page - 1}</Pagination.Item>}
+                    {stored_current_page > 0 && <Pagination.Item onClick={() => set_pagination(stored_current_page - 1, stored_page_size)}>{stored_current_page}</Pagination.Item>}
+
+                    <Pagination.Item active>{stored_current_page + 1}</Pagination.Item>
+
+                    {stored_current_page < get_total_pages() - 1 && <Pagination.Item onClick={() => set_pagination(stored_current_page + 1, stored_page_size)}>{stored_current_page + 2}</Pagination.Item>}
+                    {stored_current_page < get_total_pages() - 2 && <Pagination.Item onClick={() => set_pagination(stored_current_page + 2, stored_page_size)}>{stored_current_page + 3}</Pagination.Item>}
+
+                    {stored_current_page < get_total_pages() - 4 && <Pagination.Ellipsis />}
+                    {stored_current_page < get_total_pages() - 3 && <Pagination.Item onClick={action_pagination_goto_last_page_handler}>{get_total_pages()}</Pagination.Item>}
+
+                    <Pagination.Next
+                        disabled={(stored_current_page + 1) * stored_page_size >= dataset.length}
+                        onClick={action_pagination_goto_next_page_handler}
+                    />
+                    <Pagination.Last
+                        disabled={(stored_current_page + 1) * stored_page_size >= dataset.length}
+                        onClick={action_pagination_goto_last_page_handler}
+                    />
                 </Pagination>
             </div>
         </div>
