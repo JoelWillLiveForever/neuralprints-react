@@ -244,7 +244,10 @@
     }
 
     .pagination-controls {
-        background-color: #fafafa;
+        border-top: 1px solid #e0e0e0;
+
+        // background-color: #fafafa;
+        background-color: #fff;
 
         position: fixed;
 
@@ -257,12 +260,21 @@
         margin: 0;
 
         height: 80px;
-        align-items: center;
 
         display: inline-flex;
         flex-direction: row;
 
         justify-content: space-between;
+        align-items: center;
+
+        flex-shrink: 0;
+
+        // &__current-page-range {
+        //     position: absolute;
+            
+        //     left: 50%;
+        //     transform: translateX(-50%);
+        // }
 
         &__current-page-size-selector-block {
             display: inline-flex;

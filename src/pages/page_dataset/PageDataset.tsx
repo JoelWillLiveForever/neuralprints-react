@@ -205,17 +205,21 @@ const PageDataset: React.FC = () => {
         set_pagination(last_page, stored_page_size);
     };
 
+    const getStartIndex = () => {
+        return (stored_current_page) * stored_page_size;
+    }
+    
+    const getEndIndex = () => {
+        return Math.min(getStartIndex() + stored_page_size, dataset.length);
+    }
+
     return (
         <div className="page-dataset-container">
             {/* <h2>Dataset Page</h2> */}
 
             <div className="main-controls">
                 <InputGroup>
-                    <DropdownButton
-                        className="main-controls__dataset-dropdown-button"
-                        variant="outline-primary"
-                        title="Dataset management"
-                    >
+                    <DropdownButton className="main-controls__dataset-dropdown-button" variant="outline-primary" title="Dataset management">
                         <Dropdown.Item onClick={action_dataset_upload_handler}>Upload</Dropdown.Item>
                         <Dropdown.Item onClick={action_dataset_save_handler} disabled={!dataset.length}>
                             Save
@@ -285,9 +289,9 @@ const PageDataset: React.FC = () => {
                                             />
                                         </td>
                                     ))}
-                                    <td className='table-default actions-buttons-container'>
+                                    <td className="table-default actions-buttons-container">
                                         <Button
-                                            id='add_entry_save_button'
+                                            id="add_entry_save_button"
                                             variant="outline-success"
                                             onClick={() => {
                                                 if (new_entry.slice(1).some((field) => !field.trim())) {
@@ -307,7 +311,7 @@ const PageDataset: React.FC = () => {
                                             Save
                                         </Button>
                                         <Button
-                                            id='add_entry_cancel_button'
+                                            id="add_entry_cancel_button"
                                             variant="outline-danger"
                                             className="ms-2"
                                             onClick={() => set_is_adding_entry(false)}
@@ -319,18 +323,14 @@ const PageDataset: React.FC = () => {
                                 </tr>
                             )}
                             {current_part_of_dataset.map((row, row_index) => (
-                                <tr key={row_index} className='table-default'>
+                                <tr key={row_index} className="table-default">
                                     {row.map((cell, cell_index) => (
                                         <td key={cell_index}>
                                             <Form.Control
                                                 type="text"
                                                 value={cell}
                                                 onChange={(e) =>
-                                                    action_dataset_cell_value_change_handler(
-                                                        row_index,
-                                                        cell_index,
-                                                        e.target.value
-                                                    )
+                                                    action_dataset_cell_value_change_handler(row_index, cell_index, e.target.value)
                                                 }
                                             />
                                         </td>
@@ -380,23 +380,17 @@ const PageDataset: React.FC = () => {
                     </Form.Select>
                 </div>
 
-                {/* <span>
+                {/* <span className='pagination-controls__current-page-range'>
                     {dataset_file !== null ? dataset_file.name : 'Dataset file not uploaded'}
                 </span> */}
 
-                <Pagination className="pagination-controls__page-selector-block">
-                    <Pagination.First
-                        disabled={stored_current_page === 0}
-                        onClick={action_pagination_goto_first_page_handler}
-                    />
-                    <Pagination.Prev
-                        disabled={stored_current_page === 0}
-                        onClick={action_pagination_goto_previous_page_handler}
-                    />
+                <span>{dataset_file !== null ? `Rows ${getStartIndex() + 1}-${getEndIndex()} (out of ${dataset.length})` : 'Rows 0–0 (no data)'}</span>
 
-                    {stored_current_page > 2 && (
-                        <Pagination.Item onClick={action_pagination_goto_first_page_handler}>{1}</Pagination.Item>
-                    )}
+                <Pagination className="pagination-controls__page-selector-block">
+                    <Pagination.First disabled={stored_current_page === 0} onClick={action_pagination_goto_first_page_handler} />
+                    <Pagination.Prev disabled={stored_current_page === 0} onClick={action_pagination_goto_previous_page_handler} />
+
+                    {stored_current_page > 2 && <Pagination.Item onClick={action_pagination_goto_first_page_handler}>{1}</Pagination.Item>}
                     {stored_current_page > 3 && <Pagination.Ellipsis />}
 
                     {stored_current_page > 1 && (
@@ -411,11 +405,7 @@ const PageDataset: React.FC = () => {
                     )}
 
                     <Pagination.Item active disabled={dataset.length === 0}>
-                        {dataset.length === 0 ? (
-                            <span>0</span>
-                        ) : (
-                            <span>{stored_current_page + 1}</span>
-                        )}
+                        {dataset.length === 0 ? <span>0</span> : <span>{stored_current_page + 1}</span>}
                     </Pagination.Item>
 
                     {stored_current_page < get_total_pages() - 1 && (
@@ -431,9 +421,7 @@ const PageDataset: React.FC = () => {
 
                     {stored_current_page < get_total_pages() - 4 && <Pagination.Ellipsis />}
                     {stored_current_page < get_total_pages() - 3 && (
-                        <Pagination.Item onClick={action_pagination_goto_last_page_handler}>
-                            {get_total_pages()}
-                        </Pagination.Item>
+                        <Pagination.Item onClick={action_pagination_goto_last_page_handler}>{get_total_pages()}</Pagination.Item>
                     )}
 
                     <Pagination.Next
