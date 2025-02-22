@@ -8,6 +8,14 @@ const Menu = () => {
     const setActive = ({ isActive }: { isActive: boolean }) =>
         isActive ? "nav-item active-page" : "nav-item";
 
+    /**========================================================================
+     * todo                             TODO
+     *   
+     *   Сделать названия кнопок (страниц), добавить текст к иконкам
+     *   
+     *
+     *========================================================================**/
+
     return (
         <nav className="nav-container">
             <NavLink to="/" className={setActive} id='menu_button_dataset'>
