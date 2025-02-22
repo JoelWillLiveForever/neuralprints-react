@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 
 import {
     ReactFlow,
@@ -19,7 +19,9 @@ import { useDnD } from '../../context/DnDContext';
 
 /* import styles */
 import '@xyflow/react/dist/style.css';
-import './dndflow.scss'
+import './dndflow.scss';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+import useScreenSize from '../../hooks/useScreenSize';
 
 const proOptions = { hideAttribution: false };
 
@@ -81,27 +83,48 @@ const DnDFlow: React.FC = () => {
         [screenToFlowPosition, setNodes, type]
     );
 
+    // const { width } = useContainerDimensions(); // or useScreenSize(), etc.
+    // const { screenWidth, screenHeight } = useScreenSize(); // or useScreenSize(), etc.
+
+    // useEffect(() => {
+    //     console.log("MY SCREEN SIZE: " + window.innerWidth + " x " + window.innerHeight);
+
+    // });
+
+    // const sidebarMinSizePixels = 250;
+    // const sidebarMinSizePercentage = (sidebarMinSizePixels / window.innerWidth) * 100;
+
+    // const sidebarDefaultSizePixels = 350;
+    // const sidebarDefaultSizePercentage = (sidebarDefaultSizePixels / window.innerWidth) * 100;
+
     return (
         <div className="dndflow">
-            <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-                <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    onNodesChange={onNodesChange}
-                    onEdgesChange={onEdgesChange}
-                    onConnect={onConnect}
-                    onDrop={onDrop}
-                    onDragOver={onDragOver}
-                    fitView
-                    proOptions={proOptions}
-                    style={{ backgroundColor: '#F7F9FB' }}
-                >
-                    <Controls />
-                    {/* <MiniMap /> */}
-                    <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-                </ReactFlow>
-            </div>
-            <Sidebar />
+            <PanelGroup autoSaveId="persistence" direction="horizontal">
+                <Panel defaultSize={75}>
+                    <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+                        <ReactFlow
+                            nodes={nodes}
+                            edges={edges}
+                            onNodesChange={onNodesChange}
+                            onEdgesChange={onEdgesChange}
+                            onConnect={onConnect}
+                            onDrop={onDrop}
+                            onDragOver={onDragOver}
+                            fitView
+                            proOptions={proOptions}
+                            style={{ backgroundColor: '#fff' }}
+                        >
+                            <Controls />
+                            {/* <MiniMap /> */}
+                            <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+                        </ReactFlow>
+                    </div>
+                </Panel>
+                <PanelResizeHandle />
+                <Panel collapsible maxSize={25} defaultSize={20} minSize={15}>
+                    <Sidebar />
+                </Panel>
+            </PanelGroup>
         </div>
     );
 };

@@ -17,7 +17,7 @@ const Sidebar: React.FC = () => {
 
     return (
         <aside className="sidebar">
-            <Header4Container text='TensorFlow nodes' />
+            <Header4Container text='TensorFlow layers' />
             {/* <div className="description">Drag and drop nodes to the right panel.</div> */}
 
             <div className="tf-nodes-container">
