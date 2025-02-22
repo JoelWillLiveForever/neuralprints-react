@@ -18,6 +18,7 @@ import {
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
+import './page_training.scss';
 
 // const initialNodes = [
 //   { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
@@ -77,7 +78,7 @@ const initialEdges: Edge[] = [
 ];
 
 const PageTraining = () => {
-  const [colorMode, setColorMode] = useState<ColorMode>('dark');
+  const [colorMode, setColorMode] = useState<ColorMode>('light');
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
@@ -105,13 +106,13 @@ const PageTraining = () => {
         <MiniMap />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 
-        <Panel position="top-right">
+        {/* <Panel position="top-right">
           <select onChange={onChange} data-testid="colormode-select">
             <option value="dark">dark</option>
             <option value="light">light</option>
             <option value="system">system</option>
           </select>
-        </Panel>
+        </Panel> */}
       </ReactFlow>
     </div>
   )

@@ -16,8 +16,13 @@
     padding: 20px;
     // padding-left: 20px !important;
 
-    background-color: #121212;
-    color: #ffffff;
+    // background-color: #121212;
+    background-color: #fff;
+
+    border-right: 1px #121212 solid;
+
+    // color: #ffffff;
+    color: #000;
 
     .nav-item {
         background-color: none;
@@ -38,62 +43,77 @@
         }
 
         &#menu_button_dataset {
-            color: #EF9A9A;
+            // color: #EF9A9A;
+            color: #D32F2F;
 
             &:hover {
-                background-color: #EF9A9A14;
+                // background-color: #EF9A9A14;
+                background-color: #D32F2F14;
             }
 
             &.active-page {
-                background-color: #EF9A9A29;
+                // background-color: #03020229;
+                background-color: #D32F2F29;
             }
         }
 
         &#menu_button_training {
-            color: #FFF59D;
+            // color: #FFF59D;
+            color: #FBC02D;
 
             &:hover {
-                background-color: #FFF59D14;
+                // background-color: #FFF59D14;
+                background-color: #FBC02D14;
             }
 
             &.active-page {
-                background-color: #FFF59D29;
+                // background-color: #FFF59D29;
+                background-color: #FBC02D29;
             }
         }
 
         &#menu_button_evaluation {
-            color: #A5D6A7;
+            // color: #A5D6A7;
+            color: #388E3C;
 
             &:hover {
-                background-color: #A5D6A714;
+                // background-color: #A5D6A714;
+                background-color: #388E3C14;
             }
 
             &.active-page {
-                background-color: #A5D6A729;
+                // background-color: #A5D6A729;
+                background-color: #388E3C29;
             }
         }
 
         &#menu_button_settings {
-            color: #90CAF9;
+            // color: #90CAF9;
+            color: #1976D2;
 
             &:hover {
-                background-color: #90CAF914;
+                // background-color: #90CAF914;
+                background-color: #1976D214;
             }
 
             &.active-page {
-                background-color: #90CAF929;
+                // background-color: #90CAF929;
+                background-color: #1976D229;
             }
         }
 
         &#menu_button_about {
-            color: #B39DDB;
+            // color: #B39DDB;
+            color: #512DA8;
 
             &:hover {
-                background-color: #B39DDB14;
+                // background-color: #B39DDB14;
+                background-color: #512DA814;
             }
 
             &.active-page {
-                background-color: #B39DDB29;
+                // background-color: #B39DDB29;
+                background-color: #512DA829;
             }
         }
     }
