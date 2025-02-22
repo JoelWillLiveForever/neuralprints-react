@@ -50,29 +50,51 @@
 
             cursor: grab;
 
+            transition: box-shadow 0.3s ease-in-out;
+
             &__input {
                 background-color: #D32F2F12;
                 border-color: #D32F2F;
+
+                &:hover {
+                    box-shadow: 0 0 0 2px #D32F2F;
+                }
             }
 
             &__dense {
                 background-color: #FFA00012;
                 border-color: #FFA000;
+
+                &:hover {
+                    box-shadow: 0 0 0 2px #FFA000;
+                }
             }
 
             &__dropout {
                 background-color: #1976D212;
                 border-color: #1976D2;
+
+                &:hover {
+                    box-shadow: 0 0 0 2px #1976D2;
+                }
             }
 
             &__gaussian-noise {
                 background-color: #00796B12;
                 border-color: #00796B;
+
+                &:hover {
+                    box-shadow: 0 0 0 2px #00796B;
+                }
             }
 
             &__gaussian-dropout {
                 background-color: #C2185B12;
                 border-color: #C2185B;
+
+                &:hover {
+                    box-shadow: 0 0 0 2px #C2185B;
+                }
             }
         }
     }
