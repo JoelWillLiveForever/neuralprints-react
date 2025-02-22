@@ -6,6 +6,7 @@ import Papa from 'papaparse';
 // компоненты и стили
 import { Dropdown, DropdownButton, Form, InputGroup, Pagination, Table, Button } from 'react-bootstrap';
 import './page_dataset.scss';
+import Header4Container from '../../components/header_4_container/Header4Container';
 
 const PageDataset: React.FC = () => {
     const {
@@ -263,6 +264,7 @@ const PageDataset: React.FC = () => {
 
             {dataset.length > 0 ? (
                 <div className="table-container">
+                    <Header4Container text='Dataset' />
                     <Table className="table-container__dataset-table" bordered hover responsive>
                         <thead>
                             <tr>

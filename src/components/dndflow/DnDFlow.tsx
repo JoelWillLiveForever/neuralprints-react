@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 
 import {
     ReactFlow,
@@ -31,7 +31,7 @@ const initialNodes = [
         id: '1',
         type: 'Input',
         data: { label: 'Input' },
-        position: { x: 250, y: 5 },
+        position: { x: 0, y: 0 },
     },
 ];
 
@@ -47,6 +47,21 @@ const DnDFlow: React.FC = () => {
     const { screenToFlowPosition } = useReactFlow();
 
     const [type] = useDnD();
+
+    const { fitView } = useReactFlow();
+
+    useEffect(() => {
+        setTimeout(() => {
+            fitView();
+        }, 0);
+    }, [fitView]);
+
+    // // Используем useLayoutEffect для синхронного вызова fitView до отрисовки
+    // useLayoutEffect(() => {
+    //     if (reactFlowWrapper.current) {
+    //         fitView();
+    //     }
+    // }, [fitView]);
 
     const onConnect = useCallback(
         (params: Connection) => {
@@ -92,16 +107,16 @@ const DnDFlow: React.FC = () => {
 
     // });
 
-    // const sidebarMinSizePixels = 250;
-    // const sidebarMinSizePercentage = (sidebarMinSizePixels / window.innerWidth) * 100;
+    // const sidebar_min_size_pixels = 250;
+    // const sidebar_min_size_percentage = (sidebar_min_size_pixels / window.innerWidth) * 100;
 
-    // const sidebarDefaultSizePixels = 350;
-    // const sidebarDefaultSizePercentage = (sidebarDefaultSizePixels / window.innerWidth) * 100;
+    // const sidebar_max_size_pixels = 350;
+    // const sidebar_max_size_percentage = (sidebar_max_size_pixels / window.innerWidth) * 100;
 
     return (
         <div className="dndflow">
             <PanelGroup autoSaveId="persistence" direction="horizontal">
-                <Panel defaultSize={75}>
+                <Panel defaultSize={87.5}>
                     <div className="reactflow-wrapper" ref={reactFlowWrapper}>
                         <ReactFlow
                             nodes={nodes}
@@ -111,9 +126,9 @@ const DnDFlow: React.FC = () => {
                             onConnect={onConnect}
                             onDrop={onDrop}
                             onDragOver={onDragOver}
-                            fitView
                             proOptions={proOptions}
                             style={{ backgroundColor: '#fff' }}
+                            fitView
                         >
                             <MiniMap />
                             <Controls />
@@ -122,7 +137,7 @@ const DnDFlow: React.FC = () => {
                     </div>
                 </Panel>
                 <PanelResizeHandle />
-                <Panel collapsible maxSize={25} defaultSize={20} minSize={15}>
+                <Panel minSize={10} maxSize={15} defaultSize={12.5} collapsible>
                     <Sidebar />
                 </Panel>
             </PanelGroup>

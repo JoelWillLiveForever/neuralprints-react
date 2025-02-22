@@ -3,28 +3,39 @@
     // padding-top: 64px;
     // padding-bottom: 80px;
 
-    padding: 80px 16px 96px 16px;
+    // padding: 80px 16px 96px 16px;
 
     width: 100%;
     height: 100%;
     // height: calc(100%);
 
-    .main-controls {
-        background-color: #fff;
+    display: flex;
+    flex-direction: column;
 
-        width: auto;
-        height: 80px;
+    // padding: 16px;
+
+    gap: 16px;
+
+    .main-controls {
+        flex-shrink: 0;
+
+        // background-color: #121212;
+
+        padding: 16px;
+
+        // width: auto;
+        height: 92px;
 
         display: flex;
         flex-direction: row;
 
-        position: fixed !important;
+        // position: fixed !important;
 
-        top: 0;
-        left: 140px;
-        right: 0;
+        // top: 0;
+        // left: 140px;
+        // right: 0;
 
-        padding: 16px;
+        // padding: 16px;
 
         &__dataset-dropdown-button {
             // width: max-content;
@@ -48,12 +59,14 @@
     }
 
     .table-container {
-        max-height: calc(100vh - 64px - 96px - 16px);
+        // max-height: calc(100vh - 64px - 96px - 16px);
+
+        padding: 0 16px;
 
         overflow-y: auto;
         overflow-x: auto;
 
-        margin: 0;
+        // margin: 0;
 
         // /* Стилизация скроллбара */
         // &::-webkit-scrollbar {
@@ -77,6 +90,8 @@
         /* Для Firefox */
         scrollbar-width: auto;
         scrollbar-color: #adb5bd #f8f9fa;
+
+        // border-bottom: 1px solid #e0e0e0;
 
         &__dataset-table {
             // 80px + 16px (app-container-padding)
@@ -249,17 +264,23 @@
         // background-color: #fafafa;
         background-color: #fff;
 
-        position: fixed;
+        // position: fixed;
 
-        bottom: 0;
-        right: 0;
-        left: 140px;
+        margin-top: auto;
+
+        // bottom: 0;
+        // right: 0;
+        // // left: 140px;
+        // left: 0;
 
         // padding-left: 156px;
-        padding: 0 16px;
-        margin: 0;
+        // padding: 0 16px;
+        // margin: 0;
 
-        height: 80px;
+        // height: 80px;
+
+        // padding: 16px;
+        padding: 16px;
 
         display: inline-flex;
         flex-direction: row;
