@@ -1,6 +1,8 @@
 import React from 'react';
 import { useDnD } from '../../context/DnDContext';
 
+import Header4Container from '../header_4_container/Header4Container';
+
 import './sidebar.scss';
 
 const Sidebar: React.FC = () => {
@@ -15,7 +17,8 @@ const Sidebar: React.FC = () => {
 
     return (
         <aside className="sidebar">
-            <div className="description">Drag and drop nodes to the right panel.</div>
+            <Header4Container text='TensorFlow nodes' />
+            {/* <div className="description">Drag and drop nodes to the right panel.</div> */}
 
             <div className="tf-nodes-container">
                 <div className="tf-node tf-node__input" draggable onDragStart={(event) => onDragStart(event, 'Input')}>

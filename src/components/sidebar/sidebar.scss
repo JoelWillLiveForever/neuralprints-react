@@ -1,7 +1,12 @@
 .sidebar {
+    // position: relative;
+    // transition: width 0.2s;
+
     padding: 16px;
 
     border-left: 1px solid #121212;
+
+    width: 300px;
 
     .tf-nodes-container {
         padding: 10px;
@@ -68,3 +73,13 @@
         }
     }
 }
+
+// .resize-handle {
+//     position: absolute;
+//     top: 0;
+//     right: 0;
+//     width: 10px;
+//     height: 100%;
+//     cursor: ew-resize;
+//     background-color: #888;
+// }
