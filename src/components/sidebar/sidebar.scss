@@ -1,0 +1,68 @@
+.sidebar {
+    padding: 16px;
+
+    .tf-nodes-container {
+        padding: 10px;
+
+        height: 250px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+
+        overflow-y: auto;
+
+        background-color: #FFA00003;
+        border-bottom: 1px solid #FFA000;
+
+        scrollbar-width: auto;
+        scrollbar-color: #adb5bd #f8f9fa;
+
+        /* TensorFlow Nodes Styles */
+        .tf-node {
+            // height: 60px;
+
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            padding: 10px;
+            // margin-bottom: 10px;
+
+            background-color: #61616112;
+
+            border: 2px solid #616161;
+            border-radius: 6px;
+
+            cursor: grab;
+
+            &__input {
+                background-color: #D32F2F12;
+                border-color: #D32F2F;
+            }
+
+            &__dense {
+                background-color: #FFA00012;
+                border-color: #FFA000;
+            }
+
+            &__dropout {
+                background-color: #1976D212;
+                border-color: #1976D2;
+            }
+
+            &__gaussian-noise {
+                background-color: #00796B12;
+                border-color: #00796B;
+            }
+
+            &__gaussian-dropout {
+                background-color: #C2185B12;
+                border-color: #C2185B;
+            }
+        }
+    }
+}

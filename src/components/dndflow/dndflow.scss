@@ -1,0 +1,26 @@
+.dndflow {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+
+    // width: 100%;
+    height: 100%;
+
+    .reactflow-wrapper {
+        flex-grow: 1;
+
+        // width: 100%;
+        height: 100%;
+    }
+}
+
+// @media screen and (min-width: 768px) {
+//     .dndflow {
+//       flex-direction: row;
+//     }
+   
+//     .dndflow aside {
+//       width: 20%;
+//       max-width: 250px;
+//     }
+//   }
