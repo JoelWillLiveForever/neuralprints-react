@@ -12,6 +12,7 @@ import {
     Connection,
     Edge,
     BackgroundVariant,
+    MiniMap,
 } from '@xyflow/react';
 
 import Sidebar from '../sidebar/Sidebar';
@@ -114,8 +115,8 @@ const DnDFlow: React.FC = () => {
                             proOptions={proOptions}
                             style={{ backgroundColor: '#fff' }}
                         >
+                            <MiniMap />
                             <Controls />
-                            {/* <MiniMap /> */}
                             <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                         </ReactFlow>
                     </div>
