@@ -410,7 +410,13 @@ const PageDataset: React.FC = () => {
                         </Pagination.Item>
                     )}
 
-                    <Pagination.Item active>{stored_current_page + 1}</Pagination.Item>
+                    <Pagination.Item active disabled={dataset.length === 0}>
+                        {dataset.length === 0 ? (
+                            <span>0</span>
+                        ) : (
+                            <span>{stored_current_page + 1}</span>
+                        )}
+                    </Pagination.Item>
 
                     {stored_current_page < get_total_pages() - 1 && (
                         <Pagination.Item onClick={() => set_pagination(stored_current_page + 1, stored_page_size)}>

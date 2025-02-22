@@ -121,6 +121,11 @@
                         }
 
                         .danger-action-button {
+                            display: inline-flex !important;
+
+                            justify-content: center;
+                            align-items: center;
+
                             width: 100%;
                         }
                     }
@@ -196,11 +201,21 @@
                         }
 
                         #add_entry_save_button {
+                            display: inline-flex !important;
+                            
+                            justify-content: center;
+                            align-items: center;
+
                             width: 100%;
                             height: auto;
                         }
 
                         #add_entry_cancel_button {
+                            display: inline-flex !important;
+
+                            justify-content: center;
+                            align-items: center;
+
                             min-width: max-content;
                             height: auto;
                         }
