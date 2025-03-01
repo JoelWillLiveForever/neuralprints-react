@@ -15,7 +15,7 @@
     .tf-nodes-container {
         padding: 10px;
 
-        height: 250px;
+        height: 400px;
 
         display: flex;
         flex-direction: column;
@@ -45,12 +45,16 @@
 
             background-color: #61616112;
 
-            border: 2px solid #616161;
+            border: 2px dashed #616161;
             border-radius: 6px;
 
             cursor: grab;
 
             transition: box-shadow 0.3s ease-in-out;
+
+            &:hover {
+                border-style: solid;
+            }
 
             &__input {
                 background-color: #D32F2F12;
