@@ -1,18 +1,9 @@
-import React from 'react';
+// import
 
-import { ReactFlowProvider } from '@xyflow/react';
+const PageTraining = () => {
+    return(
+        <h1>Training Page</h1>
+    )
+}
 
-import { DnDProvider } from '../../context/DnDContext';
-import DnDFlow from '../../components/dndflow/DnDFlow';
-
-const PageTraining: React.FC = () => {
-    return (
-        <ReactFlowProvider>
-            <DnDProvider>
-                <DnDFlow />
-            </DnDProvider>
-        </ReactFlowProvider>
-    );
-};
-
-export default PageTraining;
+export default PageTraining

@@ -1,23 +1,12 @@
-.nav-container {
-    // z-index: 1000;
+.menu {
+    width: 100%;
+    height: 100%;
 
     display: flex;
     flex-direction: column;
 
-    // position: fixed;
-
-    // width: 140px;
-    // height: 100vh;
-
-    width: 100%;
-    height: 100%;
-
-    // top: 0;
-    // left: 0;
-    // bottom: 0;
-    
-    padding: 20px;
-    // padding-left: 20px !important;
+    padding: 10px;
+    gap: 10px;
 
     // background-color: #121212;
     background-color: #fff;
@@ -27,96 +16,202 @@
     // color: #ffffff;
     color: #000;
 
-    .nav-item {
-        background-color: none;
-        border-radius: 16%;
-
-        padding: 10px 30px;
-        margin-bottom: 20px;
-
+    &__button {
         display: flex;
         flex-direction: row;
 
-        justify-content: center;
+        border-radius: 10px;
 
-        font-size: 32px;
+        padding: 18px 24px;
 
-        &:last-child {
-            margin-bottom: 0;
+        justify-content: start;
+
+        color: #000000de;
+        background-color: #6161610d;
+
+        // outline: 2px dashed #d32f2f;
+
+        border-width: 2px;
+        // outline-style: dashed;
+        border-style: solid;
+
+        &:hover {
+            color: #000000f2;
+            background-color: #6161611c;
         }
 
-        &#menu_button_dataset {
+        &__icon {
+            // none
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 24px;
+        }
+
+        &__text {
+            display: flex;
+            align-items: center;
+
+            margin-top: 1px;
+            margin-left: 10px;
+
+            font-family: 'Montserrat', sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 500;
+            font-style: normal;
+
+            font-size: 18px;
+
+            line-height: 1;
+
+            letter-spacing: 0.05em;
+        }
+
+        &--active {
+            color: #000000ff;
+            background-color: #61616129;
+
+            outline-style: solid;
+            outline-width: 2px;
+
+            & .menu__button__text {    
+                font-size: 20px;
+            }
+
+            & .menu__button__icon {    
+                font-size: 28px;
+            }
+        }
+
+        &--collapsed {
+            justify-content: center;
+        }
+
+        &--dataset {
             // color: #EF9A9A;
-            color: #D32F2F;
+
+            color: #C2185Bde;
+            background-color: #C2185B0d;
 
             &:hover {
                 // background-color: #EF9A9A14;
-                background-color: #D32F2F14;
+
+                color: #C2185Bf2;
+                background-color: #C2185B1c;
             }
 
-            &.active-page {
+            &.menu__button--active {
                 // background-color: #03020229;
-                background-color: #D32F2F29;
+
+                color: #C2185Bff;
+                background-color: #C2185B29;
             }
         }
 
-        &#menu_button_training {
+        &--design {
             // color: #FFF59D;
-            color: #FFA000;
+
+            color: #E64A19de;
+            background-color: #E64A190d;
 
             &:hover {
                 // background-color: #FFF59D14;
-                background-color: #FFA00014;
+
+                color: #E64A19f2;
+                background-color: #E64A191c;
             }
 
-            &.active-page {
+            &.menu__button--active {
                 // background-color: #FFF59D29;
-                background-color: #FFA00029;
+
+                color: #E64A19ff;
+                background-color: #E64A1929;
             }
         }
 
-        &#menu_button_evaluation {
+        &--training {
+            // color: #FFF59D;
+
+            color: #689F38de;
+            background-color: #689F380d;
+
+            &:hover {
+                // background-color: #FFF59D14;
+
+                color: #689F38f2;
+                background-color: #689F381c;
+            }
+
+            &.menu__button--active {
+                // background-color: #FFF59D29;
+
+                color: #689F38ff;
+                background-color: #689F3829;
+            }
+        }
+
+        &--inference {
             // color: #A5D6A7;
-            color: #388E3C;
+
+            color: #00796Bde;
+            background-color: #00796B0d;
 
             &:hover {
                 // background-color: #A5D6A714;
-                background-color: #388E3C14;
+
+                color: #00796Bf2;
+                background-color: #00796B1c;
             }
 
-            &.active-page {
+            &.menu__button--active {
                 // background-color: #A5D6A729;
-                background-color: #388E3C29;
+
+                color: #00796Bff;
+                background-color: #00796B29;
             }
         }
 
-        &#menu_button_settings {
+        &--preferences {
             // color: #90CAF9;
-            color: #1976D2;
+
+            color: #303F9Fde;
+            background-color: #303F9F0d;
 
             &:hover {
                 // background-color: #90CAF914;
-                background-color: #1976D214;
+
+                color: #303F9Ff2;
+                background-color: #303F9F1c;
             }
 
-            &.active-page {
+            &.menu__button--active {
                 // background-color: #90CAF929;
-                background-color: #1976D229;
+
+                color: #303F9Fff;
+                background-color: #303F9F29;
             }
         }
 
-        &#menu_button_about {
+        &--about {
             // color: #B39DDB;
-            color: #512DA8;
+
+            color: #7B1FA2de;
+            background-color: #7B1FA20d;
 
             &:hover {
                 // background-color: #B39DDB14;
-                background-color: #512DA814;
+
+                color: #7B1FA2f2;
+                background-color: #7B1FA21c;
             }
 
-            &.active-page {
+            &.menu__button--active {
                 // background-color: #B39DDB29;
-                background-color: #512DA829;
+
+                color: #7B1FA2ff;
+                background-color: #7B1FA229;
             }
         }
     }

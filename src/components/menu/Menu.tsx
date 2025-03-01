@@ -1,50 +1,69 @@
 import { NavLink } from 'react-router-dom';
-// import { forwardRef } from 'react';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './menu.scss';
 
 const Menu = ({ isCollapsed }: { isCollapsed: boolean }) => {
-    const setActive = ({ isActive }: { isActive: boolean }) => (isActive ? 'nav-item active-page' : 'nav-item');
-
-    /**========================================================================
-     * todo                             TODO
-     *
-     *   Сделать названия кнопок (страниц), добавить текст к иконкам
-     *
-     *
-     *========================================================================**/
+    const setMasterClasses = ({ isActive, baseClass }: { isActive: boolean; baseClass: string }) => {
+        return `menu__button ${baseClass} ${isActive ? 'menu__button--active' : ''} ${
+            isCollapsed ? 'menu__button--collapsed' : ''
+        }`.trim();
+    };
 
     return (
-        <nav className="nav-container">
-            <NavLink to="/" className={setActive} id="menu_button_dataset">
-                <i className="bi bi-file-earmark-text-fill" id="menu_button_dataset__icon"></i>
-                {!isCollapsed && <span>Dataset</span>}
+        <nav className="menu">
+            <NavLink
+                to="/dataset"
+                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--dataset' })}
+            >
+                <i className="bi bi-file-earmark-text-fill menu__button__icon"></i>
+                {!isCollapsed && <span className="menu__button__text">Dataset</span>}
             </NavLink>
-            <NavLink to="/training" className={setActive} id="menu_button_training">
-                <i className="bi bi-mortarboard-fill" id="menu_button_training__icon"></i>
-                {!isCollapsed && <span>Training</span>}
+
+            <NavLink
+                to="/design"
+                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--design' })}
+            >
+                <i className="bi bi-mortarboard-fill menu__button__icon"></i>
+                {!isCollapsed && <span className="menu__button__text">Design</span>}
             </NavLink>
-            <NavLink to="/evaluation" className={setActive} id="menu_button_evaluation">
-                <i className="bi bi-clipboard-check-fill" id="menu_button_evaluation__icon"></i>
-                {!isCollapsed && <span>Evaluation</span>}
+
+            <NavLink
+                to="/training"
+                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--training' })}
+            >
+                <i className="bi bi-mortarboard-fill menu__button__icon"></i>
+                {!isCollapsed && <span className="menu__button__text">Training</span>}
             </NavLink>
-            <NavLink to="/settings" className={setActive} id="menu_button_settings">
-                <i className="bi bi-gear-fill" id="menu_button_settings__icon"></i>
-                {!isCollapsed && <span>Settings</span>}
+
+            <NavLink
+                to="/inference"
+                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--inference' })}
+            >
+                <i className="bi bi-clipboard-check-fill menu__button__icon"></i>
+                {!isCollapsed && <span className="menu__button__text">Inference</span>}
             </NavLink>
-            <NavLink to="/about" className={setActive} id="menu_button_about">
-                <i className="bi bi-info-circle-fill" id="menu_button_about__icon"></i>
-                {!isCollapsed && <span>About</span>}
+
+            <NavLink
+                to="/preferences"
+                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--preferences' })}
+            >
+                <i className="bi bi-gear-fill menu__button__icon"></i>
+                {!isCollapsed && <span className="menu__button__text">Preferences</span>}
+            </NavLink>
+
+            <NavLink
+                to="/about"
+                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--about' })}
+            >
+                <i className="bi bi-info-circle-fill menu__button__icon"></i>
+                {!isCollapsed && <span className="menu__button__text">About</span>}
             </NavLink>
         </nav>
     );
 };
 
 export default Menu;
-
-
-
 
 // import { NavLink } from 'react-router-dom';
 // // import { forwardRef } from 'react';
