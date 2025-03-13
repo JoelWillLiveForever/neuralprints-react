@@ -21,6 +21,8 @@ import Sidebar from '../sidebar/Sidebar';
 import { useDnD } from '../../context/DnDContext';
 
 import InputNode from '../nodes/input/InputNode';
+import DenseNode from '../nodes/dense/DenseNode';
+import DropoutNode from '../nodes/dropout/DropoutNode';
 
 /* import styles */
 import '@xyflow/react/dist/style.css';
@@ -30,10 +32,14 @@ const proOptions = { hideAttribution: false };
 
 export type NodeTypes = {
     inputNode: typeof InputNode;
+    denseNode: typeof DenseNode;
+    dropoutNode: typeof DropoutNode;
 };
 
 const nodeTypes: NodeTypes = {
     inputNode: InputNode,
+    denseNode: DenseNode,
+    dropoutNode: DropoutNode,
 };
 
 const initialNodes = [

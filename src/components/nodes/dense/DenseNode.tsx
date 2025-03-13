@@ -1,26 +1,26 @@
 import React from 'react';
 import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
 
-import type { InputNodeData, InputNodeType } from './InputNodeProps';
+import type { DenseNodeData, DenseNodeType } from './DenseNodeProps';
 
-import './input_node.scss';
+import './dense_node.scss';
 
-const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) => {
-    const { setNodes } = useReactFlow<InputNodeType>(); // Типизируем useReactFlow
+const DenseNode: React.FC<NodeProps<DenseNodeType>> = ({ id, data, selected }) => {
+    const { setNodes } = useReactFlow<DenseNodeType>(); // Типизируем useReactFlow
 
-    const handleChange = (field: keyof InputNodeData, value: string | number) => {
+    const handleChange = (field: keyof DenseNodeData, value: string | number) => {
         setNodes((nodes) =>
             nodes.map((node) => (node.id === id ? { ...node, data: { ...node.data, [field]: value } } : node))
         );
     };
 
     return (
-        <div className={`tf-node-input ${selected ? 'border-blue-500' : 'border-gray-300'}`}>
+        <div className={`tf-node-dense ${selected ? 'border-blue-500' : 'border-gray-300'}`}>
             {/* Заголовок */}
-            <div className="tf-node-input__header">Input</div>
+            <div className="tf-node-dense__header">Dense</div>
 
             {/* Поля */}
-            <div className="tf-node-input__body">
+            <div className="tf-node-dense__body">
                 <div className='property'>
                     <label className='property__key'>Name</label>
                     <input
@@ -43,10 +43,13 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
                 </div>
             </div>
 
+            {/* Входной пин */}
+            <Handle type="target" position={Position.Left} className="tf-node-dense__connector tf-node-dense__connector--target" />
+
             {/* Выходной пин */}
-            <Handle type="source" position={Position.Right} className="tf-node-input__connector" />
+            <Handle type="source" position={Position.Right} className="tf-node-dense__connector tf-node-dense__connector--source" />
         </div>
     );
 };
 
-export default InputNode;
+export default DenseNode;

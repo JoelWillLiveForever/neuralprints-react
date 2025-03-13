@@ -1,26 +1,26 @@
 import React from 'react';
 import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
 
-import type { InputNodeData, InputNodeType } from './InputNodeProps';
+import type { DropoutNodeData, DropoutNodeType } from './DropoutNodeProps';
 
-import './input_node.scss';
+import './dropout_node.scss';
 
-const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) => {
-    const { setNodes } = useReactFlow<InputNodeType>(); // Типизируем useReactFlow
+const DropoutNode: React.FC<NodeProps<DropoutNodeType>> = ({ id, data, selected }) => {
+    const { setNodes } = useReactFlow<DropoutNodeType>(); // Типизируем useReactFlow
 
-    const handleChange = (field: keyof InputNodeData, value: string | number) => {
+    const handleChange = (field: keyof DropoutNodeData, value: string | number) => {
         setNodes((nodes) =>
             nodes.map((node) => (node.id === id ? { ...node, data: { ...node.data, [field]: value } } : node))
         );
     };
 
     return (
-        <div className={`tf-node-input ${selected ? 'border-blue-500' : 'border-gray-300'}`}>
+        <div className={`tf-node-dropout ${selected ? 'border-blue-500' : 'border-gray-300'}`}>
             {/* Заголовок */}
-            <div className="tf-node-input__header">Input</div>
+            <div className="tf-node-dropout__header">Dropout</div>
 
             {/* Поля */}
-            <div className="tf-node-input__body">
+            <div className="tf-node-dropout__body">
                 <div className='property'>
                     <label className='property__key'>Name</label>
                     <input
@@ -43,10 +43,13 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
                 </div>
             </div>
 
+            {/* Входной пин */}
+            <Handle type="target" position={Position.Left} className="tf-node-dropout__connector tf-node-dropout__connector--target" />
+
             {/* Выходной пин */}
-            <Handle type="source" position={Position.Right} className="tf-node-input__connector" />
+            <Handle type="source" position={Position.Right} className="tf-node-dropout__connector tf-node-dropout__connector--source" />
         </div>
     );
 };
 
-export default InputNode;
+export default DropoutNode;

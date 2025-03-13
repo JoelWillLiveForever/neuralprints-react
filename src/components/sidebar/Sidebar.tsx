@@ -25,11 +25,11 @@ const Sidebar: React.FC = () => {
                     Input
                 </div>
 
-                <div className="tf-node tf-node__dense" draggable onDragStart={(event) => onDragStart(event, 'Dense')}>
+                <div className="tf-node tf-node__dense" draggable onDragStart={(event) => onDragStart(event, 'denseNode')}>
                     Dense
                 </div>
 
-                <div className="tf-node tf-node__dropout" draggable onDragStart={(event) => onDragStart(event, 'Dropout')}>
+                <div className="tf-node tf-node__dropout" draggable onDragStart={(event) => onDragStart(event, 'dropoutNode')}>
                     Dropout
                 </div>
 
