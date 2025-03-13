@@ -24,7 +24,7 @@ const Menu = ({ isCollapsed }: { isCollapsed: boolean }) => {
                 to="/design"
                 className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--design' })}
             >
-                <i className="bi bi-mortarboard-fill menu__button__icon"></i>
+                <i className="bi bi-sliders menu__button__icon"></i>
                 {!isCollapsed && <span className="menu__button__text">Design</span>}
             </NavLink>
 
@@ -40,7 +40,7 @@ const Menu = ({ isCollapsed }: { isCollapsed: boolean }) => {
                 to="/inference"
                 className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--inference' })}
             >
-                <i className="bi bi-clipboard-check-fill menu__button__icon"></i>
+                <i className="bi bi-rocket-takeoff-fill menu__button__icon"></i>
                 {!isCollapsed && <span className="menu__button__text">Inference</span>}
             </NavLink>
 

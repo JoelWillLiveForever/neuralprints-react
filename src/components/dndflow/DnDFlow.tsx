@@ -20,18 +20,31 @@ import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from 'rea
 import Sidebar from '../sidebar/Sidebar';
 import { useDnD } from '../../context/DnDContext';
 
+import InputNode from '../nodes/input/InputNode';
+
 /* import styles */
 import '@xyflow/react/dist/style.css';
 import './dnd_flow.scss';
 
 const proOptions = { hideAttribution: false };
 
+export type NodeTypes = {
+    inputNode: typeof InputNode;
+};
+
+const nodeTypes: NodeTypes = {
+    inputNode: InputNode,
+};
+
 const initialNodes = [
     {
         id: '1',
-        type: 'Input',
-        data: { label: 'Input' },
+        type: 'inputNode' as const,
         position: { x: 0, y: 0 },
+        data: {
+            tf_layer_name: 'input_layer',
+            tf_layer_neurons_count: 128,
+        },
     },
 ];
 
@@ -57,7 +70,9 @@ const DnDFlow: React.FC = () => {
     const PAGE_CONTAINER_WIDTH = dndFlowWrapper.current?.getBoundingClientRect().width || window.innerWidth;
 
     const SIDEBAR_DEFAULT_SIZE_IN_PX = 350;
-    const [sidebarDefaultSize, setMenuDefaultSize] = useState((SIDEBAR_DEFAULT_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100);
+    const [sidebarDefaultSize, setMenuDefaultSize] = useState(
+        (SIDEBAR_DEFAULT_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100
+    );
 
     const SIDEBAR_MIN_SIZE_IN_PX = 250;
     const [sidebarMinSize, setMenuMinSize] = useState((SIDEBAR_MIN_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100);
@@ -79,7 +94,7 @@ const DnDFlow: React.FC = () => {
 
         const handleResize = () => {
             const dndFlowWidth = dndFlowWrapper.current?.getBoundingClientRect().width || window.innerWidth;
-            console.log("Текущая ширина меню:", dndFlowWidth);
+            console.log('Текущая ширина меню:', dndFlowWidth);
 
             setMenuDefaultSize((SIDEBAR_DEFAULT_SIZE_IN_PX / dndFlowWidth) * 100);
 
@@ -104,6 +119,30 @@ const DnDFlow: React.FC = () => {
         event.dataTransfer.dropEffect = 'move';
     }, []);
 
+    // const onDrop = useCallback(
+    //     (event: React.DragEvent) => {
+    //         event.preventDefault();
+
+    //         if (!type) return;
+
+    //         const position = screenToFlowPosition({
+    //             x: event.clientX,
+    //             y: event.clientY,
+    //         });
+
+    //         const newNode = {
+    //             id: getId(),
+    //             type,
+    //             position,
+    //             data: { label: `${type}` },
+    //         };
+
+    //         // setNodes((nodes) => [...nodes, newNode]);
+    //         setNodes((nodes) => nodes.concat(newNode));
+    //     },
+    //     [screenToFlowPosition, setNodes, type]
+    // );
+
     const onDrop = useCallback(
         (event: React.DragEvent) => {
             event.preventDefault();
@@ -119,14 +158,32 @@ const DnDFlow: React.FC = () => {
                 id: getId(),
                 type,
                 position,
-                data: { label: `${type}` },
+                data: getNodeData(type),
             };
 
-            // setNodes((nodes) => [...nodes, newNode]);
             setNodes((nodes) => nodes.concat(newNode));
         },
         [screenToFlowPosition, setNodes, type]
     );
+
+    const getNodeData = (type: string) => {
+        switch (type) {
+            case 'inputNode':
+                return {
+                    tf_layer_name: 'new_input',
+                    tf_layer_neurons_count: 64,
+                };
+            case 'denseNode':
+                return {
+                    units: 64,
+                    activation: 'relu',
+                };
+            case 'dropoutNode':
+                return { rate: 0.5 };
+            default:
+                return { label: type };
+        }
+    };
 
     return (
         <div className="dnd-flow" ref={dndFlowWrapper}>
@@ -136,6 +193,7 @@ const DnDFlow: React.FC = () => {
                         <ReactFlow
                             nodes={nodes}
                             edges={edges}
+                            nodeTypes={nodeTypes}
                             onNodesChange={onNodesChange}
                             onEdgesChange={onEdgesChange}
                             onConnect={onConnect}
@@ -152,7 +210,13 @@ const DnDFlow: React.FC = () => {
                     </div>
                 </Panel>
                 <PanelResizeHandle />
-                <Panel collapsible defaultSize={sidebarDefaultSize} minSize={sidebarMinSize} maxSize={sidebarMaxSize} ref={sidebarWrapper}>
+                <Panel
+                    collapsible
+                    defaultSize={sidebarDefaultSize}
+                    minSize={sidebarMinSize}
+                    maxSize={sidebarMaxSize}
+                    ref={sidebarWrapper}
+                >
                     <Sidebar />
                 </Panel>
             </PanelGroup>

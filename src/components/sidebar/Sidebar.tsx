@@ -21,7 +21,7 @@ const Sidebar: React.FC = () => {
             {/* <div className="description">Drag and drop nodes to the right panel.</div> */}
 
             <div className="tf-nodes-container">
-                <div className="tf-node tf-node__input" draggable onDragStart={(event) => onDragStart(event, 'Input')}>
+                <div className="tf-node tf-node__input" draggable onDragStart={(event) => onDragStart(event, 'inputNode')}>
                     Input
                 </div>
 
