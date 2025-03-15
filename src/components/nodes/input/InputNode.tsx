@@ -24,18 +24,18 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
                 <div className="property">
                     <label className="property__key">Name</label>
                     <input
+                        className="nopan nodrag property__value"
                         type="text"
                         value={data.tf_layer_name}
                         onChange={(e) => handleChange('tf_layer_name', e.target.value)}
-                        className="property__value"
                     />
                 </div>
 
                 <div className="property">
                     <label className="property__key">Neurons</label>
                     <input
+                        className="nopan nodrag nowheel property__value"
                         type="number"
-                        className="nopan nodrag property__value"
                         value={data.tf_layer_neurons_count}
                         onChange={(e) => {
                             // e.stopPropagation();
@@ -48,14 +48,14 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
                         //     e.stopPropagation();
                         // }}
                         // TODO: Допилить измкенение значений при прокрутке колеса мыши
-                        // onWheel={(e) => {
-                        //     e.preventDefault();
-                        //     const step = e.deltaY > 0 ? -1 : 1; // Если прокрутка вниз, уменьшаем значение, если вверх — увеличиваем
-                        //     handleChange(
-                        //         'tf_layer_neurons_count',
-                        //         Math.max(1, Math.min(1024, data.tf_layer_neurons_count + step))
-                        //     );
-                        // }}
+                        onWheel={(e) => {
+                            e.preventDefault();
+                            const step = e.deltaY > 0 ? -1 : 1; // Если прокрутка вниз, уменьшаем значение, если вверх — увеличиваем
+                            handleChange(
+                                'tf_layer_neurons_count',
+                                Math.max(1, Math.min(1024, data.tf_layer_neurons_count + step))
+                            );
+                        }}
                         min={1}
                         max={1024}
                         step={1}

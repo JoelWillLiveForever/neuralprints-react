@@ -46,23 +46,31 @@ const DenseNode: React.FC<NodeProps<DenseNodeType>> = ({ id, data, selected }) =
                 <div className="property">
                     <label className="property__key">Name</label>
                     <input
+                        className="nopan nodrag property__value"
                         type="text"
                         value={data.tf_layer_name}
                         onChange={(e) => handleChange('tf_layer_name', e.target.value)}
-                        className="property__value"
                     />
                 </div>
 
                 <div className="property">
                     <label className="property__key">Neurons</label>
                     <input
+                        className="nopan nodrag nowheel property__value"
                         type="number"
                         value={data.tf_layer_neurons_count}
                         onChange={(e) => handleChange('tf_layer_neurons_count', Number(e.target.value))}
-                        className="nopan nodrag property__value"
                         min={1}
                         max={1024}
                         step={1}
+                        onWheel={(e) => {
+                            e.preventDefault();
+                            const step = e.deltaY > 0 ? -1 : 1; // Если прокрутка вниз, уменьшаем значение, если вверх — увеличиваем
+                            handleChange(
+                                'tf_layer_neurons_count',
+                                Math.max(1, Math.min(1024, data.tf_layer_neurons_count + step))
+                            );
+                        }}
                     />
                 </div>
 
@@ -70,9 +78,9 @@ const DenseNode: React.FC<NodeProps<DenseNodeType>> = ({ id, data, selected }) =
                     <label className="property__key">Activation</label>
                     <div className="property__select-wrapper">
                         <select
+                            className="nopan nodrag property__select"
                             value={data.tf_layer_activation_function}
                             onChange={(e) => handleChange('tf_layer_activation_function', e.target.value)}
-                            className="property__select"
                         >
                             <option value="" selected disabled hidden>
                                 Select activation function
@@ -107,9 +115,9 @@ const DenseNode: React.FC<NodeProps<DenseNodeType>> = ({ id, data, selected }) =
                     <label className="property__key">Use Bias</label>
                     <div className="property__select-wrapper">
                         <select
+                            className="nopan nodrag property__select"
                             value={data.tf_layer_use_bias ? 'yes' : 'no'}
                             onChange={(e) => handleChange('tf_layer_use_bias', e.target.value === 'yes' ? 1 : 0)}
-                            className="property__select"
                         >
                             <option value="yes">Yes</option>
                             <option value="no">No</option>

@@ -46,6 +46,12 @@
                 color: #333;
                 font-size: 14px;
                 font-family: inherit;
+
+                &:focus {
+                    outline: none;
+                    border-color: #d32f2f;
+                    box-shadow: 0 0 6px rgba(211, 47, 47, 0.5);
+                }
             }
 
             input[type="number"] {

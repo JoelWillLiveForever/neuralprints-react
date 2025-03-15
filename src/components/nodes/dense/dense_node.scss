@@ -46,6 +46,12 @@
                 color: #333;
                 font-size: 14px;
                 font-family: inherit;
+
+                &:focus {
+                    outline: none;
+                    border-color: #ffa000;
+                    box-shadow: 0 0 6px rgba(255, 160, 0, 0.5);
+                }
             }
 
             input[type='number'] {
@@ -70,11 +76,10 @@
 
                 cursor: pointer;
 
-                // TODO: сделать такое у всех полей (наверно)
                 &:focus {
                     outline: none;
                     border-color: #ffa000;
-                    box-shadow: 0 0 5px rgba(255, 160, 0, 0.5);
+                    box-shadow: 0 0 6px rgba(255, 160, 0, 0.5);
                 }
             }
         }
