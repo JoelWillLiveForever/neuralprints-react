@@ -21,24 +21,24 @@ const Sidebar: React.FC = () => {
             {/* <div className="description">Drag and drop nodes to the right panel.</div> */}
 
             <div className="tf-nodes-container">
-                <div className="tf-node tf-node__input" draggable onDragStart={(event) => onDragStart(event, 'inputNode')}>
+                <div className="tf-node tf-node__input" draggable onDragStart={(event) => onDragStart(event, 'TF_INPUT_LAYER_NODE')}>
                     Input
                 </div>
 
-                <div className="tf-node tf-node__dense" draggable onDragStart={(event) => onDragStart(event, 'denseNode')}>
+                <div className="tf-node tf-node__dense" draggable onDragStart={(event) => onDragStart(event, 'TF_DENSE_LAYER_NODE')}>
                     Dense
                 </div>
 
-                <div className="tf-node tf-node__dropout" draggable onDragStart={(event) => onDragStart(event, 'dropoutNode')}>
+                <div className="tf-node tf-node__dropout" draggable onDragStart={(event) => onDragStart(event, 'TF_DROPOUT_LAYER_NODE')}>
                     Dropout
+                </div>
+
+                <div className="tf-node tf-node__gaussian-dropout" draggable onDragStart={(event) => onDragStart(event, 'TF_GAUSSIAN_DROPOUT_LAYER_NODE')}>
+                    Gaussian Dropout
                 </div>
 
                 <div className="tf-node tf-node__gaussian-noise" draggable onDragStart={(event) => onDragStart(event, 'Gaussian Noise')}>
                     Gaussian Noise
-                </div>
-
-                <div className="tf-node tf-node__gaussian-dropout" draggable onDragStart={(event) => onDragStart(event, 'Gaussian Dropout')}>
-                    Gaussian Dropout
                 </div>
             </div>
         </aside>

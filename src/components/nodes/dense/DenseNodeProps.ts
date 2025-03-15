@@ -9,4 +9,4 @@ export type DenseNodeData = {
 }
 
 // Создаем полный тип узла с указанием типа узла
-export type DenseNodeType = Node<DenseNodeData, 'denseNode'>;
+export type DenseNodeType = Node<DenseNodeData, 'TF_DENSE_LAYER_NODE'>;

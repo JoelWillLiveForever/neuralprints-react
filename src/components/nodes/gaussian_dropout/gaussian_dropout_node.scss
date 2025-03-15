@@ -1,4 +1,4 @@
-.tf-node-dropout {
+.tf-node-gaussian-dropout {
     background-color: #fff;
     border-radius: 16px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
@@ -7,7 +7,7 @@
     font-family: 'Montserrat', sans-serif;
 
     &__header {
-        background-color: #1976d2;
+        background-color: #00796B;
         border-radius: 16px 16px 0 0;
         padding: 9px;
         text-align: center;
@@ -49,8 +49,8 @@
 
                 &:focus {
                     outline: none;
-                    border-color: #1976D2;
-                    box-shadow: 0 0 6px rgba(25, 118, 210, 0.5);
+                    border-color: #00796B;
+                    box-shadow: 0 0 6px rgba(0, 121, 107, 0.5);
                 }
             }
 
@@ -163,7 +163,7 @@
 
                         // $shadow-offset: calc($slider-width / -2);
                         // box-shadow: $shadow-offset 0 0 calc($slider-width / 2) #666;
-                        box-shadow: -200px 0 0 200px #BBDEFB;
+                        box-shadow: -200px 0 0 200px #B2DFDB;
 
                         // margin-top: -6px;
                         // margin-bottom: -6px;
@@ -204,8 +204,8 @@
 
                     &:focus {
                         outline: none;
-                        border-color: #1976D2;
-                        box-shadow: 0 0 6px rgba(25, 118, 210, 0.5);
+                        border-color: #00796B;
+                        box-shadow: 0 0 6px rgba(0, 121, 107, 0.5);
                     }
                 }
 
@@ -254,7 +254,7 @@
         width: 12px !important;
         height: auto !important;
         aspect-ratio: 1 / 1 !important;
-        background: #1976d2 !important;
+        background: #00796B !important;
         border: 2px solid white !important;
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
         transform-origin: center center !important;

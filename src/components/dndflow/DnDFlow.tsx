@@ -23,6 +23,7 @@ import { useDnD } from '../../context/DnDContext';
 import InputNode from '../nodes/input/InputNode';
 import DenseNode from '../nodes/dense/DenseNode';
 import DropoutNode from '../nodes/dropout/DropoutNode';
+import GaussianDropoutNode from '../nodes/gaussian_dropout/GaussianDropoutNode';
 
 /* import styles */
 import '@xyflow/react/dist/style.css';
@@ -31,21 +32,23 @@ import './dnd_flow.scss';
 const proOptions = { hideAttribution: false };
 
 export type NodeTypes = {
-    inputNode: typeof InputNode;
-    denseNode: typeof DenseNode;
-    dropoutNode: typeof DropoutNode;
+    TF_INPUT_LAYER_NODE: typeof InputNode;
+    TF_DENSE_LAYER_NODE: typeof DenseNode;
+    TF_DROPOUT_LAYER_NODE: typeof DropoutNode;
+    TF_GAUSSIAN_DROPOUT_LAYER_NODE: typeof GaussianDropoutNode;
 };
 
 const nodeTypes: NodeTypes = {
-    inputNode: InputNode,
-    denseNode: DenseNode,
-    dropoutNode: DropoutNode,
+    TF_INPUT_LAYER_NODE: InputNode,
+    TF_DENSE_LAYER_NODE: DenseNode,
+    TF_DROPOUT_LAYER_NODE: DropoutNode,
+    TF_GAUSSIAN_DROPOUT_LAYER_NODE: GaussianDropoutNode,
 };
 
 const initialNodes = [
     {
         id: '1',
-        type: 'inputNode' as const,
+        type: 'TF_INPUT_LAYER_NODE' as const,
         position: { x: 0, y: 0 },
         data: {
             tf_layer_name: 'input_layer',
@@ -100,7 +103,7 @@ const DnDFlow: React.FC = () => {
 
         const handleResize = () => {
             const dndFlowWidth = dndFlowWrapper.current?.getBoundingClientRect().width || window.innerWidth;
-            console.log('Текущая ширина меню:', dndFlowWidth);
+            // console.log('Текущая ширина меню:', dndFlowWidth);
 
             setMenuDefaultSize((SIDEBAR_DEFAULT_SIZE_IN_PX / dndFlowWidth) * 100);
 
@@ -174,18 +177,28 @@ const DnDFlow: React.FC = () => {
 
     const getNodeData = (type: string) => {
         switch (type) {
-            case 'inputNode':
+            case 'TF_INPUT_LAYER_NODE':
                 return {
                     tf_layer_name: 'new_input',
                     tf_layer_neurons_count: 64,
                 };
-            case 'denseNode':
+            case 'TF_DENSE_LAYER_NODE':
                 return {
-                    units: 64,
-                    activation: 'relu',
+                    tf_layer_name: 'new_dense',
+                    tf_layer_neurons_count: 128,
+                    tf_layer_activation_function: 'sigmoid',
+                    tf_layer_use_bias: 1,
                 };
-            case 'dropoutNode':
-                return { rate: 0.5 };
+            case 'TF_DROPOUT_LAYER_NODE':
+                return { 
+                    tf_layer_name: 'new_dropout',
+                    tf_layer_strength: 0.5,
+                };
+            case 'TF_GAUSSIAN_DROPOUT_LAYER_NODE':
+                return { 
+                    tf_layer_name: 'new_gaussian_dropout',
+                    tf_layer_strength: 0.5,
+                };
             default:
                 return { label: type };
         }

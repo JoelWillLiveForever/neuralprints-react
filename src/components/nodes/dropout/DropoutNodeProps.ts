@@ -7,4 +7,4 @@ export type DropoutNodeData = {
 }
 
 // Создаем полный тип узла с указанием типа узла
-export type DropoutNodeType = Node<DropoutNodeData, 'dropoutNode'>;
+export type DropoutNodeType = Node<DropoutNodeData, 'TF_DROPOUT_LAYER_NODE'>;
