@@ -21,8 +21,8 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
 
             {/* Поля */}
             <div className="tf-node-input__body">
-                <div className='property'>
-                    <label className='property__key'>Name</label>
+                <div className="property">
+                    <label className="property__key">Name</label>
                     <input
                         type="text"
                         value={data.tf_layer_name}
@@ -31,14 +31,34 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
                     />
                 </div>
 
-                <div className='property'>
-                    <label className='property__key'>Neurons</label>
+                <div className="property">
+                    <label className="property__key">Neurons</label>
                     <input
                         type="number"
+                        className="nopan nodrag property__value"
                         value={data.tf_layer_neurons_count}
-                        onChange={(e) => handleChange('tf_layer_neurons_count', Number(e.target.value))}
-                        className="property__value"
+                        onChange={(e) => {
+                            // e.stopPropagation();
+                            handleChange(
+                                'tf_layer_neurons_count',
+                                Math.max(1, parseInt((e.target as HTMLInputElement).value, 10) || 1)
+                            );
+                        }}
+                        // onMouseUp={(e) => {
+                        //     e.stopPropagation();
+                        // }}
+                        // TODO: Допилить измкенение значений при прокрутке колеса мыши
+                        // onWheel={(e) => {
+                        //     e.preventDefault();
+                        //     const step = e.deltaY > 0 ? -1 : 1; // Если прокрутка вниз, уменьшаем значение, если вверх — увеличиваем
+                        //     handleChange(
+                        //         'tf_layer_neurons_count',
+                        //         Math.max(1, Math.min(1024, data.tf_layer_neurons_count + step))
+                        //     );
+                        // }}
                         min={1}
+                        max={1024}
+                        step={1}
                     />
                 </div>
             </div>
