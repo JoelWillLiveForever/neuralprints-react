@@ -37,7 +37,7 @@ const Sidebar: React.FC = () => {
                     Gaussian Dropout
                 </div>
 
-                <div className="tf-node tf-node__gaussian-noise" draggable onDragStart={(event) => onDragStart(event, 'Gaussian Noise')}>
+                <div className="tf-node tf-node__gaussian-noise" draggable onDragStart={(event) => onDragStart(event, 'TF_GAUSSIAN_NOISE_LAYER_NODE')}>
                     Gaussian Noise
                 </div>
             </div>

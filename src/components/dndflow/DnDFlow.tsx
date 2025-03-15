@@ -24,6 +24,7 @@ import InputNode from '../nodes/input/InputNode';
 import DenseNode from '../nodes/dense/DenseNode';
 import DropoutNode from '../nodes/dropout/DropoutNode';
 import GaussianDropoutNode from '../nodes/gaussian_dropout/GaussianDropoutNode';
+import GaussianNoiseNode from '../nodes/gaussian_noise/GaussianNoiseNode';
 
 /* import styles */
 import '@xyflow/react/dist/style.css';
@@ -36,6 +37,7 @@ export type NodeTypes = {
     TF_DENSE_LAYER_NODE: typeof DenseNode;
     TF_DROPOUT_LAYER_NODE: typeof DropoutNode;
     TF_GAUSSIAN_DROPOUT_LAYER_NODE: typeof GaussianDropoutNode;
+    TF_GAUSSIAN_NOISE_LAYER_NODE: typeof GaussianNoiseNode;
 };
 
 const nodeTypes: NodeTypes = {
@@ -43,6 +45,7 @@ const nodeTypes: NodeTypes = {
     TF_DENSE_LAYER_NODE: DenseNode,
     TF_DROPOUT_LAYER_NODE: DropoutNode,
     TF_GAUSSIAN_DROPOUT_LAYER_NODE: GaussianDropoutNode,
+    TF_GAUSSIAN_NOISE_LAYER_NODE: GaussianNoiseNode,
 };
 
 const initialNodes = [
@@ -190,14 +193,19 @@ const DnDFlow: React.FC = () => {
                     tf_layer_use_bias: 1,
                 };
             case 'TF_DROPOUT_LAYER_NODE':
-                return { 
+                return {
                     tf_layer_name: 'new_dropout',
                     tf_layer_strength: 0.5,
                 };
             case 'TF_GAUSSIAN_DROPOUT_LAYER_NODE':
-                return { 
+                return {
                     tf_layer_name: 'new_gaussian_dropout',
                     tf_layer_strength: 0.5,
+                };
+            case 'TF_GAUSSIAN_NOISE_LAYER_NODE':
+                return {
+                    tf_layer_name: 'new_gaussian_noise',
+                    tf_layer_stddev: 0.1,
                 };
             default:
                 return { label: type };
