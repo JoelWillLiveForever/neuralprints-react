@@ -2,9 +2,14 @@
     // position: relative;
     // transition: width 0.2s;
 
+    display: flex;
+    flex-direction: column;
+
     padding: 16px;
 
     border-left: 1px solid #121212;
+
+    gap: 10px;
 
     // width: 300px;
     width: 100%;
@@ -13,103 +18,108 @@
     // min-width: 150px;
 
     .tf-nodes-container {
-        padding: 10px;
+        &__header {
 
-        height: 400px;
+        }
 
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
-
-        overflow-y: auto;
-
-        background-color: #FFA00003;
-        border-bottom: 1px solid #FFA000;
-
-        scrollbar-width: auto;
-        scrollbar-color: #adb5bd #f8f9fa;
-
-        /* TensorFlow Nodes Styles */
-        .tf-node {
-            // height: 60px;
-
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-
-            font-size: 16px;
-            font-weight: bold;
-
+        &__body {
             padding: 10px;
-            // margin-bottom: 10px;
 
-            background-color: #61616112;
+            // height: 400px;
+            max-height: 200px;
 
-            border: 2px dashed #616161;
-            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
 
-            cursor: grab;
+            // flex-wrap: wrap !important;
+            // align-items: flex-start;
 
-            transition: box-shadow 0.3s ease-in-out;
+            gap: 7px;
 
-            &:hover {
-                border-style: solid;
-            }
+            overflow-y: auto;
 
-            &__input {
-                background-color: #D32F2F12;
-                border-color: #D32F2F;
+            background-color: #ffa00003;
+            border-bottom: 1px solid #ffa000;
+
+            scrollbar-width: auto;
+            scrollbar-color: #adb5bd #f8f9fa;
+
+            /* TensorFlow Nodes Styles */
+            .tf-node {
+                // height: 60px;
+
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+
+                white-space: nowrap;
+
+                // width: min-content;
+
+                font-size: 16px;
+                font-weight: bold;
+
+                padding: 10px;
+                // margin-bottom: 10px;
+
+                background-color: #61616112;
+
+                border: 2px dashed #616161;
+                border-radius: 6px;
+
+                cursor: grab;
+
+                transition: box-shadow 0.3s ease-in-out;
 
                 &:hover {
-                    box-shadow: 0 0 0 2px #D32F2F;
+                    border-style: solid;
                 }
-            }
 
-            &__dense {
-                background-color: #FFA00012;
-                border-color: #FFA000;
+                &__input {
+                    background-color: #d32f2f12;
+                    border-color: #d32f2f;
 
-                &:hover {
-                    box-shadow: 0 0 0 2px #FFA000;
+                    &:hover {
+                        box-shadow: 0 0 0 2px #d32f2f;
+                    }
                 }
-            }
 
-            &__dropout {
-                background-color: #1976D212;
-                border-color: #1976D2;
+                &__dense {
+                    background-color: #ffa00012;
+                    border-color: #ffa000;
 
-                &:hover {
-                    box-shadow: 0 0 0 2px #1976D2;
+                    &:hover {
+                        box-shadow: 0 0 0 2px #ffa000;
+                    }
                 }
-            }
 
-            &__gaussian-dropout {
-                background-color: #00796B12;
-                border-color: #00796B;
+                &__dropout {
+                    background-color: #1976d212;
+                    border-color: #1976d2;
 
-                &:hover {
-                    box-shadow: 0 0 0 2px #00796B;
+                    &:hover {
+                        box-shadow: 0 0 0 2px #1976d2;
+                    }
                 }
-            }
 
-            &__gaussian-noise {
-                background-color: #5D403712;
-                border-color: #5D4037;
+                &__gaussian-dropout {
+                    background-color: #00796b12;
+                    border-color: #00796b;
 
-                &:hover {
-                    box-shadow: 0 0 0 2px #5D4037;
+                    &:hover {
+                        box-shadow: 0 0 0 2px #00796b;
+                    }
+                }
+
+                &__gaussian-noise {
+                    background-color: #5d403712;
+                    border-color: #5d4037;
+
+                    &:hover {
+                        box-shadow: 0 0 0 2px #5d4037;
+                    }
                 }
             }
         }
     }
 }
-
-// .resize-handle {
-//     position: absolute;
-//     top: 0;
-//     right: 0;
-//     width: 10px;
-//     height: 100%;
-//     cursor: ew-resize;
-//     background-color: #888;
-// }
