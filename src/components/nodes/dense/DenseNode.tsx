@@ -4,6 +4,7 @@ import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
 import type { DenseNodeData, DenseNodeType } from './DenseNodeProps';
 
 import './dense_node.scss';
+import BeautifulComboBox from '../../beautiful_combo_box/BeautifulComboBox';
 
 const DenseNode: React.FC<NodeProps<DenseNodeType>> = ({ id, data, selected }) => {
     const { setNodes } = useReactFlow<DenseNodeType>();
@@ -74,56 +75,45 @@ const DenseNode: React.FC<NodeProps<DenseNodeType>> = ({ id, data, selected }) =
                     />
                 </div>
 
-                <div className="property">
-                    <label className="property__key">Activation</label>
-                    <div className="property__select-wrapper">
-                        <select
-                            className="nopan nodrag property__select"
-                            value={data.tf_layer_activation_function}
-                            onChange={(e) => handleChange('tf_layer_activation_function', e.target.value)}
-                        >
-                            <option value="" selected disabled hidden>
-                                Select activation function
-                            </option>
-
-                            <option value="elu">ELU</option>
-                            <option value="exponential">Exponential</option>
-                            <option value="gelu">GELU</option>
-                            <option value="hard_sigmoid">Hard sigmoid</option>
-                            <option value="hard_silu">Hard SiLU</option>
-                            <option value="hard_swish">Hard Swish</option>
-                            <option value="leaky_swish">Leaky ReLU</option>
-                            <option value="linear">Linear</option>
-                            <option value="log_softmax">Log-Softmax</option>
-                            <option value="mish">Mish</option>
-                            <option value="relu">ReLU</option>
-                            <option value="relu6">ReLU6</option>
-                            <option value="selu">SELU</option>
-                            <option value="sigmoid">Sigmoid</option>
-                            <option value="silu">SiLU</option>
-                            <option value="softmax">Softmax</option>
-                            <option value="softplus">Softplus</option>
-                            <option value="softsign">Softsign</option>
-                            <option value="swish">Swish</option>
-                            <option value="tanh">Hyperbolic Tangent (tanh)</option>
-                        </select>
-                    </div>
-                </div>
+                <BeautifulComboBox
+                    value={data.tf_layer_activation_function}
+                    onChange={(e) => handleChange('tf_layer_activation_function', e.target.value)}
+                    placeholder='Select activation function'
+                    label='Activation'
+                    color='#ffa000'
+                >
+                    <option value="elu">ELU</option>
+                    <option value="exponential">Exponential</option>
+                    <option value="gelu">GELU</option>
+                    <option value="hard_sigmoid">Hard sigmoid</option>
+                    <option value="hard_silu">Hard SiLU</option>
+                    <option value="hard_swish">Hard Swish</option>
+                    <option value="leaky_swish">Leaky ReLU</option>
+                    <option value="linear">Linear</option>
+                    <option value="log_softmax">Log-Softmax</option>
+                    <option value="mish">Mish</option>
+                    <option value="relu">ReLU</option>
+                    <option value="relu6">ReLU6</option>
+                    <option value="selu">SELU</option>
+                    <option value="sigmoid">Sigmoid</option>
+                    <option value="silu">SiLU</option>
+                    <option value="softmax">Softmax</option>
+                    <option value="softplus">Softplus</option>
+                    <option value="softsign">Softsign</option>
+                    <option value="swish">Swish</option>
+                    <option value="tanh">Hyperbolic Tangent (tanh)</option>
+                </BeautifulComboBox>
 
                 {/* Use Bias в виде combobox */}
-                <div className="property">
-                    <label className="property__key">Use Bias</label>
-                    <div className="property__select-wrapper">
-                        <select
-                            className="nopan nodrag property__select"
-                            value={data.tf_layer_use_bias ? 'yes' : 'no'}
-                            onChange={(e) => handleChange('tf_layer_use_bias', e.target.value === 'yes' ? 1 : 0)}
-                        >
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                    </div>
-                </div>
+                <BeautifulComboBox
+                    value={data.tf_layer_use_bias ? 'yes' : 'no'}
+                    onChange={(e) => handleChange('tf_layer_use_bias', e.target.value === 'yes' ? 1 : 0)}
+                    label='Use Bias'
+                    color='#ffa000'
+                >
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </BeautifulComboBox>
             </div>
 
             {/* Входной пин */}

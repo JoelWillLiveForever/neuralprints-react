@@ -7,6 +7,7 @@ import './sidebar.scss';
 import BeautifulSlider from '../beautiful_slider/BeautifulSlider';
 
 import { useArchitectureStore } from '../../store/ArchitectureStore';
+import BeautifulComboBox from '../beautiful_combo_box/BeautifulComboBox';
 
 const Sidebar: React.FC = () => {
     const [, setType] = useDnD();
@@ -15,6 +16,42 @@ const Sidebar: React.FC = () => {
     const { train_split, setTrainSplit } = useArchitectureStore();
     const { test_split, setTestSplit } = useArchitectureStore();
     const { validation_split, setValidationSplit } = useArchitectureStore();
+
+    const { loss_function, setLossFunction } = useArchitectureStore();
+    const { optimizer, setOptimizer } = useArchitectureStore();
+    const { quality_metric, setQualityMetric } = useArchitectureStore();    
+    const { epochs, setEpochs } = useArchitectureStore();
+    const { batch_size, setBatchSize } = useArchitectureStore();
+
+    // const { shuffle, setShuffle } = useArchitectureStore();
+    // const { validation_data, setValidationData } = useArchitectureStore();
+    // const { class_weight, setClassWeight } = useArchitectureStore();
+    // const { sample_weight, setSampleWeight } = useArchitectureStore();
+    // const { initial_epoch, setInitialEpoch } = useArchitectureStore();
+    // const { callbacks, setCallbacks } = useArchitectureStore();
+    // const { use_multiprocessing, setUseMultiprocessing } = useArchitectureStore();
+    // const { workers, setWorkers } = useArchitectureStore();
+    // const { max_queue_size, setMaxQueueSize } = useArchitectureStore();
+    // const { use_gpu, setUseGPU } = useArchitectureStore();
+    // const { device, setDevice } = useArchitectureStore();
+    // const { learning_rate, setLearningRate } = useArchitectureStore();
+
+    // const { dropout, setDropout } = useArchitectureStore();
+    // const { early_stopping, setEarlyStopping } = useArchitectureStore();
+    // const { patience, setPatience } = useArchitectureStore();
+    // const { min_delta, setMinDelta } = useArchitectureStore();
+    // const { max_epochs, setMaxEpochs } = useArchitectureStore();
+    // const { metric, setMetric } = useArchitectureStore();
+    // const { save_weights_frequency, setSaveWeightsFrequency } = useArchitectureStore();
+    // const { save_model_frequency, setSaveModelFrequency } = useArchitectureStore();
+    // const { tensorboard_log_frequency, setTensorboardLogFrequency } = useArchitectureStore();
+    // const { model_name, setModelName } = useArchitectureStore();
+    // const { enable_tensorboard_logging, setEnableTensorboardLogging } = useArchitectureStore();
+    // const { enable_early_stopping, setEnableEarlyStopping } = useArchitectureStore();
+    // const { enable_save_weights, setEnableSaveWeights } = useArchitectureStore();
+    // const { enable_save_model, setEnableSaveModel } = useArchitectureStore();
+
+    const { enable_dataset_normalization, setEnableDatasetNormalization } = useArchitectureStore();
 
     const onDragStart = (event: React.DragEvent, nodeType: string) => {
         event.dataTransfer.setData('application/reactflow', nodeType);
@@ -175,10 +212,10 @@ const Sidebar: React.FC = () => {
 
     return (
         <aside className="sidebar">
-            <Header4Container className="tf-nodes-header" text="TensorFlow layers" />
-            <div className="tf-nodes-container">
+            <Header4Container className="tensorflow-layers-header" text="TensorFlow layers" />
+            <div className="tensorflow-layers">
                 <div
-                    className="tf-node tf-node__input"
+                    className="tf-layer tf-layer__input"
                     draggable
                     onDragStart={(event) => onDragStart(event, 'TF_INPUT_LAYER_NODE')}
                 >
@@ -186,7 +223,7 @@ const Sidebar: React.FC = () => {
                 </div>
 
                 <div
-                    className="tf-node tf-node__dense"
+                    className="tf-layer tf-layer__dense"
                     draggable
                     onDragStart={(event) => onDragStart(event, 'TF_DENSE_LAYER_NODE')}
                 >
@@ -194,7 +231,7 @@ const Sidebar: React.FC = () => {
                 </div>
 
                 <div
-                    className="tf-node tf-node__dropout"
+                    className="tf-layer tf-layer__dropout"
                     draggable
                     onDragStart={(event) => onDragStart(event, 'TF_DROPOUT_LAYER_NODE')}
                 >
@@ -202,7 +239,7 @@ const Sidebar: React.FC = () => {
                 </div>
 
                 <div
-                    className="tf-node tf-node__gaussian-dropout"
+                    className="tf-layer tf-layer__gaussian-dropout"
                     draggable
                     onDragStart={(event) => onDragStart(event, 'TF_GAUSSIAN_DROPOUT_LAYER_NODE')}
                 >
@@ -210,7 +247,7 @@ const Sidebar: React.FC = () => {
                 </div>
 
                 <div
-                    className="tf-node tf-node__gaussian-noise"
+                    className="tf-layer tf-layer__gaussian-noise"
                     draggable
                     onDragStart={(event) => onDragStart(event, 'TF_GAUSSIAN_NOISE_LAYER_NODE')}
                 >
@@ -218,8 +255,8 @@ const Sidebar: React.FC = () => {
                 </div>
             </div>
 
-            <Header4Container className="dataset-division-header" text="Dataset splitting options" />
-            <div className="dataset-division-container">
+            <Header4Container className="dataset-splitting-options-header" text="Dataset splitting options" />
+            <div className="dataset-splitting-options">
                 <BeautifulSlider
                     value={train_split}
                     onChange={handleTrainChange}
@@ -255,6 +292,56 @@ const Sidebar: React.FC = () => {
                     type="sidebar"
                     label="Validation sample size"
                 />
+            </div>
+
+            <Header4Container className="ai-model-options-header" text="AI model options" />
+            <div className="ai-model-options">
+                <BeautifulComboBox
+                    value={loss_function}
+                    onChange={(e) => setLossFunction(e.target.value)}
+                    type="sidebar"
+                    label="Loss function"
+                    placeholder="Select loss function"
+                    color="#ffa000"
+                >
+                    <option value="binary_cross_entropy">Binary crossentropy</option>
+                </BeautifulComboBox>
+
+                <BeautifulComboBox
+                    value={optimizer}
+                    onChange={(e) => setOptimizer(e.target.value)}
+                    type="sidebar"
+                    label="Optimizer"
+                    placeholder="Select optimizer"
+                    color="#ffa000"
+                >
+                    <option value="adam">Adam</option>
+                </BeautifulComboBox>
+
+                <BeautifulComboBox
+                    value={quality_metric}
+                    onChange={(e) => setQualityMetric(e.target.value)}
+                    type="sidebar"
+                    label="Quality metric"
+                    placeholder="Select quality metric"
+                    color="#ffa000"
+                >
+                    <option value="accuracy">Accuracy</option>
+                </BeautifulComboBox>
+            </div>
+
+            <Header4Container className="additional-options-header" text="Additional options" />
+            <div className="additional-options">
+                <BeautifulComboBox
+                    value={enable_dataset_normalization ? 'on' : 'off'}
+                    onChange={(e) => setEnableDatasetNormalization(e.target.value === 'on' ? true : false)}
+                    type="sidebar"
+                    label="Enable dataset normalization"
+                    color="#ffa000"
+                >
+                    <option value="off">Disable</option>
+                    <option value="on">Enable</option>
+                </BeautifulComboBox>
             </div>
         </aside>
     );
