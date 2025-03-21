@@ -81,12 +81,12 @@ const DnDFlow: React.FC = () => {
     // const CURRENT_MENU_SIZE_IN_PX = menuSize / 100.0 * window.innerWidth;
     const PAGE_CONTAINER_WIDTH = dndFlowWrapper.current?.getBoundingClientRect().width || window.innerWidth;
 
-    const SIDEBAR_DEFAULT_SIZE_IN_PX = 350;
+    const SIDEBAR_DEFAULT_SIZE_IN_PX = 375;
     const [sidebarDefaultSize, setMenuDefaultSize] = useState(
         (SIDEBAR_DEFAULT_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100
     );
 
-    const SIDEBAR_MIN_SIZE_IN_PX = 250;
+    const SIDEBAR_MIN_SIZE_IN_PX = 300;
     const [sidebarMinSize, setMenuMinSize] = useState((SIDEBAR_MIN_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100);
 
     const SIDEBAR_MAX_SIZE_IN_PX = 500;
