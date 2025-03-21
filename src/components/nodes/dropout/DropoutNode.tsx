@@ -36,23 +36,30 @@ const DropoutNode: React.FC<NodeProps<DropoutNodeType>> = ({ id, data, selected 
                     />
                 </div>
 
+                <BeautifulSlider
+                    value={data.tf_layer_strength}
+                    onChange={(e) => handleChange('tf_layer_strength', parseFloat(e.target.value))}
+                    onWheel={(e) => {
+                        e.preventDefault();
+
+                        const step = 0.05;
+                        const delta = e.deltaY < 0 ? step : -step;
+
+                        let newValue = Number(data.tf_layer_strength) + delta;
+                        newValue = Math.min(1, Math.max(0, newValue));
+
+                        handleChange('tf_layer_strength', Number(newValue.toFixed(3)));
+                    }}
+                    min={0}
+                    max={1}
+                    step={0.001}
+                    color='#1976D2'
+                />
+
+                {/* 
                 <div className="property">
-                    <BeautifulSlider
-                        value={data.tf_layer_strength}
-                        onChange={(e) => handleChange('tf_layer_strength', parseFloat(e.target.value))}
-                        onWheel={(e) => {
-                            e.preventDefault();
-
-                            const step = 0.05;
-                            const delta = e.deltaY < 0 ? step : -step;
-
-                            let newValue = Number(data.tf_layer_strength) + delta;
-                            newValue = Math.min(1, Math.max(0, newValue));
-
-                            handleChange('tf_layer_strength', Number(newValue.toFixed(3)));
-                        }}
-                    />
-                    {/* <div className="property__slider-wrapper">
+                    
+                    <div className="property__slider-wrapper">
                         <input
                             className="nopan nodrag nowheel slider-input"
                             type="range"
@@ -77,8 +84,9 @@ const DropoutNode: React.FC<NodeProps<DropoutNodeType>> = ({ id, data, selected 
                             <span className="slider-label">Strength</span>
                             <span className="slider-value">{Number(data.tf_layer_strength).toFixed(3)}</span>
                         </div>
-                    </div> */}
-                </div>
+                    </div>
+                </div> */}
+
             </div>
 
             {/* Входной пин */}

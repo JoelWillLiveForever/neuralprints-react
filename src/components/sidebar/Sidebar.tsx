@@ -69,13 +69,17 @@ const Sidebar: React.FC = () => {
 
                 <div className="dataset-division-block__body">
                     <BeautifulSlider
-                        value={1}
+                        value={0.5}
                         onChange={(e) => {
 
                         }}
                         onWheel={(e) => {
 
                         }}
+                        min={0}
+                        max={1}
+                        step={0.001}
+                        color="#00FF00"
                     />
                 </div>
             </div>

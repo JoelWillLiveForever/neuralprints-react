@@ -4,6 +4,7 @@ import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
 import type { GaussianDropoutNodeData, GaussianDropoutNodeType } from './GaussianDropoutNodeProps';
 
 import './gaussian_dropout_node.scss';
+import BeautifulSlider from '../../beautiful_slider/BeautifulSLider';
 
 const GaussianDropoutNode: React.FC<NodeProps<GaussianDropoutNodeType>> = ({ id, data, selected }) => {
     const { setNodes } = useReactFlow<GaussianDropoutNodeType>(); // Типизируем useReactFlow
@@ -31,9 +32,28 @@ const GaussianDropoutNode: React.FC<NodeProps<GaussianDropoutNodeType>> = ({ id,
                     />
                 </div>
 
-                <div className="property">
+                <BeautifulSlider
+                    value={data.tf_layer_strength}
+                    onChange={(e) => handleChange('tf_layer_strength', parseFloat(e.target.value))}
+                    onWheel={(e) => {
+                        e.preventDefault();
+
+                        const step = 0.05;
+                        const delta = e.deltaY < 0 ? step : -step;
+
+                        let newValue = Number(data.tf_layer_strength) + delta;
+                        newValue = Math.min(1, Math.max(0, newValue));
+
+                        handleChange('tf_layer_strength', Number(newValue.toFixed(3)));
+                    }}
+                    min={0}
+                    max={1}
+                    step={0.001}
+                    color='#00796B'
+                />
+
+                {/* <div className="property">
                     <div className="property__slider-wrapper">
-                        {/* <label className="property__key">Strength</label> */}
                         <input
                             className="nopan nodrag nowheel slider-input"
                             type="range"
@@ -59,7 +79,7 @@ const GaussianDropoutNode: React.FC<NodeProps<GaussianDropoutNodeType>> = ({ id,
                             <span className="slider-value">{Number(data.tf_layer_strength).toFixed(3)}</span>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             {/* Входной пин */}
