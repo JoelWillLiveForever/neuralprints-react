@@ -175,92 +175,86 @@ const Sidebar: React.FC = () => {
 
     return (
         <aside className="sidebar">
+            <Header4Container className="tf-nodes-header" text="TensorFlow layers" />
             <div className="tf-nodes-container">
-                <Header4Container className="tf-nodes-container__header" text="TensorFlow layers" />
+                <div
+                    className="tf-node tf-node__input"
+                    draggable
+                    onDragStart={(event) => onDragStart(event, 'TF_INPUT_LAYER_NODE')}
+                >
+                    Input
+                </div>
 
-                <div className="tf-nodes-container__body">
-                    <div
-                        className="tf-node tf-node__input"
-                        draggable
-                        onDragStart={(event) => onDragStart(event, 'TF_INPUT_LAYER_NODE')}
-                    >
-                        Input
-                    </div>
+                <div
+                    className="tf-node tf-node__dense"
+                    draggable
+                    onDragStart={(event) => onDragStart(event, 'TF_DENSE_LAYER_NODE')}
+                >
+                    Dense
+                </div>
 
-                    <div
-                        className="tf-node tf-node__dense"
-                        draggable
-                        onDragStart={(event) => onDragStart(event, 'TF_DENSE_LAYER_NODE')}
-                    >
-                        Dense
-                    </div>
+                <div
+                    className="tf-node tf-node__dropout"
+                    draggable
+                    onDragStart={(event) => onDragStart(event, 'TF_DROPOUT_LAYER_NODE')}
+                >
+                    Dropout
+                </div>
 
-                    <div
-                        className="tf-node tf-node__dropout"
-                        draggable
-                        onDragStart={(event) => onDragStart(event, 'TF_DROPOUT_LAYER_NODE')}
-                    >
-                        Dropout
-                    </div>
+                <div
+                    className="tf-node tf-node__gaussian-dropout"
+                    draggable
+                    onDragStart={(event) => onDragStart(event, 'TF_GAUSSIAN_DROPOUT_LAYER_NODE')}
+                >
+                    Gaussian Dropout
+                </div>
 
-                    <div
-                        className="tf-node tf-node__gaussian-dropout"
-                        draggable
-                        onDragStart={(event) => onDragStart(event, 'TF_GAUSSIAN_DROPOUT_LAYER_NODE')}
-                    >
-                        Gaussian Dropout
-                    </div>
-
-                    <div
-                        className="tf-node tf-node__gaussian-noise"
-                        draggable
-                        onDragStart={(event) => onDragStart(event, 'TF_GAUSSIAN_NOISE_LAYER_NODE')}
-                    >
-                        Gaussian Noise
-                    </div>
+                <div
+                    className="tf-node tf-node__gaussian-noise"
+                    draggable
+                    onDragStart={(event) => onDragStart(event, 'TF_GAUSSIAN_NOISE_LAYER_NODE')}
+                >
+                    Gaussian Noise
                 </div>
             </div>
 
-            <div className="dataset-division-block">
-                <Header4Container className="dataset-division-block__header" text="Dataset splitting options" />
+            <Header4Container className="dataset-division-header" text="Dataset splitting options" />
+            <div className="dataset-division-container">
+                <BeautifulSlider
+                    value={train_split}
+                    onChange={handleTrainChange}
+                    onWheel={(e) => handleWheel(e, 'train')}
+                    min={0}
+                    max={1}
+                    step={0.001}
+                    color="#ffa000"
+                    type="sidebar"
+                    label="Training sample size"
+                />
 
-                <div className="dataset-division-block__body">
-                    <BeautifulSlider
-                        value={train_split}
-                        onChange={handleTrainChange}
-                        onWheel={(e) => handleWheel(e, 'train')}
-                        min={0}
-                        max={1}
-                        step={0.001}
-                        color="#ffa000"
-                        type="sidebar"
-                        label="Training sample size"
-                    />
+                <BeautifulSlider
+                    value={test_split}
+                    onChange={handleTestChange}
+                    onWheel={(e) => handleWheel(e, 'test')}
+                    min={0}
+                    max={1}
+                    step={0.001}
+                    color="#ffa000"
+                    type="sidebar"
+                    label="Test sample size"
+                />
 
-                    <BeautifulSlider
-                        value={test_split}
-                        onChange={handleTestChange}
-                        onWheel={(e) => handleWheel(e, 'test')}
-                        min={0}
-                        max={1}
-                        step={0.001}
-                        color="#ffa000"
-                        type="sidebar"
-                        label="Test sample size"
-                    />
-
-                    <BeautifulSlider
-                        value={validation_split}
-                        onChange={handleValidationChange}
-                        onWheel={(e) => handleWheel(e, 'validation')}
-                        min={0}
-                        max={1}
-                        step={0.001}
-                        color="#ffa000"
-                        type="sidebar"
-                        label="Validation sample size"
-                    />
-                </div>
+                <BeautifulSlider
+                    value={validation_split}
+                    onChange={handleValidationChange}
+                    onWheel={(e) => handleWheel(e, 'validation')}
+                    min={0}
+                    max={1}
+                    step={0.001}
+                    color="#ffa000"
+                    type="sidebar"
+                    label="Validation sample size"
+                />
             </div>
         </aside>
     );

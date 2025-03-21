@@ -9,129 +9,140 @@
 
     border-left: 1px solid #121212;
 
-    gap: 10px;
+    // gap: 10px;
 
     // width: 300px;
     width: 100%;
+
     height: 100%;
+    min-height: 0;
+
+    // overflow: hidden;
 
     // min-width: 150px;
 
     .tf-nodes-container {
-        &__header {
+        padding: 10px;
 
-        }
+        // height: 400px;
+        height: 100%;
 
-        &__body {
+        min-height: 150px;
+        max-height: none;
+
+        overflow-y: auto;
+
+        display: flex;
+        flex-direction: column;
+
+        flex: 1;
+
+        // flex-shrink: 1;
+        // flex-basis: 0%;
+
+        // flex-wrap: wrap !important;
+        // align-items: flex-start;
+
+        gap: 7px;
+
+        background-color: #ffa00003;
+        border-bottom: 1px solid #ffa000;
+
+        scrollbar-width: auto;
+        scrollbar-color: #adb5bd #f8f9fa;
+
+        /* TensorFlow Nodes Styles */
+        .tf-node {
+            // height: 60px;
+
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+
+            white-space: nowrap;
+
+            // width: min-content;
+
+            font-size: 16px;
+            font-weight: bold;
+
             padding: 10px;
+            // margin-bottom: 10px;
 
-            // height: 400px;
-            max-height: 200px;
+            background-color: #61616112;
 
-            display: flex;
-            flex-direction: column;
+            border: 2px dashed #616161;
+            border-radius: 6px;
 
-            // flex-wrap: wrap !important;
-            // align-items: flex-start;
+            cursor: grab;
 
-            gap: 7px;
+            transition: box-shadow 0.3s ease-in-out;
 
-            overflow-y: auto;
+            &:hover {
+                border-style: solid;
+            }
 
-            background-color: #ffa00003;
-            border-bottom: 1px solid #ffa000;
-
-            scrollbar-width: auto;
-            scrollbar-color: #adb5bd #f8f9fa;
-
-            /* TensorFlow Nodes Styles */
-            .tf-node {
-                // height: 60px;
-
-                display: inline-flex;
-                justify-content: center;
-                align-items: center;
-
-                white-space: nowrap;
-
-                // width: min-content;
-
-                font-size: 16px;
-                font-weight: bold;
-
-                padding: 10px;
-                // margin-bottom: 10px;
-
-                background-color: #61616112;
-
-                border: 2px dashed #616161;
-                border-radius: 6px;
-
-                cursor: grab;
-
-                transition: box-shadow 0.3s ease-in-out;
+            &__input {
+                background-color: #d32f2f12;
+                border-color: #d32f2f;
 
                 &:hover {
-                    border-style: solid;
+                    box-shadow: 0 0 0 2px #d32f2f;
                 }
+            }
 
-                &__input {
-                    background-color: #d32f2f12;
-                    border-color: #d32f2f;
+            &__dense {
+                background-color: #ffa00012;
+                border-color: #ffa000;
 
-                    &:hover {
-                        box-shadow: 0 0 0 2px #d32f2f;
-                    }
+                &:hover {
+                    box-shadow: 0 0 0 2px #ffa000;
                 }
+            }
 
-                &__dense {
-                    background-color: #ffa00012;
-                    border-color: #ffa000;
+            &__dropout {
+                background-color: #1976d212;
+                border-color: #1976d2;
 
-                    &:hover {
-                        box-shadow: 0 0 0 2px #ffa000;
-                    }
+                &:hover {
+                    box-shadow: 0 0 0 2px #1976d2;
                 }
+            }
 
-                &__dropout {
-                    background-color: #1976d212;
-                    border-color: #1976d2;
+            &__gaussian-dropout {
+                background-color: #00796b12;
+                border-color: #00796b;
 
-                    &:hover {
-                        box-shadow: 0 0 0 2px #1976d2;
-                    }
+                &:hover {
+                    box-shadow: 0 0 0 2px #00796b;
                 }
+            }
 
-                &__gaussian-dropout {
-                    background-color: #00796b12;
-                    border-color: #00796b;
+            &__gaussian-noise {
+                background-color: #5d403712;
+                border-color: #5d4037;
 
-                    &:hover {
-                        box-shadow: 0 0 0 2px #00796b;
-                    }
-                }
-
-                &__gaussian-noise {
-                    background-color: #5d403712;
-                    border-color: #5d4037;
-
-                    &:hover {
-                        box-shadow: 0 0 0 2px #5d4037;
-                    }
+                &:hover {
+                    box-shadow: 0 0 0 2px #5d4037;
                 }
             }
         }
     }
 
-    .dataset-division-block {
+    .dataset-division-header {
+        margin-top: 10px;
+    }
 
-        &__body {
-            margin-top: 7px;
+    .dataset-division-container {
+        width: auto;
+        height: fit-content;
 
-            display: flex;
-            flex-direction: column;
+        display: flex;
+        flex-direction: column;
 
-            gap: 7px;
-        }
+        flex-shrink: 0;
+        gap: 7px;
+
+        margin-top: 7px;
     }
 }
