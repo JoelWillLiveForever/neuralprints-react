@@ -54,6 +54,7 @@ const DropoutNode: React.FC<NodeProps<DropoutNodeType>> = ({ id, data, selected 
                     max={1}
                     step={0.001}
                     color='#1976D2'
+                    label='Strength'
                 />
 
                 {/* 

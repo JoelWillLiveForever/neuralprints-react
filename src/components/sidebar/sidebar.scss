@@ -122,4 +122,16 @@
             }
         }
     }
+
+    .dataset-division-block {
+
+        &__body {
+            margin-top: 7px;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 7px;
+        }
+    }
 }

@@ -50,6 +50,7 @@ const GaussianDropoutNode: React.FC<NodeProps<GaussianDropoutNodeType>> = ({ id,
                     max={1}
                     step={0.001}
                     color='#00796B'
+                    label='Strength'
                 />
 
                 {/* <div className="property">

@@ -16,6 +16,7 @@ const BeautifulSlider: React.FC<BeautifulSliderProps> = ({
     min = 0.0,
     max = 1.0,
     step = 0.01,
+    label = 'beauty',
 }) => {
     const hexToRgb = (hex: string): string => {
         hex = hex.replace(/^#/, '');
@@ -36,7 +37,6 @@ const BeautifulSlider: React.FC<BeautifulSliderProps> = ({
         >
             {type === 'node' ? (
                 <div className="slider-node">
-                    {/* <label className="property__key">Strength</label> */}
                     <input
                         className="nopan nodrag nowheel slider-node__input"
                         type="range"
@@ -47,15 +47,35 @@ const BeautifulSlider: React.FC<BeautifulSliderProps> = ({
                         onChange={onChange}
                         onWheel={onWheel}
                     />
+
                     <div className="slider-node__overlay">
-                        <span className="slider-label">Strength</span>
+                        <span className="slider-label">{label}</span>
 
                         {/* // TODO: Сделать размерность как у step */}
                         <span className="slider-value">{value.toFixed(3)}</span>
                     </div>
                 </div>
             ) : (
-                <div className="slider-sidebar"></div>
+                <div className="slider-sidebar-wrapper">
+                    <label className="slider-label">{label}</label>
+
+                    <div className="slider-sidebar">
+                        <input
+                            className="slider-sidebar__input"
+                            type="range"
+                            min={min}
+                            max={max}
+                            step={step}
+                            value={value}
+                            onChange={onChange}
+                            onWheel={onWheel}
+                        />
+
+                        <div className="slider-sidebar__overlay">
+                            <span className="slider-value">{(value * 100).toFixed(0)}%</span>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );

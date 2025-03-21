@@ -1,5 +1,5 @@
 export interface BeautifulSliderProps {
-    type?: 'node | sidebar';
+    type?: 'node' | 'sidebar';
     className?: string;
 
     value: number;
@@ -12,4 +12,6 @@ export interface BeautifulSliderProps {
     min?: number;
     max?: number;
     step?: number;
+
+    label?: string;
 }

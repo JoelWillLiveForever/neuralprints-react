@@ -50,6 +50,7 @@ const GaussianNoiseNode: React.FC<NodeProps<GaussianNoiseNodeType>> = ({ id, dat
                     max={1}
                     step={0.001}
                     color='#5D4037'
+                    label='Stddev'
                 />
 
                 {/* <div className="property">
