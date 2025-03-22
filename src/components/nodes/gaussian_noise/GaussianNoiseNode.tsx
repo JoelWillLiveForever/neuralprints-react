@@ -4,6 +4,8 @@ import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
 import type { GaussianNoiseNodeData, GaussianNoiseNodeType } from './GaussianNoiseNodeProps';
 
 import './gaussian_noise_node.scss';
+import BeautifulSlider from '../../beautiful_slider/BeautifulSlider';
+import BeautifulField from '../../beautiful_field/BeautifulField';
 
 const GaussianNoiseNode: React.FC<NodeProps<GaussianNoiseNodeType>> = ({ id, data, selected }) => {
     const { setNodes } = useReactFlow<GaussianNoiseNodeType>(); // Типизируем useReactFlow
@@ -21,19 +23,38 @@ const GaussianNoiseNode: React.FC<NodeProps<GaussianNoiseNodeType>> = ({ id, dat
 
             {/* Поля */}
             <div className="tf-node-gaussian-noise__body">
-                <div className="property">
-                    <label className="property__key">Name</label>
-                    <input
-                        type="text"
-                        value={data.tf_layer_name}
-                        onChange={(e) => handleChange('tf_layer_name', e.target.value)}
-                        className="nopan nodrag property__value"
-                    />
-                </div>
+                <BeautifulField
+                    value={data.tf_layer_name}
+                    onChange={(e) => handleChange('tf_layer_name', e.target.value)}
+                    type="text"
+                    label="Name"
+                    placeholder='Input layer name'
+                    color='#5D4037'
+                />
 
-                <div className="property">
+                <BeautifulSlider
+                    value={data.tf_layer_stddev}
+                    onChange={(e) => handleChange('tf_layer_stddev', parseFloat(e.target.value))}
+                    onWheel={(e) => {
+                        e.preventDefault();
+
+                        const step = 0.05;
+                        const delta = e.deltaY < 0 ? step : -step;
+
+                        let newValue = Number(data.tf_layer_stddev) + delta;
+                        newValue = Math.min(1, Math.max(0, newValue));
+
+                        handleChange('tf_layer_stddev', Number(newValue.toFixed(3)));
+                    }}
+                    min={0}
+                    max={1}
+                    step={0.001}
+                    color='#5D4037'
+                    label='Stddev'
+                />
+
+                {/* <div className="property">
                     <div className="property__slider-wrapper">
-                        {/* <label className="property__key">Strength</label> */}
                         <input
                             className="nopan nodrag nowheel slider-input"
                             type="range"
@@ -59,7 +80,7 @@ const GaussianNoiseNode: React.FC<NodeProps<GaussianNoiseNodeType>> = ({ id, dat
                             <span className="slider-value">{Number(data.tf_layer_stddev).toFixed(3)}</span>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             {/* Входной пин */}

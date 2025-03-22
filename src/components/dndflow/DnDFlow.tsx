@@ -25,10 +25,12 @@ import DenseNode from '../nodes/dense/DenseNode';
 import DropoutNode from '../nodes/dropout/DropoutNode';
 import GaussianDropoutNode from '../nodes/gaussian_dropout/GaussianDropoutNode';
 import GaussianNoiseNode from '../nodes/gaussian_noise/GaussianNoiseNode';
+import FlattenNode from '../nodes/flatten/FlattenNode';
 
 /* import styles */
 import '@xyflow/react/dist/style.css';
 import './dnd_flow.scss';
+import Conv2DNode from '../nodes/conv_2d/Conv2DNode';
 
 const proOptions = { hideAttribution: false };
 
@@ -38,6 +40,8 @@ export type NodeTypes = {
     TF_DROPOUT_LAYER_NODE: typeof DropoutNode;
     TF_GAUSSIAN_DROPOUT_LAYER_NODE: typeof GaussianDropoutNode;
     TF_GAUSSIAN_NOISE_LAYER_NODE: typeof GaussianNoiseNode;
+    TF_CONV_2D_LAYER_NODE: typeof Conv2DNode;
+    TF_FLATTEN_LAYER_NODE: typeof FlattenNode;
 };
 
 const nodeTypes: NodeTypes = {
@@ -46,6 +50,8 @@ const nodeTypes: NodeTypes = {
     TF_DROPOUT_LAYER_NODE: DropoutNode,
     TF_GAUSSIAN_DROPOUT_LAYER_NODE: GaussianDropoutNode,
     TF_GAUSSIAN_NOISE_LAYER_NODE: GaussianNoiseNode,
+    TF_CONV_2D_LAYER_NODE: Conv2DNode,
+    TF_FLATTEN_LAYER_NODE: FlattenNode,
 };
 
 const initialNodes = [
@@ -81,12 +87,12 @@ const DnDFlow: React.FC = () => {
     // const CURRENT_MENU_SIZE_IN_PX = menuSize / 100.0 * window.innerWidth;
     const PAGE_CONTAINER_WIDTH = dndFlowWrapper.current?.getBoundingClientRect().width || window.innerWidth;
 
-    const SIDEBAR_DEFAULT_SIZE_IN_PX = 350;
+    const SIDEBAR_DEFAULT_SIZE_IN_PX = 375;
     const [sidebarDefaultSize, setMenuDefaultSize] = useState(
         (SIDEBAR_DEFAULT_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100
     );
 
-    const SIDEBAR_MIN_SIZE_IN_PX = 250;
+    const SIDEBAR_MIN_SIZE_IN_PX = 300;
     const [sidebarMinSize, setMenuMinSize] = useState((SIDEBAR_MIN_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100);
 
     const SIDEBAR_MAX_SIZE_IN_PX = 500;
@@ -207,6 +213,20 @@ const DnDFlow: React.FC = () => {
                     tf_layer_name: 'new_gaussian_noise',
                     tf_layer_stddev: 0.1,
                 };
+            case 'TF_CONV_2D_LAYER_NODE':
+                return {
+                    tf_layer_name: 'new_conv_2d',
+                    tf_layer_filters_count: 64,
+                    tf_layer_kernel_size: [3, 3],
+                    // tf_layer_strides: [1, 1],
+                    // tf_layer_padding: 'valid',
+                    // tf_layer_data_format: 'channels_last',
+                    // tf_layer_dilation_rate: [1, 1],
+                    tf_layer_activation_function: 'sigmoid',
+                    tf_layer_use_bias: 1,
+                };
+            case 'TF_FLATTEN_LAYER_NODE':
+                return;
             default:
                 return { label: type };
         }

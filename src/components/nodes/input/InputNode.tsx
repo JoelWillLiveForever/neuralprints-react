@@ -4,6 +4,7 @@ import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
 import type { InputNodeData, InputNodeType } from './InputNodeProps';
 
 import './input_node.scss';
+import BeautifulField from '../../beautiful_field/BeautifulField';
 
 const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) => {
     const { setNodes } = useReactFlow<InputNodeType>(); // Типизируем useReactFlow
@@ -21,7 +22,16 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
 
             {/* Поля */}
             <div className="tf-node-input__body">
-                <div className="property">
+                <BeautifulField
+                    value={data.tf_layer_name}
+                    onChange={(e) => handleChange('tf_layer_name', e.target.value)}
+                    type="text"
+                    label="Name"
+                    placeholder='Input layer name'
+                    color='#D32F2F'
+                />
+
+                {/* <div className="property">
                     <label className="property__key">Name</label>
                     <input
                         className="nopan nodrag property__value"
@@ -29,9 +39,28 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
                         value={data.tf_layer_name}
                         onChange={(e) => handleChange('tf_layer_name', e.target.value)}
                     />
-                </div>
+                </div> */}
 
-                <div className="property">
+                <BeautifulField
+                    value={data.tf_layer_neurons_count}
+                    onChange={(e) => handleChange('tf_layer_neurons_count', Number(e.target.value))}
+                    onWheel={(e) => {
+                        e.preventDefault();
+                        const step = e.deltaY > 0 ? -1 : 1; // Если прокрутка вниз, уменьшаем значение, если вверх — увеличиваем
+                        handleChange(
+                            'tf_layer_neurons_count',
+                            Math.max(1, Math.min(1024, data.tf_layer_neurons_count + step))
+                        );
+                    }}
+                    min={1}
+                    max={1024}
+                    step={1}
+                    type="numeric"
+                    label="Neurons"
+                    color='#D32F2F'
+                />
+
+                {/* <div className="property">
                     <label className="property__key">Neurons</label>
                     <input
                         className="nopan nodrag nowheel property__value"
@@ -60,7 +89,7 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
                         max={1024}
                         step={1}
                     />
-                </div>
+                </div> */}
             </div>
 
             {/* Выходной пин */}

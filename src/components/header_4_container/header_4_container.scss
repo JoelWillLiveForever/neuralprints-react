@@ -2,18 +2,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 .header-4-container {
-    font-family: 'Montserrat Alternates', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 
     h6 {
         font-size: 14px; /* Можно изменить по своему усмотрению */
         margin: 0;
+
+        letter-spacing: 0.05em;
     }
 
     .header-separator-line {
         height: 1px;
 
         margin-top: 4px;
-        margin-bottom: 10px;
+        // margin-bottom: 10px;
 
         background-color: #121212;
         border-radius: 100%;

@@ -1,0 +1,114 @@
+.beautiful-field-container {
+    width: 100%;
+    height: auto;
+
+    .field-node {
+        display: flex;
+        flex-direction: row;
+        gap: 7px;
+
+        &__label {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+
+            white-space: nowrap;
+        }
+
+        &__input-container {
+            width: 100%;
+            height: auto;
+
+            display: flex;
+            flex-direction: row;
+
+            gap: 4px;
+        }
+
+        &__input {
+            width: 100%;
+            height: 31px;
+
+            border: 1px solid #ccc;
+            border-radius: 4px;
+
+            padding: 4px 8px;
+
+            background-color: white;
+            color: #333;
+
+            font-size: 14px;
+            font-family: inherit;
+
+            text-align: right;
+
+            &:focus {
+                outline: none;
+                border-color: rgba(var(--field-color), 1);
+                box-shadow: 0 0 6px rgba(var(--field-color), 0.5);
+            }
+
+            &[type='number'] {
+                text-align: right;
+                direction: rtl;
+            }
+        }
+    }
+
+    .field-sidebar {
+        display: flex;
+        flex-direction: column;
+
+        gap: 4px;
+
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+
+        &__label {
+            display: block;
+
+            font-weight: light;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        &__input-container {
+            width: 100%;
+            height: auto;
+
+            display: flex;
+            flex-direction: row;
+
+            gap: 7px;
+        }
+
+        &__input {
+            width: 100%;
+            height: 40px;
+
+            border: 1px solid #ccc;
+            border-radius: 4px;
+
+            padding: 4px 8px;
+
+            background-color: white;
+            color: #333;
+
+            font-size: 14px;
+            font-family: inherit;
+
+            text-align: right;
+
+            &:focus {
+                outline: none;
+                border-color: rgba(var(--field-color), 1);
+                box-shadow: 0 0 6px rgba(var(--field-color), 0.5);
+            }
+
+            &[type='number'] {
+                text-align: right;
+                direction: rtl;
+            }
+        }
+    }
+}

@@ -1,0 +1,208 @@
+.beautiful-slider-container {
+    width: 100%;
+    height: auto;
+
+    .slider-node {
+        position: relative;
+        width: 100%;
+
+        height: 31px;
+
+        &__input {
+            appearance: none;
+            -webkit-appearance: none;
+
+            overflow: hidden;
+
+            position: relative;
+
+            width: 100%;
+            height: 100%;
+
+            padding: 0 !important;
+
+            border: 1px solid #ccc;
+            border-radius: 4px;
+
+            background: #fff;
+
+            transition: all 0.2s;
+            cursor: pointer;
+
+            &::-webkit-slider-runnable-track {
+                -webkit-appearance: none;
+                appearance: none;
+
+                height: 100%;
+            }
+
+            // Скрываем стандартный thumb
+            &::-webkit-slider-thumb {
+                appearance: none;
+                -webkit-appearance: none;
+
+                width: 0px;
+                height: 29px;
+
+                background: transparent;
+
+                border-radius: 0 2px 2px 0;
+                cursor: ew-resize;
+
+                // box-shadow: -200px 0 0 200px #bbdefb;
+                box-shadow: -200px 0 0 200px rgba($color: var(--slider-color), $alpha: 0.2);
+            }
+
+            &:focus {
+                outline: none;
+                border-color: rgba(var(--slider-color), 1);
+                box-shadow: 0 0 6px rgba(var(--slider-color), 0.5);
+                // box-shadow: 0 0 6px blue;
+            }
+        }
+
+        &__overlay {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            pointer-events: none;
+
+            padding: 0 8px;
+
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+
+            color: #000;
+
+            // .slider-label {
+
+            // }
+
+            .slider-value {
+                text-align: center;
+            }
+        }
+    }
+
+    .slider-sidebar-wrapper {
+        // width: auto;
+        // height: auto;
+
+        text-align: right;
+        
+        font-family: 'Montserrat', sans-serif;
+        
+        font-size: 14px;
+        font-weight: light;
+
+        .slider-label {
+            display: inline-block;
+
+            margin-bottom: 4px;
+        }
+
+        .slider-sidebar {
+            position: relative;
+            width: 100%;
+
+            height: 40px;
+
+            &__input {
+                appearance: none;
+                -webkit-appearance: none;
+
+                overflow: hidden;
+
+                position: relative;
+
+                width: 100%;
+                height: 100%;
+
+                padding: 0 !important;
+
+                border: 1px solid #ccc;
+                border-radius: 4px;
+
+                background: #fff;
+
+                transition: all 0.2s;
+                cursor: pointer;
+
+                &::-webkit-slider-runnable-track {
+                    -webkit-appearance: none;
+                    appearance: none;
+
+                    height: 100%;
+                }
+
+                // Скрываем стандартный thumb
+                &::-webkit-slider-thumb {
+                    appearance: none;
+                    -webkit-appearance: none;
+
+                    width: 0px;
+                    height: 38px;
+
+                    background: transparent;
+
+                    border-radius: 0 2px 2px 0;
+                    cursor: ew-resize;
+
+                    // box-shadow: -200px 0 0 200px #bbdefb;
+                    box-shadow: -350px 0 0 350px rgba($color: var(--slider-color), $alpha: 0.2);
+                }
+
+                &:focus {
+                    outline: none;
+                    border-color: rgba(var(--slider-color), 1);
+                    box-shadow: 0 0 6px rgba(var(--slider-color), 0.5);
+                    // box-shadow: 0 0 6px blue;
+                }
+            }
+
+            &__overlay {
+                position: absolute;
+
+                top: 0;
+                left: 0;
+
+                width: 100%;
+                height: 100%;
+
+                display: flex;
+
+                justify-content: center;
+                align-items: center;
+
+                pointer-events: none;
+
+                padding: 0 8px;
+
+                font-family: 'Montserrat', sans-serif;
+                font-size: 14px;
+
+                color: #000;
+
+                // .slider-label {
+
+                // }
+
+                .slider-value {
+                    text-align: center;
+
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}
