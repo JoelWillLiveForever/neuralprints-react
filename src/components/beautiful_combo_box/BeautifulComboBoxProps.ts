@@ -1,5 +1,5 @@
 export interface BeautifulComboBoxProps {
-    type?: 'node' | 'sidebar';
+    root?: 'node' | 'sidebar';
     className?: string;
 
     value: string;

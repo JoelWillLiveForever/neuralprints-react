@@ -23,42 +23,42 @@
         padding: 14px 10px 10px 10px;
         gap: 6px;
 
-        .property {
-            display: flex;
-            flex-direction: row;
-            gap: 7px;
+        // .property {
+        //     display: flex;
+        //     flex-direction: row;
+        //     gap: 7px;
 
-            &__key {
-                display: flex;
-                align-items: center;
-                font-weight: 500;
+        //     &__key {
+        //         display: flex;
+        //         align-items: center;
+        //         font-weight: 500;
 
-                white-space: nowrap;
-            }
+        //         white-space: nowrap;
+        //     }
 
-            &__value {
-                width: 100%;
-                text-align: right;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                padding: 4px 8px;
-                background-color: white;
-                color: #333;
-                font-size: 14px;
-                font-family: inherit;
+        //     &__value {
+        //         width: 100%;
+        //         text-align: right;
+        //         border: 1px solid #ccc;
+        //         border-radius: 4px;
+        //         padding: 4px 8px;
+        //         background-color: white;
+        //         color: #333;
+        //         font-size: 14px;
+        //         font-family: inherit;
 
-                &:focus {
-                    outline: none;
-                    border-color: #d32f2f;
-                    box-shadow: 0 0 6px rgba(211, 47, 47, 0.5);
-                }
-            }
+        //         &:focus {
+        //             outline: none;
+        //             border-color: #d32f2f;
+        //             box-shadow: 0 0 6px rgba(211, 47, 47, 0.5);
+        //         }
+        //     }
 
-            input[type="number"] {
-                text-align: right;
-                direction: rtl;
-            }
-        }
+        //     input[type="number"] {
+        //         text-align: right;
+        //         direction: rtl;
+        //     }
+        // }
     }
 
     &__connector {

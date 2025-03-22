@@ -7,7 +7,7 @@ import { BeautifulSliderProps } from './BeautifulSliderProps';
 import './beautiful_slider.scss';
 
 const BeautifulSlider: React.FC<BeautifulSliderProps> = ({
-    type = 'node',
+    root = 'node',
     className = '',
     value,
     onChange,
@@ -35,7 +35,7 @@ const BeautifulSlider: React.FC<BeautifulSliderProps> = ({
             className={`beautiful-slider-container ${className}`}
             style={{ '--slider-color': hexToRgb(color) } as React.CSSProperties}
         >
-            {type === 'node' ? (
+            {root === 'node' ? (
                 <div className="slider-node">
                     <input
                         className="nopan nodrag nowheel slider-node__input"

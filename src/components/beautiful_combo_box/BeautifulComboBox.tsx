@@ -7,7 +7,7 @@ import { BeautifulComboBoxProps } from './BeautifulComboBoxProps';
 import './beautiful_combo_box.scss';
 
 const BeautifulComboBox: React.FC<BeautifulComboBoxProps> = ({
-    type = 'node',
+    root = 'node',
     className = '',
 
     value,
@@ -38,7 +38,7 @@ const BeautifulComboBox: React.FC<BeautifulComboBoxProps> = ({
             className={`beautiful-combo-box-container ${className}`}
             style={{ '--combo-box-color': hexToRgb(color) } as React.CSSProperties}
         >
-            {type === 'node' ? (
+            {root === 'node' ? (
                 <div className="combo-box-node">
                     <label className="combo-box-node__label">{label}</label>
 

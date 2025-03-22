@@ -4,7 +4,8 @@ import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
 import type { GaussianNoiseNodeData, GaussianNoiseNodeType } from './GaussianNoiseNodeProps';
 
 import './gaussian_noise_node.scss';
-import BeautifulSlider from '../../beautiful_slider/BeautifulSLider';
+import BeautifulSlider from '../../beautiful_slider/BeautifulSlider';
+import BeautifulField from '../../beautiful_field/BeautifulField';
 
 const GaussianNoiseNode: React.FC<NodeProps<GaussianNoiseNodeType>> = ({ id, data, selected }) => {
     const { setNodes } = useReactFlow<GaussianNoiseNodeType>(); // Типизируем useReactFlow
@@ -22,15 +23,14 @@ const GaussianNoiseNode: React.FC<NodeProps<GaussianNoiseNodeType>> = ({ id, dat
 
             {/* Поля */}
             <div className="tf-node-gaussian-noise__body">
-                <div className="property">
-                    <label className="property__key">Name</label>
-                    <input
-                        type="text"
-                        value={data.tf_layer_name}
-                        onChange={(e) => handleChange('tf_layer_name', e.target.value)}
-                        className="nopan nodrag property__value"
-                    />
-                </div>
+                <BeautifulField
+                    value={data.tf_layer_name}
+                    onChange={(e) => handleChange('tf_layer_name', e.target.value)}
+                    type="text"
+                    label="Name"
+                    placeholder='Input layer name'
+                    color='#5D4037'
+                />
 
                 <BeautifulSlider
                     value={data.tf_layer_stddev}

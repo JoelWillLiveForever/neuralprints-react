@@ -5,6 +5,7 @@ import type { DenseNodeData, DenseNodeType } from './DenseNodeProps';
 
 import './dense_node.scss';
 import BeautifulComboBox from '../../beautiful_combo_box/BeautifulComboBox';
+import BeautifulField from '../../beautiful_field/BeautifulField';
 
 const DenseNode: React.FC<NodeProps<DenseNodeType>> = ({ id, data, selected }) => {
     const { setNodes } = useReactFlow<DenseNodeType>();
@@ -44,43 +45,40 @@ const DenseNode: React.FC<NodeProps<DenseNodeType>> = ({ id, data, selected }) =
 
             {/* Поля */}
             <div className="tf-node-dense__body">
-                <div className="property">
-                    <label className="property__key">Name</label>
-                    <input
-                        className="nopan nodrag property__value"
-                        type="text"
-                        value={data.tf_layer_name}
-                        onChange={(e) => handleChange('tf_layer_name', e.target.value)}
-                    />
-                </div>
+                <BeautifulField
+                    value={data.tf_layer_name}
+                    onChange={(e) => handleChange('tf_layer_name', e.target.value)}
+                    type="text"
+                    label="Name"
+                    placeholder="Input layer name"
+                    color="#FFA000"
+                />
 
-                <div className="property">
-                    <label className="property__key">Neurons</label>
-                    <input
-                        className="nopan nodrag nowheel property__value"
-                        type="number"
-                        value={data.tf_layer_neurons_count}
-                        onChange={(e) => handleChange('tf_layer_neurons_count', Number(e.target.value))}
-                        min={1}
-                        max={1024}
-                        step={1}
-                        onWheel={(e) => {
-                            e.preventDefault();
-                            const step = e.deltaY > 0 ? -1 : 1; // Если прокрутка вниз, уменьшаем значение, если вверх — увеличиваем
-                            handleChange(
-                                'tf_layer_neurons_count',
-                                Math.max(1, Math.min(1024, data.tf_layer_neurons_count + step))
-                            );
-                        }}
-                    />
-                </div>
+                <BeautifulField
+                    value={data.tf_layer_neurons_count}
+                    onChange={(e) => handleChange('tf_layer_neurons_count', Number(e.target.value))}
+                    onWheel={(e) => {
+                        e.preventDefault();
+                        const step = e.deltaY > 0 ? -1 : 1; // Если прокрутка вниз, уменьшаем значение, если вверх — увеличиваем
+                        handleChange(
+                            'tf_layer_neurons_count',
+                            Math.max(1, Math.min(1024, data.tf_layer_neurons_count + step))
+                        );
+                    }}
+                    min={1}
+                    max={1024}
+                    step={1}
+                    type="numeric"
+                    label="Neurons"
+                    color="#FFA000"
+                />
 
                 <BeautifulComboBox
                     value={data.tf_layer_activation_function}
                     onChange={(e) => handleChange('tf_layer_activation_function', e.target.value)}
-                    placeholder='Select activation function'
-                    label='Activation'
-                    color='#ffa000'
+                    placeholder="Select activation function"
+                    label="Activation"
+                    color="#FFA000"
                 >
                     <option value="elu">ELU</option>
                     <option value="exponential">Exponential</option>
@@ -108,8 +106,8 @@ const DenseNode: React.FC<NodeProps<DenseNodeType>> = ({ id, data, selected }) =
                 <BeautifulComboBox
                     value={data.tf_layer_use_bias ? 'yes' : 'no'}
                     onChange={(e) => handleChange('tf_layer_use_bias', e.target.value === 'yes' ? 1 : 0)}
-                    label='Use Bias'
-                    color='#ffa000'
+                    label="Use Bias"
+                    color="#FFA000"
                 >
                     <option value="yes">Yes</option>
                     <option value="no">No</option>

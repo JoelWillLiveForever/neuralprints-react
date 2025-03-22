@@ -1,5 +1,5 @@
 export interface BeautifulSliderProps {
-    type?: 'node' | 'sidebar';
+    root?: 'node' | 'sidebar';
     className?: string;
 
     value: number;

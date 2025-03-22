@@ -8,6 +8,7 @@ import BeautifulSlider from '../beautiful_slider/BeautifulSlider';
 
 import { useArchitectureStore } from '../../store/ArchitectureStore';
 import BeautifulComboBox from '../beautiful_combo_box/BeautifulComboBox';
+import BeautifulField from '../beautiful_field/BeautifulField';
 
 const Sidebar: React.FC = () => {
     const [, setType] = useDnD();
@@ -19,7 +20,7 @@ const Sidebar: React.FC = () => {
 
     const { loss_function, setLossFunction } = useArchitectureStore();
     const { optimizer, setOptimizer } = useArchitectureStore();
-    const { quality_metric, setQualityMetric } = useArchitectureStore();    
+    const { quality_metric, setQualityMetric } = useArchitectureStore();
     const { epochs, setEpochs } = useArchitectureStore();
     const { batch_size, setBatchSize } = useArchitectureStore();
 
@@ -265,7 +266,7 @@ const Sidebar: React.FC = () => {
                     max={1}
                     step={0.001}
                     color="#ffa000"
-                    type="sidebar"
+                    root="sidebar"
                     label="Training sample size"
                 />
 
@@ -277,7 +278,7 @@ const Sidebar: React.FC = () => {
                     max={1}
                     step={0.001}
                     color="#ffa000"
-                    type="sidebar"
+                    root="sidebar"
                     label="Test sample size"
                 />
 
@@ -289,7 +290,7 @@ const Sidebar: React.FC = () => {
                     max={1}
                     step={0.001}
                     color="#ffa000"
-                    type="sidebar"
+                    root="sidebar"
                     label="Validation sample size"
                 />
             </div>
@@ -299,7 +300,7 @@ const Sidebar: React.FC = () => {
                 <BeautifulComboBox
                     value={loss_function}
                     onChange={(e) => setLossFunction(e.target.value)}
-                    type="sidebar"
+                    root="sidebar"
                     label="Loss function"
                     placeholder="Select loss function"
                     color="#ffa000"
@@ -310,7 +311,7 @@ const Sidebar: React.FC = () => {
                 <BeautifulComboBox
                     value={optimizer}
                     onChange={(e) => setOptimizer(e.target.value)}
-                    type="sidebar"
+                    root="sidebar"
                     label="Optimizer"
                     placeholder="Select optimizer"
                     color="#ffa000"
@@ -321,13 +322,49 @@ const Sidebar: React.FC = () => {
                 <BeautifulComboBox
                     value={quality_metric}
                     onChange={(e) => setQualityMetric(e.target.value)}
-                    type="sidebar"
+                    root="sidebar"
                     label="Quality metric"
                     placeholder="Select quality metric"
                     color="#ffa000"
                 >
                     <option value="accuracy">Accuracy</option>
                 </BeautifulComboBox>
+
+                <BeautifulField
+                    root="sidebar"
+                    value={epochs}
+                    onChange={(e) => setEpochs(Number(e.target.value))}
+                    onWheel={(e) => {
+                        e.preventDefault(); // Предотвращаем стандартное поведение прокрутки
+                        const step = e.deltaY > 0 ? -1 : 1; // Если прокрутка вниз, уменьшаем значение, если вверх — увеличиваем
+                        const newValue = Math.max(1, Math.min(1000, epochs + step))
+                        setEpochs(newValue); // Обновляем значение с ограничениями
+                    }}
+                    min={1}
+                    max={1000}
+                    step={1}
+                    type="numeric"
+                    label="Number of training epochs"
+                    color="#ffa000"
+                />
+
+                <BeautifulField
+                    root="sidebar"
+                    value={batch_size}
+                    onChange={(e) => setBatchSize(Number(e.target.value))}
+                    onWheel={(e) => {
+                        e.preventDefault();
+                        const step = e.deltaY > 0 ? -8 : 8;
+                        const newValue = Math.max(8, Math.min(256, batch_size + step));
+                        setBatchSize(newValue);
+                    }}
+                    min={8}
+                    max={256}
+                    step={8}
+                    type="numeric"
+                    label="Mini-batch size"
+                    color="#ffa000"
+                />
             </div>
 
             <Header4Container className="additional-options-header" text="Additional options" />
@@ -335,7 +372,7 @@ const Sidebar: React.FC = () => {
                 <BeautifulComboBox
                     value={enable_dataset_normalization ? 'on' : 'off'}
                     onChange={(e) => setEnableDatasetNormalization(e.target.value === 'on' ? true : false)}
-                    type="sidebar"
+                    root="sidebar"
                     label="Enable dataset normalization"
                     color="#ffa000"
                 >
