@@ -131,6 +131,15 @@
                 }
             }
 
+            &__conv-2d {
+                background-color: #E64A1912;
+                border-color: #E64A19;
+
+                &:hover {
+                    box-shadow: 0 0 0 2px #E64A19;
+                }
+            }
+
             &__flatten {
                 background-color: #AA00FF12;
                 border-color: #AA00FF;

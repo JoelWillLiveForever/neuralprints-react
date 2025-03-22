@@ -256,6 +256,14 @@ const Sidebar: React.FC = () => {
                 </div>
 
                 <div
+                    className="tf-layer tf-layer__conv-2d"
+                    draggable
+                    onDragStart={(event) => onDragStart(event, 'TF_CONV_2D_LAYER_NODE')}
+                >
+                    Conv2D
+                </div>
+
+                <div
                     className="tf-layer tf-layer__flatten"
                     draggable
                     onDragStart={(event) => onDragStart(event, 'TF_FLATTEN_LAYER_NODE')}
