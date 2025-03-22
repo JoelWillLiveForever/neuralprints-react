@@ -254,6 +254,14 @@ const Sidebar: React.FC = () => {
                 >
                     Gaussian Noise
                 </div>
+
+                <div
+                    className="tf-layer tf-layer__flatten"
+                    draggable
+                    onDragStart={(event) => onDragStart(event, 'TF_FLATTEN_LAYER_NODE')}
+                >
+                    Flatten
+                </div>
             </div>
 
             <Header4Container className="dataset-splitting-options-header" text="Dataset splitting options" />

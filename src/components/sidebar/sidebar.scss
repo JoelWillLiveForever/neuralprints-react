@@ -130,6 +130,15 @@
                     box-shadow: 0 0 0 2px #5d4037;
                 }
             }
+
+            &__flatten {
+                background-color: #AA00FF12;
+                border-color: #AA00FF;
+
+                &:hover {
+                    box-shadow: 0 0 0 2px #AA00FF;
+                }
+            }
         }
     }
 
