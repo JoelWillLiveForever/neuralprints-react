@@ -10,7 +10,8 @@ import {
     useReactFlow,
     Background,
     Connection,
-    Edge,
+    Node as RFNode,
+    Edge as RFEdge,
     BackgroundVariant,
     MiniMap,
 } from '@xyflow/react';
@@ -26,11 +27,13 @@ import DropoutNode from '../nodes/dropout/DropoutNode';
 import GaussianDropoutNode from '../nodes/gaussian_dropout/GaussianDropoutNode';
 import GaussianNoiseNode from '../nodes/gaussian_noise/GaussianNoiseNode';
 import FlattenNode from '../nodes/flatten/FlattenNode';
+import Conv2DNode from '../nodes/conv_2d/Conv2DNode';
+
+import { useArchitectureStore } from '../../store/ArchitectureStore';
 
 /* import styles */
 import '@xyflow/react/dist/style.css';
 import './dnd_flow.scss';
-import Conv2DNode from '../nodes/conv_2d/Conv2DNode';
 
 const proOptions = { hideAttribution: false };
 
@@ -54,24 +57,33 @@ const nodeTypes: NodeTypes = {
     TF_FLATTEN_LAYER_NODE: FlattenNode,
 };
 
-const initialNodes = [
-    {
-        id: '1',
-        type: 'TF_INPUT_LAYER_NODE' as const,
-        position: { x: 0, y: 0 },
-        data: {
-            tf_layer_name: 'input_layer',
-            tf_layer_neurons_count: 128,
-        },
-    },
-];
+// const initialNodes = [
+//     {
+//         id: '1',
+//         type: 'TF_INPUT_LAYER_NODE' as const,
+//         position: { x: 0, y: 0 },
+//         data: {
+//             tf_layer_name: 'input_layer',
+//             tf_layer_neurons_count: 128,
+//         },
+//     },
+// ];
 
 let id = 0;
 const getId = () => `tensorflow_node_${id++}`;
 
 const DnDFlow: React.FC = () => {
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const {
+        nodes,
+        edges,
+        setNodes,
+        setEdges,
+        onNodesChange,
+        onEdgesChange
+    } = useArchitectureStore();
+
+    // const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+    // const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
     const { screenToFlowPosition } = useReactFlow();
 
@@ -127,9 +139,14 @@ const DnDFlow: React.FC = () => {
 
     const onConnect = useCallback(
         (params: Connection) => {
-            setEdges((edges) => addEdge(params, edges));
+            const newEdge = {
+                ...params,
+                id: `${params.source}-${params.target}`
+            };
+            // setEdges((edges) => addEdge(params, edges));
+            setEdges(addEdge(newEdge, edges));
         },
-        [setEdges]
+        [edges, setEdges]
     );
 
     const onDragOver = useCallback((event: React.DragEvent) => {
@@ -179,9 +196,10 @@ const DnDFlow: React.FC = () => {
                 data: getNodeData(type),
             };
 
-            setNodes((nodes) => nodes.concat(newNode));
+            // setNodes((nodes) => nodes.concat(newNode));
+            setNodes([...nodes, newNode]);
         },
-        [screenToFlowPosition, setNodes, type]
+        [nodes, setNodes, type, screenToFlowPosition]
     );
 
     const getNodeData = (type: string) => {
@@ -272,125 +290,3 @@ const DnDFlow: React.FC = () => {
 };
 
 export default DnDFlow;
-
-// import React, { useCallback, useState, type ChangeEventHandler } from 'react';
-// import {
-//   ReactFlow,
-//   addEdge,
-//   useNodesState,
-//   useEdgesState,
-//   MiniMap,
-//   Background,
-//   BackgroundVariant,
-//   Controls,
-//   Connection,
-//   Panel,
-//   Position,
-//   type Node,
-//   type Edge,
-//   type ColorMode,
-//   type OnConnect,
-// } from '@xyflow/react';
-
-// import '@xyflow/react/dist/style.css';
-// import './page_training.scss';
-
-// // const initialNodes = [
-// //   { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
-// //   { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
-// // ];
-// // const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
-
-// const nodeDefaults = {
-//   sourcePosition: Position.Right,
-//   targetPosition: Position.Left,
-// };
-
-// const initialNodes: Node[] = [
-//   {
-//     id: 'A',
-//     type: 'input',
-//     position: { x: 0, y: 150 },
-//     data: { label: 'A' },
-//     ...nodeDefaults,
-//   },
-//   {
-//     id: 'B',
-//     position: { x: 250, y: 0 },
-//     data: { label: 'B' },
-//     ...nodeDefaults,
-//   },
-//   {
-//     id: 'C',
-//     position: { x: 250, y: 150 },
-//     data: { label: 'C' },
-//     ...nodeDefaults,
-//   },
-//   {
-//     id: 'D',
-//     position: { x: 250, y: 300 },
-//     data: { label: 'D' },
-//     ...nodeDefaults,
-//   },
-// ];
-
-// const initialEdges: Edge[] = [
-//   {
-//     id: 'A-B',
-//     source: 'A',
-//     target: 'B',
-//   },
-//   {
-//     id: 'A-C',
-//     source: 'A',
-//     target: 'C',
-//   },
-//   {
-//     id: 'A-D',
-//     source: 'A',
-//     target: 'D',
-//   },
-// ];
-
-// const PageTraining = () => {
-//   const [colorMode, setColorMode] = useState<ColorMode>('light');
-//   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-//   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-//   const onConnect = useCallback(
-//     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-//     [setEdges],
-//   );
-
-//   const onChange: ChangeEventHandler<HTMLSelectElement> = (evt) => {
-//     setColorMode(evt.target.value as ColorMode);
-//   };
-
-//   return (
-//     <div style={{ width: '100%', height: '100%' }}>
-//       <ReactFlow
-//         nodes={nodes}
-//         edges={edges}
-//         onNodesChange={onNodesChange}
-//         onEdgesChange={onEdgesChange}
-//         onConnect={onConnect}
-//         colorMode={colorMode}
-//         fitView
-//       >
-//         <Controls />
-//         <MiniMap />
-//         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-
-//         {/* <Panel position="top-right">
-//           <select onChange={onChange} data-testid="colormode-select">
-//             <option value="dark">dark</option>
-//             <option value="light">light</option>
-//             <option value="system">system</option>
-//           </select>
-//         </Panel> */}
-//       </ReactFlow>
-//     </div>
-//   )
-// }
-
-// export default PageTraining;

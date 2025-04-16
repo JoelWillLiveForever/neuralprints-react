@@ -9,6 +9,9 @@ import BeautifulSlider from '../beautiful_slider/BeautifulSlider';
 import { useArchitectureStore } from '../../store/ArchitectureStore';
 import BeautifulComboBox from '../beautiful_combo_box/BeautifulComboBox';
 import BeautifulField from '../beautiful_field/BeautifulField';
+import { Button } from 'react-bootstrap';
+
+import send_architecture_data from '../../api/SendArchitectureData';
 
 const Sidebar: React.FC = () => {
     const [, setType] = useDnD();
@@ -211,6 +214,30 @@ const Sidebar: React.FC = () => {
         updateSplits(newValue, type);
     };
 
+    const handleSendClick = async () => {
+        try {
+            await send_architecture_data();
+            alert('Архитектура успешно отправлена!');
+        } catch (error) {
+            let errorMessage = 'Неизвестная ошибка';
+
+            // Вариант 1: Проверка через instanceof
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+
+            // Вариант 2: Проверка типа через type guard
+            // if (typeof error === 'object' && error !== null && 'message' in error) {
+            //     errorMessage = (error as { message: string }).message;
+            // }
+
+            // Вариант 3: Универсальная обработка
+            // errorMessage = String(error);
+
+            alert(`Ошибка: ${errorMessage}`);
+        }
+    };
+
     return (
         <aside className="sidebar">
             <Header4Container className="tensorflow-layers-header" text="TensorFlow layers" />
@@ -353,7 +380,7 @@ const Sidebar: React.FC = () => {
                     onWheel={(e) => {
                         e.preventDefault(); // Предотвращаем стандартное поведение прокрутки
                         const step = e.deltaY > 0 ? -1 : 1; // Если прокрутка вниз, уменьшаем значение, если вверх — увеличиваем
-                        const newValue = Math.max(1, Math.min(1000, epochs + step))
+                        const newValue = Math.max(1, Math.min(1000, epochs + step));
                         setEpochs(newValue); // Обновляем значение с ограничениями
                     }}
                     min={1}
@@ -395,6 +422,8 @@ const Sidebar: React.FC = () => {
                     <option value="off">Disable</option>
                     <option value="on">Enable</option>
                 </BeautifulComboBox>
+
+                <Button onClick={handleSendClick}>Отправить</Button>
             </div>
         </aside>
     );

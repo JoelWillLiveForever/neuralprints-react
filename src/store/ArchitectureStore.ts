@@ -1,7 +1,10 @@
 import { create } from 'zustand';
+import { Node as RFNode, Edge as RFEdge, applyNodeChanges, applyEdgeChanges } from '@xyflow/react';
 
 interface ArchitectureStore {
-    layers: string[]; // Хранит список слоев
+    // layers: string[]; // Хранит список слоев
+    nodes: RFNode[];
+    edges: RFEdge[];
 
     // Данные разбиения датасета
     train_split: number;
@@ -16,8 +19,17 @@ interface ArchitectureStore {
 
     enable_dataset_normalization: boolean;
 
-    addLayer: (layer: string) => void;
-    removeLayer: (layer: string) => void;
+    // setLayers: (layers: string[]) => void;
+
+    // addLayer: (layer: string) => void;
+    // removeLayer: (layer: string) => void;
+
+    // Методы для работы с узлами и связями
+    setNodes: (nodes: RFNode[]) => void;
+    setEdges: (edges: RFEdge[]) => void;
+
+    onNodesChange: (changes: any[]) => void;
+    onEdgesChange: (changes: any[]) => void;
 
     setTrainSplit: (value: number) => void;
     setTestSplit: (value: number) => void;
@@ -33,7 +45,9 @@ interface ArchitectureStore {
 }
 
 export const useArchitectureStore = create<ArchitectureStore>((set, get) => ({
-    layers: [],
+    // layers: [],
+    nodes: [],
+    edges: [],
     
     train_split: 0.7,
     test_split: 0.2,
@@ -47,8 +61,25 @@ export const useArchitectureStore = create<ArchitectureStore>((set, get) => ({
 
     enable_dataset_normalization: false,
 
-    addLayer: (layer) => set((state) => ({ layers: [...state.layers, layer] })),
-    removeLayer: (layer) => set((state) => ({ layers: state.layers.filter((l) => l !== layer) })),
+    // setLayers: (layers) => set({ layers }),
+
+    // addLayer: (layer) => set((state) => ({ layers: [...state.layers, layer] })),
+    // removeLayer: (layer) => set((state) => ({ layers: state.layers.filter((l) => l !== layer) })),
+
+    setNodes: (nodes) => set({ nodes }),
+    setEdges: (edges) => set({ edges }),
+    
+    onNodesChange: (changes) => {
+        set({
+            nodes: applyNodeChanges(changes, get().nodes)
+        });
+    },
+    
+    onEdgesChange: (changes) => {
+        set({
+            edges: applyEdgeChanges(changes, get().edges)
+        });
+    },
 
     setTrainSplit: (value) => set({ train_split: value }),
     setTestSplit: (value) => set({ test_split: value }),
