@@ -5,9 +5,9 @@ import { ReactFlowProvider } from '@xyflow/react';
 import { DnDProvider } from '../../context/DnDContext';
 import DnDFlow from '../../components/dndflow/DnDFlow';
 
-import './page_design.scss'
+import './page_architecture.scss'
 
-const PageDesign: React.FC = () => {
+const PageArchitecture: React.FC = () => {
     return (
         <ReactFlowProvider>
             <DnDProvider>
@@ -17,4 +17,4 @@ const PageDesign: React.FC = () => {
     );
 };
 
-export default PageDesign;
+export default PageArchitecture;

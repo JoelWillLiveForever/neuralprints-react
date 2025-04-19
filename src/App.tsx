@@ -10,7 +10,7 @@ import PageAbout from './pages/page_about/PageAbout';
 import PagePreferences from './pages/page_preferences/PagePreferences';
 import PageInference from './pages/page_inference/PageInference';
 import PageTraining from './pages/page_training/PageTraining';
-import PageDesign from './pages/page_design/PageDesign';
+import PageArchitecture from './pages/page_architecture/PageArchitecture';
 import PageDataset from './pages/page_dataset/PageDataset';
 
 import './app.scss';
@@ -22,10 +22,10 @@ const App = () => {
 
     const menuWrapper = useRef<ImperativePanelHandle>(null);
 
-    const MENU_DEFAULT_SIZE_IN_PX = 280;
+    const MENU_DEFAULT_SIZE_IN_PX = 300;
     const [menuDefaultSize, setMenuDefaultSize] = useState((MENU_DEFAULT_SIZE_IN_PX / window.innerWidth) * 100);
 
-    const MENU_MIN_SIZE_IN_PX = 240;
+    const MENU_MIN_SIZE_IN_PX = 260;
     const [menuMinSize, setMenuMinSize] = useState((MENU_MIN_SIZE_IN_PX / window.innerWidth) * 100);
 
     const MENU_MAX_SIZE_IN_PX = 310;
@@ -82,7 +82,7 @@ const App = () => {
                         <div className="page-container">
                             <Routes>
                                 <Route path="/dataset" element={<PageDataset />} />
-                                <Route path="/design" element={<PageDesign />} />
+                                <Route path="/architecture" element={<PageArchitecture />} />
                                 <Route path="/training" element={<PageTraining />} />
                                 <Route path="/inference" element={<PageInference />} />
                                 <Route path="/preferences" element={<PagePreferences />} />

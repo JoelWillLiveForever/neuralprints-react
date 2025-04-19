@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { IconGeometry } from '@tabler/icons-react';
+
 import './menu.scss';
 
 const Menu = ({ isCollapsed }: { isCollapsed: boolean }) => {
@@ -21,11 +23,16 @@ const Menu = ({ isCollapsed }: { isCollapsed: boolean }) => {
             </NavLink>
 
             <NavLink
-                to="/design"
+                to="/architecture"
                 className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--design' })}
             >
-                <i className="bi bi-sliders menu__button__icon"></i>
-                {!isCollapsed && <span className="menu__button__text">Design</span>}
+                {({isActive}) => (
+                    <>
+                        {/* <i className="bi bi-sliders menu__button__icon"></i> */}
+                        <IconGeometry size={isActive ? 28 : 24} />
+                        {!isCollapsed && <span className="menu__button__text">Architecture</span>}
+                    </>
+                )}
             </NavLink>
 
             <NavLink
