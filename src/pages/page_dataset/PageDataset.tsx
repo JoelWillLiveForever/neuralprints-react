@@ -264,7 +264,7 @@ const PageDataset: React.FC = () => {
 
             {dataset.length > 0 ? (
                 <div className="table-container">
-                    <Header4Container text='Dataset' />
+                    {/* <Header4Container text='Dataset' /> */}
                     <Table className="table-container__dataset-table" bordered hover responsive>
                         <thead>
                             <tr>
@@ -357,6 +357,10 @@ const PageDataset: React.FC = () => {
                 //     Загрузите датасет в *.CSV формате!
                 // </Alert>
                 <strong className="info-message-block">Please, upload Your dataset in *.CSV file format!</strong>
+
+                // <div className='info-message-block'>
+                //     <strong className="info-message-block__content">Please, upload Your dataset in *.CSV file format!</strong>
+                // </div>
             )}
 
             <div className="pagination-controls">
