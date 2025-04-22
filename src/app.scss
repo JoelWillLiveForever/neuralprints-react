@@ -110,6 +110,35 @@
                 background-color: #7B1FA2ff;
             }
         }
+
+        &--collapsed {
+            width: 40px;
+
+            margin-left: -8px;
+            margin-right: -8px;
+
+            &::before {
+                width: 24px;
+                transform: translateX(-50%) scaleX(1);
+            }
+
+            &:hover::before,
+            &:active::before {
+                transform: translateX(-50%) scaleX(1.25);
+            }
+        }
+
+        // по дефолту этот стиль
+        // &--expanded {
+        //     &::before {
+        //         background-color: #7B1FA2de;
+        //     }
+
+        //     &:hover::before,
+        //     &:active::before {
+        //         background-color: #7B1FA2ff;
+        //     }
+        // }
     }
 }
 

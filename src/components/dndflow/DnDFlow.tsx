@@ -110,6 +110,8 @@ const DnDFlow: React.FC = () => {
     const SIDEBAR_MAX_SIZE_IN_PX = 500;
     const [sidebarMaxSize, setMenuMaxSize] = useState((SIDEBAR_MAX_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100);
 
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
     // Обновляем размер меню при изменении окна
     useEffect(() => {
         // вызвать один раз при первом рендеринге страницы
@@ -250,6 +252,14 @@ const DnDFlow: React.FC = () => {
         }
     };
 
+    const handleSidebarOnCollapse = () => {
+        setIsSidebarCollapsed(true);
+    };
+
+    const handleSidebarPanelOnExpand = () => {
+        setIsSidebarCollapsed(false);
+    };
+
     return (
         <div className="dnd-flow" ref={dndFlowWrapper}>
             <PanelGroup autoSaveId="persistence" direction="horizontal">
@@ -274,13 +284,16 @@ const DnDFlow: React.FC = () => {
                         </ReactFlow>
                     </div>
                 </Panel>
-                <PanelResizeHandle />
+                <PanelResizeHandle className={`my-custom-resize-handle my-custom-resize-handle--architecture ${isSidebarCollapsed ? 'my-custom-resize-handle--collapsed' : ''}`} />
                 <Panel
                     collapsible
                     defaultSize={sidebarDefaultSize}
                     minSize={sidebarMinSize}
                     maxSize={sidebarMaxSize}
                     ref={sidebarWrapper}
+
+                    onCollapse={handleSidebarOnCollapse}
+                    onExpand={handleSidebarPanelOnExpand}
                 >
                     <Sidebar />
                 </Panel>
