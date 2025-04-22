@@ -13,6 +13,8 @@ import { Button } from 'react-bootstrap';
 
 import send_architecture_data from '../../api/SendArchitectureData';
 
+const PAGE_COLOR = "#E64A19";
+
 const Sidebar: React.FC = () => {
     const [, setType] = useDnD();
 
@@ -308,7 +310,7 @@ const Sidebar: React.FC = () => {
                     min={0}
                     max={1}
                     step={0.001}
-                    color="#ffa000"
+                    color={PAGE_COLOR}
                     root="sidebar"
                     label="Training sample size"
                 />
@@ -320,7 +322,7 @@ const Sidebar: React.FC = () => {
                     min={0}
                     max={1}
                     step={0.001}
-                    color="#ffa000"
+                    color={PAGE_COLOR}
                     root="sidebar"
                     label="Test sample size"
                 />
@@ -332,7 +334,7 @@ const Sidebar: React.FC = () => {
                     min={0}
                     max={1}
                     step={0.001}
-                    color="#ffa000"
+                    color={PAGE_COLOR}
                     root="sidebar"
                     label="Validation sample size"
                 />
@@ -346,7 +348,7 @@ const Sidebar: React.FC = () => {
                     root="sidebar"
                     label="Loss function"
                     placeholder="Select loss function"
-                    color="#ffa000"
+                    color={PAGE_COLOR}
                 >
                     <option value="kld">KLD (Kullback-Leibler divergence)</option>
                     <option value="mae">MAE (Mean absolute error)</option>
@@ -376,7 +378,7 @@ const Sidebar: React.FC = () => {
                     root="sidebar"
                     label="Optimizer"
                     placeholder="Select optimizer"
-                    color="#ffa000"
+                    color={PAGE_COLOR}
                 >
                     <option value="adadelta">Adadelta</option>
                     <option value="adafactor">Adafactor</option>
@@ -398,7 +400,7 @@ const Sidebar: React.FC = () => {
                     root="sidebar"
                     label="Quality metric"
                     placeholder="Select quality metric"
-                    color="#ffa000"
+                    color={PAGE_COLOR}
                 >
                     <option value="accuracy">Accuracy</option>
                     <option value="binary_accuracy">Binary accuracy</option>
@@ -471,7 +473,7 @@ const Sidebar: React.FC = () => {
                     step={1}
                     type="numeric"
                     label="Number of training epochs"
-                    color="#ffa000"
+                    color={PAGE_COLOR}
                 />
 
                 <BeautifulField
@@ -489,7 +491,7 @@ const Sidebar: React.FC = () => {
                     step={8}
                     type="numeric"
                     label="Mini-batch size"
-                    color="#ffa000"
+                    color={PAGE_COLOR}
                 />
             </div>
 
@@ -500,7 +502,7 @@ const Sidebar: React.FC = () => {
                     onChange={(e) => setEnableDatasetNormalization(e.target.value === 'on' ? true : false)}
                     root="sidebar"
                     label="Enable dataset normalization"
-                    color="#ffa000"
+                    color={PAGE_COLOR}
                 >
                     <option value="off">Disable</option>
                     <option value="on">Enable</option>
