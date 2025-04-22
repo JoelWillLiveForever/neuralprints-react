@@ -348,7 +348,26 @@ const Sidebar: React.FC = () => {
                     placeholder="Select loss function"
                     color="#ffa000"
                 >
+                    <option value="kld">KLD (Kullback-Leibler divergence)</option>
+                    <option value="mae">MAE (Mean absolute error)</option>
+                    <option value="mape">MAPE (Mean absolute percentage error)</option>
+                    <option value="mse">MSE (Mean squared error)</option>
+                    <option value="msle">MSLE (Mean squared logarithmic error)</option>
                     <option value="binary_cross_entropy">Binary crossentropy</option>
+                    <option value="binary_focal_cross_entropy">Binary focal crossentropy</option>
+                    <option value="categorical_cross_entropy">Categorical crossentropy</option>
+                    <option value="categorical_focal_cross_entropy">Categorical focal crossentropy</option>
+                    <option value="sparse_categorical_cross_entropy">Sparse categorical crossentropy</option>
+                    <option value="cosine_similarity">Cosine similarity</option>
+                    <option value="ctc">CTC (Connectionist temporal classification)</option>
+                    <option value="dice">Dice</option>
+                    <option value="hinge">Hinge</option>
+                    <option value="squared_hinge">Squared hinge</option>
+                    <option value="categorical_hinge">Categorical hinge</option>
+                    <option value="huber">Huber</option>
+                    <option value="reduction">Reduction</option>
+                    <option value="poisson">Poisson</option>
+                    <option value="tversky">Tversky</option>
                 </BeautifulComboBox>
 
                 <BeautifulComboBox
@@ -359,7 +378,18 @@ const Sidebar: React.FC = () => {
                     placeholder="Select optimizer"
                     color="#ffa000"
                 >
+                    <option value="adadelta">Adadelta</option>
+                    <option value="adafactor">Adafactor</option>
+                    <option value="adagrad">Adagrad</option>
                     <option value="adam">Adam</option>
+                    <option value="adamw">AdamW</option>
+                    <option value="adamax">Adamax</option>
+                    <option value="ftrl">Ftrl</option>
+                    <option value="lion">Lion</option>
+                    <option value="lso">LSO (Loss scale optimizer)</option>
+                    <option value="nadam">Nadam</option>
+                    <option value="rmsprop">RMSprop (Root mean squared propagation)</option>
+                    <option value="sgd">SGD (Stochastic gradient descent)</option>
                 </BeautifulComboBox>
 
                 <BeautifulComboBox
@@ -371,6 +401,59 @@ const Sidebar: React.FC = () => {
                     color="#ffa000"
                 >
                     <option value="accuracy">Accuracy</option>
+                    <option value="binary_accuracy">Binary accuracy</option>
+                    <option value="categorical_accuracy">Categorical accuracy</option>
+                    <option value="sparse_categorical_accuracy">Sparse categorical accuracy</option>
+                    <option value="top_k_categorical_accuracy">Top K categorical accuracy</option>
+                    <option value="sparse_top_k_categorical_accuracy">Sparse top K categorical accuracy</option>
+                    <option value="auc">AUC (Area under the curve)</option>
+                    <option value="average_precision_at_k">Average precision at K</option>
+                    <option value="false_negatives">False negatives</option>
+                    <option value="false_negatives_at_thresholds">False negatives at thresholds</option>
+                    <option value="false_positives">False positives</option>
+                    <option value="false_positives_at_thresholds">False positives at thresholds</option>
+                    <option value="mean">Mean (Weighted mean)</option>
+                    <option value="mean_absolute_error">MAE (Mean absolute error)</option>
+                    <option value="mean_absolute_percentage_error">MAPE (Mean absolute percentage error)</option>
+                    <option value="mean_cosine_distance">Mean cosine distance</option>
+                    <option value="mean_per_class_accuracy">Mean per class accuracy</option>
+                    <option value="mean_relative_error">Mean relative error</option>
+                    <option value="mean_squared_error">MSE (Mean squared error)</option>
+                    <option value="mean_squared_logarithmic_error">MSLE (Mean squared logarithmic error)</option>
+                    <option value="mean_tensor">Mean tensor</option>
+                    <option value="percentage_below">Percentage below</option>
+                    <option value="precision">Precision</option>
+                    <option value="precision_at_k">Precision at K</option>
+                    <option value="precision_at_thresholds">Precision at thresholds</option>
+                    <option value="precision_at_top_k">Precision at top K</option>
+                    <option value="recall">Recall</option>
+                    <option value="recall_at_k">Recall at K</option>
+                    <option value="recall_at_thresholds">Recall at thresholds</option>
+                    <option value="recall_at_top_k">Recall at top K</option>
+                    <option value="root_mean_squared_error">Root mean squared error</option>
+                    <option value="sensitivity_at_specificity">Sensitivity at specificity</option>
+                    <option value="sparse_average_precision_at_k">Sparse average precision at K</option>
+                    <option value="sparse_precision_at_k">Sparse precision at K</option>
+                    <option value="specificity_at_sensitivity">Specificity at sensitivity</option>
+                    <option value="true_negatives">True negatives</option>
+                    <option value="true_negatives_at_thresholds">True negatives at thresholds</option>
+                    <option value="true_positives">True positives</option>
+                    <option value="true_positives_at_thresholds">True positives at thresholds</option>
+                    <option value="binary_crossentropy">Binary crossentropy</option>
+                    <option value="categorical_crossentropy">Categorical crossentropy</option>
+                    <option value="categorical_hinge">Categorical hinge</option>
+                    <option value="cosine_similarity">Cosine similarity</option>
+                    <option value="f1_score">F1 Score</option>
+                    <option value="f_beta_score">F beta score</option>
+                    <option value="hinge">Hinge</option>
+                    <option value="iou">IoU</option>
+                    <option value="mean_iou">Mean IoU</option>
+                    <option value="kld">KLD (Kullback-Leibler divergence)</option>
+                    <option value="log_cosh_error">Log-Cosh error</option>
+                    <option value="poisson">Poisson</option>
+                    <option value="r2_score">R2 score</option>
+                    <option value="squared_hinge">Squared hinge</option>
+                    <option value="sum">Sum</option>
                 </BeautifulComboBox>
 
                 <BeautifulField
