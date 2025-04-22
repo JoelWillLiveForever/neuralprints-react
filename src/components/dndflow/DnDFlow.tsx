@@ -252,14 +252,6 @@ const DnDFlow: React.FC = () => {
         }
     };
 
-    const handleSidebarOnCollapse = () => {
-        setIsSidebarCollapsed(true);
-    };
-
-    const handleSidebarPanelOnExpand = () => {
-        setIsSidebarCollapsed(false);
-    };
-
     return (
         <div className="dnd-flow" ref={dndFlowWrapper}>
             <PanelGroup autoSaveId="persistence" direction="horizontal">
@@ -292,8 +284,8 @@ const DnDFlow: React.FC = () => {
                     maxSize={sidebarMaxSize}
                     ref={sidebarWrapper}
 
-                    onCollapse={handleSidebarOnCollapse}
-                    onExpand={handleSidebarPanelOnExpand}
+                    onCollapse={() => setIsSidebarCollapsed(true)}
+                    onExpand={() => setIsSidebarCollapsed(false)}
                 >
                     <Sidebar />
                 </Panel>

@@ -17,7 +17,7 @@ import './pages/pages.scss';
 
 const MENU_DEFAULT_SIZE_PX = 300;
 const MENU_MIN_SIZE_PX = 260;
-const MENU_MAX_SIZE_PX = 310;
+const MENU_MAX_SIZE_PX = 320;
 const MENU_COLLAPSED_SIZE_PX = 100;
 
 const App = () => {
@@ -35,6 +35,7 @@ const App = () => {
     // Обновляем размеры меню на основе ширины окна
     const updateMenuSizes = () => {
         const w = window.innerWidth;
+
         setMenuDefaultSize((MENU_DEFAULT_SIZE_PX / w) * 100);
         setMenuMinSize((MENU_MIN_SIZE_PX / w) * 100);
         setMenuMaxSize((MENU_MAX_SIZE_PX / w) * 100);
@@ -86,12 +87,15 @@ const App = () => {
         <div className="app-container">
             <PanelGroup autoSaveId="persistence" direction="horizontal">
                 <Panel
-                    ref={menuRef}
                     collapsible
+                    
+                    ref={menuRef}
+
                     collapsedSize={menuCollapsedSize}
                     minSize={menuMinSize}
                     maxSize={menuMaxSize}
                     defaultSize={menuDefaultSize}
+
                     onCollapse={() => setIsMenuCollapsed(true)}
                     onExpand={() => setIsMenuCollapsed(false)}
                 >
