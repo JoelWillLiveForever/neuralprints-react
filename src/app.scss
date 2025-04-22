@@ -5,6 +5,112 @@
     // overflow: hidden;
     width: 100vw;
     height: 100vh;
+
+    .my-custom-resize-handle {
+        margin-left: -8px;
+        margin-right: -8px;
+        z-index: 100;
+
+        width: 16px;
+        background-color: transparent;
+        cursor: col-resize;
+
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+
+            top: 0;
+            bottom: 0;
+
+            left: 50%;
+
+            transform: translateX(-50%) scaleX(1);
+
+            width: 2px;
+
+            background-color: #9E9E9Ede;
+
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            transform-origin: center;
+        }
+
+        &:hover::before,
+        &:active::before {
+            // width: 4px;
+
+            transform: translateX(-50%) scaleX(2);
+            background-color: #9E9E9Eff;
+        }
+
+        // Стили для активных страниц
+        &--dataset {
+            &::before {
+                background-color: #C2185Bde;
+            }
+
+            &:hover::before,
+            &:active::before {
+                background-color: #C2185Bff;
+            }
+        }
+
+        &--architecture {
+            &::before {
+                background-color: #E64A19de;
+            }
+
+            &:hover::before,
+            &:active::before {
+                background-color: #E64A19ff;
+            }
+        }
+
+        &--training {
+            &::before {
+                background-color: #689F38de;
+            }
+
+            &:hover::before,
+            &:active::before {
+                background-color: #689F38ff;
+            }
+        }
+
+        &--inference {
+            &::before {
+                background-color: #00796Bde;
+            }
+
+            &:hover::before,
+            &:active::before {
+                background-color: #00796Bff;
+            }
+        }
+
+        &--preferences {
+            &::before {
+                background-color: #303F9Fde;
+            }
+
+            &:hover::before,
+            &:active::before {
+                background-color: #303F9Fff;
+            }
+        }
+
+        &--about {
+            &::before {
+                background-color: #7B1FA2de;
+            }
+
+            &:hover::before,
+            &:active::before {
+                background-color: #7B1FA2ff;
+            }
+        }
+    }
 }
 
 .page-container {
@@ -30,7 +136,7 @@
     position: relative;
 
     &::after {
-        content: "";
+        content: '';
         position: absolute;
 
         top: 5px;
@@ -41,6 +147,6 @@
         width: 100%;
 
         border-radius: 10px;
-        background-color: #9E9E9E;
+        background-color: #9e9e9e;
     }
 }

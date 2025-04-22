@@ -24,7 +24,7 @@ const Menu = ({ isCollapsed }: { isCollapsed: boolean }) => {
 
             <NavLink
                 to="/architecture"
-                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--design' })}
+                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--architecture' })}
             >
                 {({isActive}) => (
                     <>
