@@ -9,9 +9,14 @@
     .my-custom-resize-handle {
         margin-left: -8px;
         margin-right: -8px;
+
+        margin-top: 0;
+        margin-bottom: 0;
+
         z-index: 100;
 
         width: 16px;
+
         background-color: transparent;
         cursor: col-resize;
 
@@ -30,7 +35,7 @@
 
             width: 2px;
 
-            background-color: #9E9E9Ede;
+            background-color: #9e9e9ede;
 
             transition: transform 0.2s ease, background-color 0.2s ease;
             transform-origin: center;
@@ -41,73 +46,72 @@
             // width: 4px;
 
             transform: translateX(-50%) scaleX(2);
-            background-color: #9E9E9Eff;
         }
 
         // Стили для активных страниц
         &--dataset {
             &::before {
-                background-color: #C2185Bde;
+                background-color: #c2185bde;
             }
 
             &:hover::before,
             &:active::before {
-                background-color: #C2185Bff;
+                background-color: #c2185bff;
             }
         }
 
         &--architecture {
             &::before {
-                background-color: #E64A19de;
+                background-color: #e64a19de;
             }
 
             &:hover::before,
             &:active::before {
-                background-color: #E64A19ff;
+                background-color: #e64a19ff;
             }
         }
 
         &--training {
             &::before {
-                background-color: #689F38de;
+                background-color: #689f38de;
             }
 
             &:hover::before,
             &:active::before {
-                background-color: #689F38ff;
+                background-color: #689f38ff;
             }
         }
 
         &--inference {
             &::before {
-                background-color: #00796Bde;
+                background-color: #00796bde;
             }
 
             &:hover::before,
             &:active::before {
-                background-color: #00796Bff;
+                background-color: #00796bff;
             }
         }
 
         &--preferences {
             &::before {
-                background-color: #303F9Fde;
+                background-color: #303f9fde;
             }
 
             &:hover::before,
             &:active::before {
-                background-color: #303F9Fff;
+                background-color: #303f9fff;
             }
         }
 
         &--about {
             &::before {
-                background-color: #7B1FA2de;
+                background-color: #7b1fa2de;
             }
 
             &:hover::before,
             &:active::before {
-                background-color: #7B1FA2ff;
+                background-color: #7b1fa2ff;
             }
         }
 
@@ -126,6 +130,48 @@
             &:active::before {
                 transform: translateX(-50%) scaleX(1.25);
             }
+        }
+
+        &--vertical {
+            margin-top: -2px;
+            margin-bottom: -2px;
+
+            // background-color: blue;
+
+            margin-left: 0;
+            margin-right: 0;
+
+            width: 100%;
+            height: 24px;
+        }
+
+        &--vertical::before {
+            content: '';
+            position: absolute;
+
+            left: 0;
+            right: 0;
+
+            top: 50%;
+
+            transform: translateY(-50%) scaleY(1);
+
+            width: 100%;
+            height: 20px;
+
+            // background-color: blue;
+
+            // background-color: #9e9e9ede;
+
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            transform-origin: center;
+        }
+
+        &--vertical:hover::before,
+        &--vertical:active::before {
+            // width: 4px;
+
+            transform: translateY(-50%) scaleY(1.2);
         }
 
         // по дефолту этот стиль

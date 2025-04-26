@@ -72,6 +72,10 @@ const nodeTypes: NodeTypes = {
 let id = 0;
 const getId = () => `tensorflow_node_${id++}`;
 
+const SIDEBAR_DEFAULT_SIZE_IN_PX = 375;
+const SIDEBAR_MIN_SIZE_IN_PX = 300;
+const SIDEBAR_MAX_SIZE_IN_PX = 500;
+
 const DnDFlow: React.FC = () => {
     const {
         nodes,
@@ -96,23 +100,29 @@ const DnDFlow: React.FC = () => {
     const { fitView } = useReactFlow();
     const [isFitViewExecuted, setIsFitViewExecuted] = useState(false);
 
-    // const CURRENT_MENU_SIZE_IN_PX = menuSize / 100.0 * window.innerWidth;
-    const PAGE_CONTAINER_WIDTH = dndFlowWrapper.current?.getBoundingClientRect().width || window.innerWidth;
+    const getPct = (px: number) => {
+        const containerWidth = dndFlowWrapper.current?.getBoundingClientRect().width ?? window.innerWidth;
+        return (px / containerWidth) * 100;
+    };
 
-    const SIDEBAR_DEFAULT_SIZE_IN_PX = 375;
-    const [sidebarDefaultSize, setMenuDefaultSize] = useState(
-        (SIDEBAR_DEFAULT_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100
-    );
-
-    const SIDEBAR_MIN_SIZE_IN_PX = 300;
-    const [sidebarMinSize, setMenuMinSize] = useState((SIDEBAR_MIN_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100);
-
-    const SIDEBAR_MAX_SIZE_IN_PX = 500;
-    const [sidebarMaxSize, setMenuMaxSize] = useState((SIDEBAR_MAX_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100);
+    const [sidebarDefaultSize, setMenuDefaultSize] = useState(getPct(SIDEBAR_DEFAULT_SIZE_IN_PX));
+    const [sidebarMinSize, setMenuMinSize] = useState(getPct(SIDEBAR_MIN_SIZE_IN_PX));
+    const [sidebarMaxSize, setMenuMaxSize] = useState(getPct(SIDEBAR_MAX_SIZE_IN_PX));
 
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
-    // Обновляем размер меню при изменении окна
+    useEffect(() => {
+        // Обновляем размеры sidebar на основе ширины окна
+        const updateSidebarPanelSizes = () => {
+            setMenuDefaultSize(getPct(SIDEBAR_DEFAULT_SIZE_IN_PX));
+            setMenuMinSize(getPct(SIDEBAR_MIN_SIZE_IN_PX));
+            setMenuMaxSize(getPct(SIDEBAR_MAX_SIZE_IN_PX));
+        };
+
+        window.addEventListener('resize', updateSidebarPanelSizes);
+        return () => window.removeEventListener('resize', updateSidebarPanelSizes);
+    }, []);
+
     useEffect(() => {
         // вызвать один раз при первом рендеринге страницы
         // центрирование диаграммы
@@ -123,20 +133,6 @@ const DnDFlow: React.FC = () => {
 
             setIsFitViewExecuted(true);
         }
-
-        const handleResize = () => {
-            const dndFlowWidth = dndFlowWrapper.current?.getBoundingClientRect().width || window.innerWidth;
-            // console.log('Текущая ширина меню:', dndFlowWidth);
-
-            setMenuDefaultSize((SIDEBAR_DEFAULT_SIZE_IN_PX / dndFlowWidth) * 100);
-
-            setMenuMinSize((SIDEBAR_MIN_SIZE_IN_PX / dndFlowWidth) * 100);
-            setMenuMaxSize((SIDEBAR_MAX_SIZE_IN_PX / dndFlowWidth) * 100);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => window.removeEventListener('resize', handleResize);
     }, [fitView, isFitViewExecuted]);
 
     const onConnect = useCallback(
@@ -254,8 +250,8 @@ const DnDFlow: React.FC = () => {
 
     return (
         <div className="dnd-flow" ref={dndFlowWrapper}>
-            <PanelGroup autoSaveId="persistence" direction="horizontal">
-                <Panel defaultSize={100 - (sidebarWrapper.current?.getSize() || sidebarMaxSize)}>
+            <PanelGroup autoSaveId="architecture_sidebar" direction="horizontal">
+                <Panel defaultSize={100 - (sidebarWrapper.current?.getSize() ?? sidebarMaxSize)}>
                     <div className="react-flow-wrapper">
                         <ReactFlow
                             nodes={nodes}

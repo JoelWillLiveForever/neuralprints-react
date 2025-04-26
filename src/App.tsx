@@ -27,20 +27,12 @@ const App = () => {
     const [isMenuCollapsed, setIsMenuCollapsed] = useState(false);
     const [handleClass, setHandleClass] = useState<string>('');
 
-    const [menuDefaultSize, setMenuDefaultSize] = useState(0);
-    const [menuMinSize, setMenuMinSize] = useState(0);
-    const [menuMaxSize, setMenuMaxSize] = useState(0);
-    const [menuCollapsedSize, setMenuCollapsedSize] = useState(0);
+    const getPct = (px: number) => (px / window.innerWidth) * 100;
 
-    // Обновляем размеры меню на основе ширины окна
-    const updateMenuSizes = () => {
-        const w = window.innerWidth;
-
-        setMenuDefaultSize((MENU_DEFAULT_SIZE_PX / w) * 100);
-        setMenuMinSize((MENU_MIN_SIZE_PX / w) * 100);
-        setMenuMaxSize((MENU_MAX_SIZE_PX / w) * 100);
-        setMenuCollapsedSize((MENU_COLLAPSED_SIZE_PX / w) * 100);
-    };
+    const [menuDefaultSize, setMenuDefaultSize] = useState(() => getPct(MENU_DEFAULT_SIZE_PX));
+    const [menuMinSize, setMenuMinSize] = useState(() => getPct(MENU_MIN_SIZE_PX));
+    const [menuMaxSize, setMenuMaxSize] = useState(() => getPct(MENU_MAX_SIZE_PX));
+    const [menuCollapsedSize, setMenuCollapsedSize] = useState(() => getPct(MENU_COLLAPSED_SIZE_PX));
 
     // // Определяем класс по текущему маршруту --- обрабатывает вложенные маршруты, switch - нет
     // const determineHandleClass = useCallback(() => {
@@ -74,7 +66,14 @@ const App = () => {
     }, [location.pathname]);
 
     useEffect(() => {
-        updateMenuSizes();
+        // Обновляем размеры меню на основе ширины окна
+        const updateMenuSizes = () => {
+            setMenuDefaultSize(getPct(MENU_DEFAULT_SIZE_PX));
+            setMenuMinSize(getPct(MENU_MIN_SIZE_PX));
+            setMenuMaxSize(getPct(MENU_MAX_SIZE_PX));
+            setMenuCollapsedSize(getPct(MENU_COLLAPSED_SIZE_PX));
+        };
+
         window.addEventListener('resize', updateMenuSizes);
         return () => window.removeEventListener('resize', updateMenuSizes);
     }, []);
@@ -85,17 +84,14 @@ const App = () => {
 
     return (
         <div className="app-container">
-            <PanelGroup autoSaveId="persistence" direction="horizontal">
+            <PanelGroup autoSaveId="app_menu" direction="horizontal">
                 <Panel
                     collapsible
-                    
                     ref={menuRef}
-
                     collapsedSize={menuCollapsedSize}
                     minSize={menuMinSize}
                     maxSize={menuMaxSize}
                     defaultSize={menuDefaultSize}
-
                     onCollapse={() => setIsMenuCollapsed(true)}
                     onExpand={() => setIsMenuCollapsed(false)}
                 >
@@ -104,7 +100,7 @@ const App = () => {
 
                 <PanelResizeHandle className={`my-custom-resize-handle ${handleClass}`} />
 
-                <Panel defaultSize={100 - (menuRef.current?.getSize() || menuMaxSize)}>
+                <Panel defaultSize={100 - (menuRef.current?.getSize() ?? menuMaxSize)}>
                     <div className="page-container">
                         <Routes>
                             <Route path="/dataset" element={<PageDataset />} />

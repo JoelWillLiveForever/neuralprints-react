@@ -8,8 +8,9 @@ export default defineConfig({
     alias: {
       '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
     },
+  },  
+  server: {
+    host: '0.0.0.0',
+    // historyApiFallback: true, Чтобы Vite не давал 404 на маршруты
   },
-  // server: {
-  //   historyApiFallback: true, Чтобы Vite не давал 404 на маршруты
-  // },
 })
