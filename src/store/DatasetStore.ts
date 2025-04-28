@@ -5,7 +5,7 @@ interface DatasetStore {
     dataset: string[][];
 
     headers: string[];
-    column_types: ('feature' | 'target' | 'ignored')[];
+    column_types: string[];
 
     sort_params: { column_index: number; order: 'asc' | 'desc' | null };
 
@@ -18,8 +18,8 @@ interface DatasetStore {
     set_headers: (headers: string[]) => void;
     get_headers: () => void;
 
-    set_column_types: (column_types: ('feature' | 'target' | 'ignored')[]) => void; // Метод для обновления типов столбцов
-    get_column_types: () => ('feature' | 'target' | 'ignored')[]; // Метод для получения типов столбцов
+    set_column_types: (column_types: string[]) => void; // Метод для обновления типов столбцов
+    get_column_types: () => string[]; // Метод для получения типов столбцов
 
     set_pagination: (current_page: number, page_size: number) => void;
 

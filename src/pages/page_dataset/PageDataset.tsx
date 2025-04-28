@@ -21,7 +21,7 @@ const PageDataset: React.FC = () => {
 
         set_dataset,
         set_headers,
-        // set_column_types,
+        set_column_types,
 
         set_pagination,
 
@@ -267,6 +267,13 @@ const PageDataset: React.FC = () => {
 
     const handle_sort_click = (column_index: number) => {
         sort_dataset(column_index);
+    };
+
+    const handle_column_type_change = (index: number, new_type: string) => {
+        const updated_column_types = [...column_types]; // Копируем текущие данные
+        updated_column_types[index] = new_type; // Обновляем конкретный элемент в column_types
+        
+        set_column_types(updated_column_types); // Обновляем состояние
     };
 
     return (
