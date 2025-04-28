@@ -8,22 +8,31 @@
 
     /* Кнопки */
     .btn-primary {
-        background-color: $primary;
-        border-color: $primary;
+        --bs-btn-bg: #{$primary};
+        --bs-btn-border-color: #{$primary};
 
-        &:hover,
-        &:focus,
-        &:active {
-            background-color: darken($primary, 10%);
-            border-color: darken($primary, 10%);
-        }
+        --bs-btn-hover-bg: #{darken($primary, 10%)};
+        --bs-btn-hover-border-color: #{darken($primary, 10%)};
 
-        &:disabled,
-        &.disabled {
-            background-color: rgba($primary, $disabled-opacity);
-            border-color: rgba($primary, $disabled-opacity);
-            opacity: 1;
-        }
+        --bs-btn-active-bg: #{darken($primary, 20%)};
+        --bs-btn-active-border-color: #{darken($primary, 20%)};
+
+        // background-color: $primary;
+        // border-color: $primary;
+
+        // &:hover,
+        // &:focus,
+        // &:active {
+        //     background-color: darken($primary, 10%);
+        //     border-color: darken($primary, 10%);
+        // }
+
+        // &:disabled,
+        // &.disabled {
+        //     background-color: rgba($primary, $disabled-opacity);
+        //     border-color: rgba($primary, $disabled-opacity);
+        //     opacity: 1;
+        // }
     }
 
     /* Outline кнопки */
@@ -71,7 +80,7 @@
         --bs-pagination-color: #{$primary};
         // --bs-pagination-border-color: #{$primary};
         --bs-pagination-active-bg: #{$primary};
-        --bs-pagination-active-border-color: #{$primary}; 
+        --bs-pagination-active-border-color: #{$primary};
         // --bs-pagination-active-color: #fff; // Белый цвет для активной цифры
         --bs-pagination-focus-color: #{$primary};
         --bs-pagination-focus-bg: tint-color(#{$primary}, 80%) !important;
@@ -275,6 +284,85 @@
             //     // background: white;
             //     z-index: 1;
             // }
+
+            thead {
+                tr {
+                    // height: 120px;
+                    // padding: 10px;
+
+                    th {
+                        height: 100%;
+                        position: relative;
+
+                        vertical-align: middle;
+
+                        padding: 14px 14px;
+
+                        .my-custom-thead {
+                            height: 100%;
+                            
+                            display: flex;
+                            flex-direction: column;
+
+                            justify-content: center;
+
+                            gap: 14px;
+
+                            &__chas {
+                                display: flex;
+
+                                align-items: center;
+                                justify-content: center;
+
+                                width: 100%;
+
+                                position: relative;
+
+                                // padding-right: 25px;
+
+                                &__column-header {
+                                    text-align: center;
+                                    flex-grow: 1;
+
+                                    line-height: 1.5;
+                                }
+
+                                &__column-sort {
+                                    position: absolute;
+
+                                    width: 24px;
+                                    height: 24px;
+                                    
+                                    right: 0;
+                                    top: 50%;
+
+                                    transform: translateY(-50%);
+
+                                    cursor: pointer;
+
+                                    display: flex;
+
+                                    align-items: center;
+                                    justify-content: center;
+
+                                    padding: 0;
+                                    margin: 0;
+
+                                    font-size: 0.9rem;
+                                }
+                            }
+
+                            &__column-type {
+                                width: 100%;
+                                height: fit-content;
+
+                                font-size: 0.9rem;
+                                margin-top: auto;
+                            }
+                        }
+                    }
+                }
+            }
 
             // Стиль для строки при наведении
             tbody {

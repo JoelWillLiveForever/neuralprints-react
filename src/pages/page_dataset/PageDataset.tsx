@@ -6,20 +6,32 @@ import Papa from 'papaparse';
 // компоненты и стили
 import { Dropdown, DropdownButton, Form, InputGroup, Pagination, Table, Button } from 'react-bootstrap';
 import './page_dataset.scss';
-import Header4Container from '../../components/header_4_container/Header4Container';
 
 const PageDataset: React.FC = () => {
     const {
         dataset,
+
         headers,
+        column_types,
+
+        sort_params,
 
         current_page: stored_current_page,
         page_size: stored_page_size,
 
         set_dataset,
         set_headers,
+        // set_column_types,
 
         set_pagination,
+
+        sort_dataset,
+        // reset_sorting,
+
+        initialize_data,
+        update_data,
+        clear_data,
+
     } = useDatasetStore();
 
     const DATASET_CSV_FILE_INPUT_REF = useRef<HTMLInputElement | null>(null);
@@ -30,6 +42,14 @@ const PageDataset: React.FC = () => {
     const [is_adding_entry, set_is_adding_entry] = useState(false);
     const [new_entry, set_new_entry] = useState<string[]>([]);
 
+    // const [sort_order, set_sort_order] = useState<(null | 'asc' | 'desc')[]>(headers.map(() => null)); // Состояние для порядка сортировки
+    // const original_dataset_ref = useRef<string[][]>([]); // хранит оригинальные данные для сортировки (может это кастыль? хз.)
+
+    // useEffect(() => {
+    //     // когда dataset меняется (например, новый загружен), обновляем оригинальные данные
+    //     original_dataset_ref.current = dataset;
+    // }, [dataset]);
+
     // Обновление текущих данных при изменении страницы или размера страницы
     useEffect(() => {
         const start = stored_current_page * stored_page_size; // начало диапазона
@@ -37,6 +57,21 @@ const PageDataset: React.FC = () => {
 
         set_current_part_of_dataset(dataset.slice(start, end));
     }, [dataset, stored_current_page, stored_page_size]);
+
+    // useEffect(() => {
+    //     if (headers.length > 0) {
+    //         const initial_column_types = new Array(headers.length).fill('feature');
+
+    //         initial_column_types[0] = 'ignore';
+    //         initial_column_types[headers.length - 1] = 'target';
+
+    //         set_column_types(initial_column_types);
+    //     }
+    // }, [headers, set_column_types]);
+
+    // useEffect(() => {
+    //     set_sort_order(headers.map(() => null));
+    // }, [headers]);
 
     const action_dataset_upload_handler = () => {
         DATASET_CSV_FILE_INPUT_REF.current?.click();
@@ -48,8 +83,15 @@ const PageDataset: React.FC = () => {
             set_dataset_file(csv_file);
             Papa.parse(csv_file, {
                 complete: (result) => {
-                    set_headers(result.data[0]);
-                    set_dataset(result.data.slice(1));
+                    // set_headers(result.data[0]);
+                    // set_dataset(result.data.slice(1));
+
+                    const parsed_headers = result.data[0] as string[];
+                    set_headers(parsed_headers);
+
+                    // Приведение типа данных
+                    const parsed_data = result.data.slice(1) as string[][]; // Явное приведение типа
+                    initialize_data(parsed_data);
 
                     set_pagination(stored_current_page, stored_page_size);
                 },
@@ -65,12 +107,15 @@ const PageDataset: React.FC = () => {
             return;
         }
 
-        set_dataset([]);
-        set_headers([]);
+        // set_headers([]);
+
+        clear_data();
+        // update_data([]);
+        // set_dataset([]);
 
         set_dataset_file(null);
 
-        set_pagination(0, stored_page_size); // Сброс к начальным настройкам
+        // set_pagination(0, stored_page_size); // Сброс к начальным настройкам
 
         // сброс значения value для возможности загружать снова тот же самый файл
         if (DATASET_CSV_FILE_INPUT_REF.current) {
@@ -84,15 +129,18 @@ const PageDataset: React.FC = () => {
         // const { dataset, headers } = useDatasetStore.getState();
 
         // Если массив dataset пуст, то выводим alert() и выходим из функции.
-        if (dataset.length === 0) {
+        if (useDatasetStore.getState()._original_data.length === 0) {
             alert('Нет данных для сохранения!');
             return;
         }
 
+        // сбросить сортировку датасета, если есть
+        // reset_sorting();
+
         // Превращаем JavaScript-массив в CSV-строки.
         const csvContent = Papa.unparse({
             fields: headers, // Заголовки
-            data: dataset, // Данные
+            data: useDatasetStore.getState()._original_data, // Данные
         });
 
         // Blob — это бинарный объект, представляющий файл в памяти.
@@ -129,7 +177,8 @@ const PageDataset: React.FC = () => {
         const actual_index = stored_current_page * stored_page_size + row_index;
         const new_dataset = dataset.filter((_, index) => index !== actual_index);
 
-        set_dataset(new_dataset);
+        // set_dataset(new_dataset);
+        update_data(new_dataset);
 
         // Автоматический переход на предыдущую страницу если текущая пустая
         if (current_part_of_dataset.length === 1 && stored_current_page > 0) {
@@ -143,7 +192,9 @@ const PageDataset: React.FC = () => {
         const actual_index = stored_current_page * stored_page_size + row_index;
 
         new_dataset[actual_index][cell_index] = value;
-        set_dataset(new_dataset);
+        update_data(new_dataset);
+
+        // set_dataset(new_dataset);
     };
 
     const action_dataset_add_entry_handler = () => {
@@ -207,12 +258,16 @@ const PageDataset: React.FC = () => {
     };
 
     const getStartIndex = () => {
-        return (stored_current_page) * stored_page_size;
-    }
-    
+        return stored_current_page * stored_page_size;
+    };
+
     const getEndIndex = () => {
         return Math.min(getStartIndex() + stored_page_size, dataset.length);
-    }
+    };
+
+    const handle_sort_click = (column_index: number) => {
+        sort_dataset(column_index);
+    };
 
     return (
         <div className="page-dataset-container">
@@ -220,7 +275,11 @@ const PageDataset: React.FC = () => {
 
             <div className="main-controls">
                 <InputGroup>
-                    <DropdownButton className="main-controls__dataset-dropdown-button" variant="outline-primary" title="Dataset management">
+                    <DropdownButton
+                        className="main-controls__dataset-dropdown-button"
+                        variant="outline-primary"
+                        title="Dataset management"
+                    >
                         <Dropdown.Item onClick={action_dataset_upload_handler}>Upload</Dropdown.Item>
                         <Dropdown.Item onClick={action_dataset_save_handler} disabled={!dataset.length}>
                             Save
@@ -266,12 +325,53 @@ const PageDataset: React.FC = () => {
                 <div className="table-container">
                     {/* <Header4Container text='Dataset' /> */}
                     <Table className="table-container__dataset-table" bordered hover responsive>
-                        <thead>
+                        {/* <thead>
                             <tr>
                                 {headers.map((header, index) => (
                                     <th key={index}>{header}</th>
                                 ))}
                                 <th>Actions</th>
+                            </tr>
+                        </thead> */}
+                        <thead>
+                            <tr>
+                                {headers.map((header, index) => (
+                                    <th key={index}>
+                                        <div className="my-custom-thead">
+                                            <div className="my-custom-thead__chas">
+                                                <span className="my-custom-thead__chas__column-header">{header}</span>
+                                                <Button
+                                                    onClick={() => handle_sort_click(index)}
+                                                    className="my-custom-thead__chas__column-sort"
+                                                >
+                                                    {/* Если сортировка выключена по данному столбцу */}
+                                                    {sort_params.column_index === index && sort_params.order === null && '⇅'}
+
+                                                    {/* Если этот столбец отсортирован по возрастанию */}
+                                                    {sort_params.column_index === index && sort_params.order === 'asc' && '↑'}
+
+                                                    {/* Если этот столбец отсортирован по убыванию */}
+                                                    {sort_params.column_index === index && sort_params.order === 'desc' && '↓'}
+
+                                                    {/* Если отсортирован другой столбец, но не этот */}
+                                                    {sort_params.column_index !== index && (sort_params.order === null || sort_params.order !== null) && '⇅'}
+                                                </Button>
+                                            </div>
+                                            <Form.Select
+                                                value={column_types[index]}
+                                                onChange={(e) => handle_column_type_change(index, e.target.value)}
+                                                className="my-custom-thead__column-type"
+                                            >
+                                                <option value="feature">Feature</option>
+                                                <option value="target">Target</option>
+                                                <option value="ignored">Ignored</option>
+                                            </Form.Select>
+                                        </div>
+                                    </th>
+                                ))}
+                                <th>
+                                    <div className="my-custom-thead">Actions</div>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -332,7 +432,11 @@ const PageDataset: React.FC = () => {
                                                 type="text"
                                                 value={cell}
                                                 onChange={(e) =>
-                                                    action_dataset_cell_value_change_handler(row_index, cell_index, e.target.value)
+                                                    action_dataset_cell_value_change_handler(
+                                                        row_index,
+                                                        cell_index,
+                                                        e.target.value
+                                                    )
                                                 }
                                             />
                                         </td>
@@ -390,13 +494,25 @@ const PageDataset: React.FC = () => {
                     {dataset_file !== null ? dataset_file.name : 'Dataset file not uploaded'}
                 </span> */}
 
-                <span>{dataset_file !== null ? `Rows ${getStartIndex() + 1}-${getEndIndex()} (out of ${dataset.length})` : 'Rows 0–0 (no data)'}</span>
+                <span>
+                    {dataset_file !== null
+                        ? `Rows ${getStartIndex() + 1}-${getEndIndex()} (out of ${dataset.length})`
+                        : 'Rows 0–0 (no data)'}
+                </span>
 
                 <Pagination className="pagination-controls__page-selector-block">
-                    <Pagination.First disabled={stored_current_page === 0} onClick={action_pagination_goto_first_page_handler} />
-                    <Pagination.Prev disabled={stored_current_page === 0} onClick={action_pagination_goto_previous_page_handler} />
+                    <Pagination.First
+                        disabled={stored_current_page === 0}
+                        onClick={action_pagination_goto_first_page_handler}
+                    />
+                    <Pagination.Prev
+                        disabled={stored_current_page === 0}
+                        onClick={action_pagination_goto_previous_page_handler}
+                    />
 
-                    {stored_current_page > 2 && <Pagination.Item onClick={action_pagination_goto_first_page_handler}>{1}</Pagination.Item>}
+                    {stored_current_page > 2 && (
+                        <Pagination.Item onClick={action_pagination_goto_first_page_handler}>{1}</Pagination.Item>
+                    )}
                     {stored_current_page > 3 && <Pagination.Ellipsis />}
 
                     {stored_current_page > 1 && (
@@ -427,7 +543,9 @@ const PageDataset: React.FC = () => {
 
                     {stored_current_page < get_total_pages() - 4 && <Pagination.Ellipsis />}
                     {stored_current_page < get_total_pages() - 3 && (
-                        <Pagination.Item onClick={action_pagination_goto_last_page_handler}>{get_total_pages()}</Pagination.Item>
+                        <Pagination.Item onClick={action_pagination_goto_last_page_handler}>
+                            {get_total_pages()}
+                        </Pagination.Item>
                     )}
 
                     <Pagination.Next

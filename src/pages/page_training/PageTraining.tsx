@@ -145,7 +145,7 @@ const PageTraining = () => {
 
                             <div className="controls-view__content">
                                 <Button onClick={sendDatasetWithArchitectureAndStartModelTrain}>
-                                    Start the AI ​​model training process
+                                    Start the AI model training process
                                 </Button>
                                 <Button>Export weights of a trained AI model</Button>
                                 <Button>Compile the trained AI model into an executable file</Button>
