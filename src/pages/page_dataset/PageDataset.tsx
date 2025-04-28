@@ -9,6 +9,7 @@ import './page_dataset.scss';
 
 const PageDataset: React.FC = () => {
     const {
+        dataset_file,
         dataset,
 
         headers,
@@ -18,6 +19,8 @@ const PageDataset: React.FC = () => {
 
         current_page: stored_current_page,
         page_size: stored_page_size,
+
+        set_dataset_file,
 
         set_dataset,
         set_headers,
@@ -36,7 +39,7 @@ const PageDataset: React.FC = () => {
 
     const DATASET_CSV_FILE_INPUT_REF = useRef<HTMLInputElement | null>(null);
 
-    const [dataset_file, set_dataset_file] = useState<File | null>(null);
+    // const [dataset_file, set_dataset_file] = useState<File | null>(null);
     const [current_part_of_dataset, set_current_part_of_dataset] = useState<string[][]>([]);
 
     const [is_adding_entry, set_is_adding_entry] = useState(false);
@@ -113,7 +116,7 @@ const PageDataset: React.FC = () => {
         // update_data([]);
         // set_dataset([]);
 
-        set_dataset_file(null);
+        // set_dataset_file(null);
 
         // set_pagination(0, stored_page_size); // Сброс к начальным настройкам
 

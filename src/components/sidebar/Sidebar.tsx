@@ -323,12 +323,12 @@ const Sidebar: React.FC = () => {
                     placeholder="Select loss function"
                     color={PAGE_COLOR}
                 >
+                    <option value="binary_crossentropy">Binary crossentropy</option>
                     <option value="kld">KLD (Kullback-Leibler divergence)</option>
                     <option value="mae">MAE (Mean absolute error)</option>
                     <option value="mape">MAPE (Mean absolute percentage error)</option>
                     <option value="mse">MSE (Mean squared error)</option>
                     <option value="msle">MSLE (Mean squared logarithmic error)</option>
-                    <option value="binary_cross_entropy">Binary crossentropy</option>
                     <option value="binary_focal_cross_entropy">Binary focal crossentropy</option>
                     <option value="categorical_cross_entropy">Categorical crossentropy</option>
                     <option value="categorical_focal_cross_entropy">Categorical focal crossentropy</option>

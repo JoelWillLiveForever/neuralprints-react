@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { Node as RFNode, Edge as RFEdge, applyNodeChanges, applyEdgeChanges } from '@xyflow/react';
 
 interface ArchitectureStore {
+    architecture_hash: string;
+
     // layers: string[]; // Хранит список слоев
     nodes: RFNode[];
     edges: RFEdge[];
@@ -24,6 +26,9 @@ interface ArchitectureStore {
     // addLayer: (layer: string) => void;
     // removeLayer: (layer: string) => void;
 
+    set_architecture_hash: (architecture_hash: string) => void;
+    get_architecture_hash: () => string;
+
     // Методы для работы с узлами и связями
     setNodes: (nodes: RFNode[]) => void;
     setEdges: (edges: RFEdge[]) => void;
@@ -45,10 +50,12 @@ interface ArchitectureStore {
 }
 
 export const useArchitectureStore = create<ArchitectureStore>((set, get) => ({
+    architecture_hash: '',
+
     // layers: [],
     nodes: [],
     edges: [],
-    
+
     train_split: 0.7,
     test_split: 0.2,
     validation_split: 0.1,
@@ -61,6 +68,9 @@ export const useArchitectureStore = create<ArchitectureStore>((set, get) => ({
 
     enable_dataset_normalization: false,
 
+    set_architecture_hash: (hash) => set({ architecture_hash: hash }),
+    get_architecture_hash: () => get().architecture_hash,
+
     // setLayers: (layers) => set({ layers }),
 
     // addLayer: (layer) => set((state) => ({ layers: [...state.layers, layer] })),
@@ -68,16 +78,16 @@ export const useArchitectureStore = create<ArchitectureStore>((set, get) => ({
 
     setNodes: (nodes) => set({ nodes }),
     setEdges: (edges) => set({ edges }),
-    
+
     onNodesChange: (changes) => {
         set({
-            nodes: applyNodeChanges(changes, get().nodes)
+            nodes: applyNodeChanges(changes, get().nodes),
         });
     },
-    
+
     onEdgesChange: (changes) => {
         set({
-            edges: applyEdgeChanges(changes, get().edges)
+            edges: applyEdgeChanges(changes, get().edges),
         });
     },
 

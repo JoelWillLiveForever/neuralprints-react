@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 
 interface DatasetStore {
+    dataset_file: File | null;
+
     _original_data: string[][];
     dataset: string[][];
 
@@ -12,11 +14,14 @@ interface DatasetStore {
     current_page: number;
     page_size: number;
 
+    set_dataset_file: (dataset_file: File) => void;
+    get_dataset_file: () => File | null;
+
     set_dataset: (data: string[][]) => void;
-    get_dataset: () => void;
+    get_dataset: () => string[][];
 
     set_headers: (headers: string[]) => void;
-    get_headers: () => void;
+    get_headers: () => string[];
 
     set_column_types: (column_types: string[]) => void; // Метод для обновления типов столбцов
     get_column_types: () => string[]; // Метод для получения типов столбцов
@@ -32,6 +37,8 @@ interface DatasetStore {
 }
 
 export const useDatasetStore = create<DatasetStore>((set, get) => ({
+    dataset_file: null,
+
     _original_data: [],
     dataset: [],
 
@@ -42,6 +49,9 @@ export const useDatasetStore = create<DatasetStore>((set, get) => ({
 
     current_page: 0,
     page_size: 5,
+
+    set_dataset_file: (dataset_file) => set({ dataset_file: dataset_file }),
+    get_dataset_file: () => get().dataset_file,
 
     set_dataset: (data) => set({ dataset: data }),
     get_dataset: () => get().dataset,
@@ -127,6 +137,8 @@ export const useDatasetStore = create<DatasetStore>((set, get) => ({
 
     clear_data: () => {
         set({
+            dataset_file: null,
+
             _original_data: [], // Обновляем _original_data
             dataset: [],
             headers: [],

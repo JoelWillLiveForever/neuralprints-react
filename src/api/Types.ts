@@ -18,7 +18,7 @@ export type Layer =
     | { type: 'TF_FLATTEN_LAYER_NODE'; data: FlattenNodeData }
     | { type: 'TF_CONV_2D_LAYER_NODE'; data: Conv2DNodeData };
 
-
+    
 // Payload, который отправляется на бэкенд или используется внутри приложения
 export type ArchitecturePayload = {
     layers: Layer[];

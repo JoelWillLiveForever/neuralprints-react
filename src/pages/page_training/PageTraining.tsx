@@ -18,6 +18,8 @@ import './page_training.scss';
 import { Button } from 'react-bootstrap';
 import Header4Container from '../../components/header_4_container/Header4Container';
 import send_architecture_data from '../../api/SendArchitectureData';
+import send_dataset_data from '../../api/SendDatasetData';
+import start_model_training from '../../api/StartModelTraining';
 
 // Регистрация компонентов графика
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Title);
@@ -82,8 +84,14 @@ const PageTraining = () => {
 
     const sendDatasetWithArchitectureAndStartModelTrain = async () => {
         try {
+            await send_dataset_data();
+            alert('Датасет успешно отправлен!');
+
             await send_architecture_data();
             alert('Архитектура успешно отправлена!');
+
+            await start_model_training();
+            alert('Обучение модели успешно завершено!');
         } catch (error) {
             let errorMessage = 'Неизвестная ошибка';
 
