@@ -5,9 +5,9 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 
 import Menu from './components/menu/Menu';
 
-import PageAbout from './pages/page_about/PageAbout';
+import PageHelp from './pages/page_help/PageHelp';
 import PagePreferences from './pages/page_preferences/PagePreferences';
-import PageInference from './pages/page_inference/PageInference';
+// import PageInference from './pages/page_inference/PageInference';
 import PageTraining from './pages/page_training/PageTraining';
 import PageArchitecture from './pages/page_architecture/PageArchitecture';
 import PageDataset from './pages/page_dataset/PageDataset';
@@ -54,12 +54,12 @@ const App = () => {
                 return 'my-custom-resize-handle--architecture';
             case '/training':
                 return 'my-custom-resize-handle--training';
-            case '/inference':
-                return 'my-custom-resize-handle--inference';
+            // case '/inference':
+            //     return 'my-custom-resize-handle--inference';
             case '/preferences':
                 return 'my-custom-resize-handle--preferences';
-            case '/about':
-                return 'my-custom-resize-handle--about';
+            case '/help':
+                return 'my-custom-resize-handle--help';
             default:
                 return '';
         }
@@ -106,9 +106,9 @@ const App = () => {
                             <Route path="/dataset" element={<PageDataset />} />
                             <Route path="/architecture" element={<PageArchitecture />} />
                             <Route path="/training" element={<PageTraining />} />
-                            <Route path="/inference" element={<PageInference />} />
+                            {/* <Route path="/inference" element={<PageInference />} /> */}
                             <Route path="/preferences" element={<PagePreferences />} />
-                            <Route path="/about" element={<PageAbout />} />
+                            <Route path="/help" element={<PageHelp />} />
                         </Routes>
                     </div>
                 </Panel>
