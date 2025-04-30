@@ -60,7 +60,7 @@ export const useArchitectureStore = create<ArchitectureStore>((set, get) => ({
     test_split: 0.2,
     validation_split: 0.1,
 
-    loss_function: 'binary_cross_entropy',
+    loss_function: 'binary_crossentropy',
     optimizer: 'adam',
     quality_metric: 'accuracy',
     epochs: 100,
