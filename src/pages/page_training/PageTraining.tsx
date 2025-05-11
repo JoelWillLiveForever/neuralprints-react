@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { LazyLog, ScrollFollow } from '@melloware/react-logviewer';
 
@@ -11,8 +11,10 @@ import {
     Tooltip,
     Legend,
     Title,
+    ChartOptions,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+// import { WebSocket } from 'websocket';
 
 import './page_training.scss';
 import { Button } from 'react-bootstrap';
@@ -20,6 +22,8 @@ import Header4Container from '../../components/header_4_container/Header4Contain
 import send_architecture_data from '../../api/SendArchitectureData';
 import send_dataset_data from '../../api/SendDatasetData';
 import start_model_training from '../../api/StartModelTraining';
+import { useDatasetStore } from '../../store/DatasetStore';
+import { useArchitectureStore } from '../../store/ArchitectureStore';
 
 // Регистрация компонентов графика
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Title);
@@ -27,6 +31,13 @@ ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip,
 const DEFAULT_WIDTH_PX = 687.5;
 const MIN_WIDTH_PX = 575;
 const MAX_WIDTH_PX = 800;
+
+interface ChartData {
+    loss: { x: number; y: number }[];
+    valLoss: { x: number; y: number }[];
+    metric: { x: number; y: number }[];
+    valMetric: { x: number; y: number }[];
+}
 
 const PageTraining = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -41,6 +52,18 @@ const PageTraining = () => {
     const [chartMinSize, setChartMinSize] = useState(getPct(MIN_WIDTH_PX));
     const [chartMaxSize, setChartMaxSize] = useState(getPct(MAX_WIDTH_PX));
 
+    const [chartData, setChartData] = useState<ChartData>({
+        loss: [],
+        valLoss: [],
+        metric: [],
+        valMetric: [],
+    });
+
+    const [socket, setSocket] = useState<WebSocket | null>(null);
+    const [isTraining, setIsTraining] = useState(false);
+
+    const [metricName, setMetricName] = useState('Metric');
+
     useEffect(() => {
         // Обновляем размеры панели графика на основе ширины окна
         const updateChartPanelSizes = () => {
@@ -53,64 +76,187 @@ const PageTraining = () => {
         return () => window.removeEventListener('resize', updateChartPanelSizes);
     }, []);
 
-    // Данные для графика
-    const data = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-        datasets: [
-            {
-                label: 'Training Loss',
-                data: [0.9, 0.7, 0.5, 0.4, 0.35, 0.3],
-                fill: false,
-                borderColor: '#4f46e5',
-                tension: 0.3,
-            },
-        ],
-    };
+    // useEffect(() => {
+    //     const ws = new WebSocket('ws://localhost:8000/ws/train');
 
-    const options = {
+    //     ws.onmessage = (event) => {
+    //         const data = JSON.parse(event.data);
+
+    //         // Добавляем логирование для отладки
+    //         console.log('WebSocket message:', data);
+
+    //         if (data.type === 'training_update') {
+    //             setChartData((prev) => ({
+    //                 loss: [...prev.loss, { x: data.epoch, y: data.loss }],
+    //                 valLoss: [...prev.valLoss, { x: data.epoch, y: data.val_loss }],
+    //                 metric: [...prev.metric, { x: data.epoch, y: data.metric }],
+    //                 valMetric: [...prev.valMetric, { x: data.epoch, y: data.val_metric }],
+    //             }));
+
+    //             if (data.metric !== undefined && !metricName) {
+    //                 setMetricName(data.metric_name || 'Metric');
+    //             }
+    //         }
+
+    //         if (data.type === 'error') {
+    //             console.error('Training error: ', data.message);
+    //         }
+    //     };
+
+    //     setSocket(ws);
+    //     return () => ws.close();
+    // }, [metricName]);
+
+    // Изменяем способ создания данных для графиков
+    const getChartData = useCallback(
+        () => ({
+            loss: chartData.loss,
+            valLoss: chartData.valLoss,
+            metric: chartData.metric,
+            valMetric: chartData.valMetric,
+        }),
+        [chartData]
+    );
+
+    // // Данные для графика
+    // const data = {
+    //     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    //     datasets: [
+    //         {
+    //             label: 'Training Loss',
+    //             data: [0.9, 0.7, 0.5, 0.4, 0.35, 0.3],
+    //             fill: false,
+    //             borderColor: '#4f46e5',
+    //             tension: 0.3,
+    //         },
+    //     ],
+    // };
+
+    // Настроки графиков
+    const options: ChartOptions<'line'> = {
         responsive: true,
-        maintainAspectRatio: false,
         // aspectRatio: 1,
-        plugins: {
-            legend: {
-                display: true,
+        maintainAspectRatio: false,
+        animation: {
+            duration: 0, // Убираем анимацию для мгновенного обновления
+        },
+        scales: {
+            x: {
+                type: 'linear',
+                title: { display: true, text: 'Epoch' },
             },
-            title: {
-                display: true,
-                text: 'Training Progress',
+            y: {
+                title: { display: true, text: 'Value' },
             },
         },
-    };
+        // plugins: {
+        //     legend: {
+        //         display: true,
+        //     },
+        //     title: {
+        //         display: true,
+        //         text: 'Training Progress',
+        //     },
+        // },
+    } as const;
 
     const sendDatasetWithArchitectureAndStartModelTrain = async () => {
         try {
+            // Отправка данных
             await send_dataset_data();
-            alert('Датасет успешно отправлен!');
-
             await send_architecture_data();
-            alert('Архитектура успешно отправлена!');
 
-            await start_model_training();
-            alert('Обучение модели успешно завершено!');
+            // Открытие WebSocket соединения
+            const newSocket = new WebSocket('ws://localhost:8000/ws/train');
+
+            newSocket.onopen = () => {
+                console.log('WebSocket connected');
+                setSocket(newSocket);
+                setIsTraining(true);
+
+                // Подготовка данных для обучения
+                const dataset_file = useDatasetStore.getState().get_dataset_file();
+                const architecture_hash = useArchitectureStore.getState().get_architecture_hash();
+
+                if (!dataset_file) {
+                    console.error('Файл датасета не выбран.');
+                    return;
+                }
+
+                if (!architecture_hash) {
+                    console.error('Архитектура не выбрана.');
+                    return;
+                }
+
+                const dataset_name = dataset_file.name.replace(/\.csv$/i, '');
+
+                const payload = {
+                    type: 'start_training',
+                    dataset_name: dataset_name,
+                    architecture_hash: architecture_hash,
+                };
+
+                // Отправка данных для старта обучения
+                newSocket.send(JSON.stringify(payload));
+            };
+
+            // Обработка сообщений от сервера
+            newSocket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log('WebSocket message:', data);
+
+                if (data.type === 'training_update') {
+                    setChartData((prev) => ({
+                        loss: [...prev.loss, { x: data.epoch, y: data.loss }],
+                        valLoss: [...prev.valLoss, { x: data.epoch, y: data.val_loss }],
+                        metric: [...prev.metric, { x: data.epoch, y: data.metric }],
+                        valMetric: [...prev.valMetric, { x: data.epoch, y: data.val_metric }],
+                    }));
+
+                    if (!metricName && data.metric_name) {
+                        setMetricName(data.metric_name);
+                    }
+                }
+
+                if (data.type === 'training_complete') {
+                    console.log('Training complete!');
+                    setIsTraining(false); // Завершаем обучение на клиенте
+                }
+
+                if (data.type === 'error') {
+                    console.error('Training error:', data.message);
+                    setIsTraining(false); // Завершаем обучение на клиенте
+                }
+            };
+
+            // Обработка ошибок WebSocket
+            newSocket.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                setIsTraining(false);
+            };
+
+            // Закрытие соединения
+            newSocket.onclose = () => {
+                console.log('WebSocket closed');
+                setIsTraining(false);
+                setSocket(null);
+            };
         } catch (error) {
-            let errorMessage = 'Неизвестная ошибка';
-
-            // Вариант 1: Проверка через instanceof
-            if (error instanceof Error) {
-                errorMessage = error.message;
+            // Обработка ошибок
+            console.error('Ошибка:', error instanceof Error ? error.message : String(error));
+            if (socket) {
+                socket.close();
             }
-
-            // Вариант 2: Проверка типа через type guard
-            // if (typeof error === 'object' && error !== null && 'message' in error) {
-            //     errorMessage = (error as { message: string }).message;
-            // }
-
-            // Вариант 3: Универсальная обработка
-            // errorMessage = String(error);
-
-            alert(`Ошибка: ${errorMessage}`);
+            setIsTraining(false);
         }
     };
+
+    // Закрываем сокет при уходе со страницы
+    useEffect(() => {
+        return () => {
+            socket?.close();
+        };
+    }, [socket]);
 
     return (
         <div className="page-training-container" ref={containerRef}>
@@ -141,10 +287,48 @@ const PageTraining = () => {
                         <div className="chart-view">
                             <Header4Container className="chart-view__header" text="Charts" />
                             <div className="chart-view__content">
-                                <Line data={data} options={options} />
+                                <Line
+                                    key="loss-chart"
+                                    data={{
+                                        datasets: [
+                                            {
+                                                label: 'Training Loss',
+                                                data: getChartData().loss,
+                                                borderColor: 'rgb(255, 99, 132)',
+                                                tension: 0.1,
+                                            },
+                                            {
+                                                label: 'Validation Loss',
+                                                data: getChartData().valLoss,
+                                                borderColor: 'rgb(54, 162, 235)',
+                                                tension: 0.1,
+                                            },
+                                        ],
+                                    }}
+                                    options={options}
+                                />
                             </div>
                             <div className="chart-view__content">
-                                <Line data={data} options={options} />
+                                <Line
+                                    key="metric-chart"
+                                    data={{
+                                        datasets: [
+                                            {
+                                                label: `Training ${metricName}`,
+                                                data: getChartData().metric,
+                                                borderColor: 'rgb(75, 192, 192)',
+                                                tension: 0.1,
+                                            },
+                                            {
+                                                label: `Validation ${metricName}`,
+                                                data: getChartData().valMetric,
+                                                borderColor: 'rgb(153, 102, 255)',
+                                                tension: 0.1,
+                                            },
+                                        ],
+                                    }}
+                                    options={options}
+                                />
                             </div>
                         </div>
 
