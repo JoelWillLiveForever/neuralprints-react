@@ -262,22 +262,38 @@ const PageTraining = () => {
         <div className="page-training-container" ref={containerRef}>
             <PanelGroup autoSaveId="training_panels" direction="horizontal">
                 <Panel defaultSize={100 - (chartPanelRef.current?.getSize() ?? chartMaxSize)}>
-                    <PanelGroup className="left-side-panel" direction="vertical">
+                    {/* <PanelGroup className="left-side-panel" direction="vertical">
                         <Panel defaultSize={50}>
                             <div className="inference-view-wrapper"></div>
                         </Panel>
                         <PanelResizeHandle className="my-custom-resize-handle my-custom-resize-handle--vertical my-custom-resize-handle--training" />
                         <Panel defaultSize={50}>
                             <div className="log-view-wrapper">
-                                {/* <ScrollFollow
+                                <ScrollFollow
                                     startFollowing={true}
                                     render={({ follow, onScroll }) => (
                                         <LazyLog url="http://example.log" stream follow={follow} onScroll={onScroll} />
                                     )}
-                                /> */}
+                                />
                             </div>
                         </Panel>
-                    </PanelGroup>
+                    </PanelGroup> */}
+
+                    <Header4Container text='Logs' />
+                    <div>
+
+                    </div>
+
+                    <Header4Container text='Performance metrics' />
+                    <div>
+
+                    </div>
+
+                    <Header4Container text='Controls' />
+                    <div>
+
+                    </div>
+
                 </Panel>
 
                 <PanelResizeHandle className="my-custom-resize-handle my-custom-resize-handle--training" />
