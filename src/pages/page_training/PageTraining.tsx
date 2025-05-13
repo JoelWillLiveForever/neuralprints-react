@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { LazyLog, ScrollFollow } from '@melloware/react-logviewer';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 import {
     Chart as ChartJS,
@@ -267,12 +268,17 @@ const PageTraining = () => {
                 <Panel defaultSize={100 - (chartPanelRef.current?.getSize() ?? chartMaxSize)} className="main-content">
                     <div className="status">
                         <Header4Container text="Status" className="status__header" />
-                        <div className="status__content"></div>
+                        <div className="status__content">
+                            <ProgressBar now={10} label={`Epoch ${10} / ${100}`} className='my-custom-progress-bar' />
+                        </div>
                     </div>
+
+                    // TODO: если логов нет, обозначить текст юзеру, что тут будут логи
                     <div className="logs">
                         <Header4Container text="Logs" className="logs__header" />
                         <div className="logs__content"></div>
                     </div>
+
                     <div className="performance-metrics">
                         <Header4Container text="Performance metrics" className="performance-metrics__header" />
                         <div className="performance-metrics__content">
@@ -364,6 +370,7 @@ const PageTraining = () => {
                             </div>
                         </div>
                     </div>
+
                     {/* <div className="confusion-matrix">
                         <Header4Container text="Confusion matrix" className="confusion-matrix__header" />
                         <div className="confusion-matrix__content">
@@ -405,6 +412,7 @@ const PageTraining = () => {
                             </div>
                         </div>
                     </div> */}
+
                     <div className="controls">
                         <Header4Container text="Controls" className="controls__header" />
                         <div className="controls__content">
