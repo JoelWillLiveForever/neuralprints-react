@@ -261,8 +261,105 @@ const PageTraining = () => {
     return (
         <div className="page-training-container" ref={containerRef}>
             <PanelGroup autoSaveId="training_panels" direction="horizontal">
-                <Panel defaultSize={100 - (chartPanelRef.current?.getSize() ?? chartMaxSize)}>
-                    {/* <PanelGroup className="left-side-panel" direction="vertical">
+                <Panel defaultSize={100 - (chartPanelRef.current?.getSize() ?? chartMaxSize)} className="main-content">
+                    <div className="logs">
+                        <Header4Container text="Logs" className="logs__header" />
+                        <div className="logs__content"></div>
+                    </div>
+                    <div className="performance-metrics">
+                        <Header4Container text="Performance metrics" className="performance-metrics__header" />
+                        <div className="performance-metrics__content"></div>
+                    </div>
+                    <div className="controls">
+                        <Header4Container text="Controls" className="controls__header" />
+                        <div className="controls__content">
+                            <Button onClick={sendDatasetWithArchitectureAndStartModelTrain} id="button-start-training">
+                                START TRAINING
+                            </Button>
+
+                            <div className="separator"></div>
+
+                            <div className="buttons-block buttons-block--vertical">
+                                <Button>Get *.H5</Button>
+                                <Button>Get *.SavedModel</Button>
+                            </div>
+
+                            <div className="separator"></div>
+
+                            <div className="buttons-block buttons-block--vertical">
+                                <Button>Get *.PY</Button>
+                                <Button>Get *.EXE</Button>
+                            </div>
+                        </div>
+                    </div>
+                </Panel>
+
+                <PanelResizeHandle className="my-custom-resize-handle my-custom-resize-handle--training" />
+
+                <Panel
+                    defaultSize={chartDefaultSize}
+                    minSize={chartMinSize}
+                    maxSize={chartMaxSize}
+                    ref={chartPanelRef}
+                    className="charts-bar"
+                >
+                    <Header4Container className="charts-bar__header" text="Charts" />
+                    <div className="charts-bar__content">
+                        <div className="chart">
+                            <Line
+                                key="loss-metric-chart"
+                                data={{
+                                    datasets: [
+                                        {
+                                            label: 'Training Loss',
+                                            data: getChartData().loss,
+                                            borderColor: 'rgb(255, 99, 132)',
+                                            tension: 0.1,
+                                        },
+                                        {
+                                            label: 'Validation Loss',
+                                            data: getChartData().valLoss,
+                                            borderColor: 'rgb(54, 162, 235)',
+                                            tension: 0.1,
+                                        },
+                                    ],
+                                }}
+                                options={options}
+                            />
+                        </div>
+                        <div className="chart">
+                            <Line
+                                key="metric-chart"
+                                data={{
+                                    datasets: [
+                                        {
+                                            label: `Training ${metricName}`,
+                                            data: getChartData().metric,
+                                            borderColor: 'rgb(75, 192, 192)',
+                                            tension: 0.1,
+                                        },
+                                        {
+                                            label: `Validation ${metricName}`,
+                                            data: getChartData().valMetric,
+                                            borderColor: 'rgb(153, 102, 255)',
+                                            tension: 0.1,
+                                        },
+                                    ],
+                                }}
+                                options={options}
+                            />
+                        </div>
+                    </div>
+                </Panel>
+            </PanelGroup>
+        </div>
+    );
+};
+
+export default PageTraining;
+
+{
+    /* <PanelGroup className="left-side-panel" direction="vertical">
                         <Panel defaultSize={50}>
                             <div className="inference-view-wrapper"></div>
                         </Panel>
@@ -277,93 +374,5 @@ const PageTraining = () => {
                                 />
                             </div>
                         </Panel>
-                    </PanelGroup> */}
-
-                    <Header4Container text='Logs' />
-                    <div>
-
-                    </div>
-
-                    <Header4Container text='Performance metrics' />
-                    <div>
-
-                    </div>
-
-                    <Header4Container text='Controls' />
-                    <div>
-
-                    </div>
-
-                </Panel>
-
-                <PanelResizeHandle className="my-custom-resize-handle my-custom-resize-handle--training" />
-
-                <Panel defaultSize={chartDefaultSize} minSize={chartMinSize} maxSize={chartMaxSize} ref={chartPanelRef}>
-                    <div className="right-side-panel">
-                        <div className="chart-view">
-                            <Header4Container className="chart-view__header" text="Charts" />
-                            <div className="chart-view__content">
-                                <Line
-                                    key="loss-chart"
-                                    data={{
-                                        datasets: [
-                                            {
-                                                label: 'Training Loss',
-                                                data: getChartData().loss,
-                                                borderColor: 'rgb(255, 99, 132)',
-                                                tension: 0.1,
-                                            },
-                                            {
-                                                label: 'Validation Loss',
-                                                data: getChartData().valLoss,
-                                                borderColor: 'rgb(54, 162, 235)',
-                                                tension: 0.1,
-                                            },
-                                        ],
-                                    }}
-                                    options={options}
-                                />
-                            </div>
-                            <div className="chart-view__content">
-                                <Line
-                                    key="metric-chart"
-                                    data={{
-                                        datasets: [
-                                            {
-                                                label: `Training ${metricName}`,
-                                                data: getChartData().metric,
-                                                borderColor: 'rgb(75, 192, 192)',
-                                                tension: 0.1,
-                                            },
-                                            {
-                                                label: `Validation ${metricName}`,
-                                                data: getChartData().valMetric,
-                                                borderColor: 'rgb(153, 102, 255)',
-                                                tension: 0.1,
-                                            },
-                                        ],
-                                    }}
-                                    options={options}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="controls-view">
-                            <Header4Container className="controls-view__header" text="Controls" />
-
-                            <div className="controls-view__content">
-                                <Button onClick={sendDatasetWithArchitectureAndStartModelTrain}>
-                                    Start the AI model training process
-                                </Button>
-                                <Button>Export weights of a trained AI model</Button>
-                                <Button>Compile the trained AI model into an executable file</Button>
-                            </div>
-                        </div>
-                    </div>
-                </Panel>
-            </PanelGroup>
-        </div>
-    );
-};
-
-export default PageTraining;
+                    </PanelGroup> */
+}
