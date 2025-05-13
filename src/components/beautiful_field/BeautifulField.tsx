@@ -13,13 +13,15 @@ import {
 import './beautiful_field.scss';
 
 const BeautifulField: React.FC<BeautifulFieldProps> = ({
-    root = 'node',
+    variant = 'variant-1',
     className = '',
 
     type = 'text',
 
     color = '#616161',
     label = 'beauty',
+
+    readOnly = false,
 
     ...props
 }) => {
@@ -104,51 +106,66 @@ const BeautifulField: React.FC<BeautifulFieldProps> = ({
             break;
     }
 
+    // const sharedInputProps = (
+    //     value: string | number | undefined,
+    //     onChange: ((e: React.ChangeEvent<HTMLInputElement>) => void) | undefined,
+    //     onWheel: ((e: React.WheelEvent) => void) | undefined,
+    //     readOnly: boolean
+    // ) => ({
+    //     value,
+    //     onChange: readOnly ? undefined : onChange,
+    //     onWheel: readOnly ? undefined : onWheel,
+    //     readOnly: readOnly,
+    // });
+
     return (
         <div
             className={`beautiful-field-container ${className}`}
             style={{ '--field-color': hexToRgb(color) } as React.CSSProperties}
         >
-            {root === 'node' ? (
-                <div className="field-node">
-                    <label className="field-node__label">{label}</label>
+            {variant === 'variant-1' ? (
+                <div className="field-variant-1">
+                    <label className="field-variant-1__label">{label}</label>
 
                     {type === 'text' || type === 'numeric' ? (
                         <input
-                            className="nopan nodrag nowheel field-node__input"
+                            className="nopan nodrag nowheel field-variant-1__input"
                             type={type === 'numeric' ? 'number' : 'text'}
                             value={value}
-                            onChange={onChange}
-                            onWheel={type === 'numeric' ? onWheel : undefined}
+                            onChange={readOnly ? undefined : onChange}
+                            onWheel={readOnly ? undefined : type === 'numeric' ? onWheel : undefined}
                             {...(type === 'numeric' ? numericDefaults : textDefaults)}
+                            readOnly={readOnly}
                         />
                     ) : (
-                        <div className='field-node__input-container'>
+                        <div className="field-variant-1__input-container">
                             <input
-                                className="nopan nodrag nowheel field-node__input"
+                                className="nopan nodrag nowheel field-variant-1__input"
                                 type={type === 'numeric-double' ? 'number' : 'text'}
                                 value={value_1}
-                                onChange={onChange_1}
-                                onWheel={type === 'numeric-double' ? onWheel_1 : undefined}
+                                onChange={readOnly ? undefined : onChange_1}
+                                onWheel={readOnly ? undefined : type === 'numeric-double' ? onWheel_1 : undefined}
                                 {...(type === 'numeric-double' ? numericDoubleDefaults_1 : textDoubleDefaults_1)}
+                                readOnly={readOnly}
                             />
                             <input
-                                className="nopan nodrag nowheel field-node__input"
+                                className="nopan nodrag nowheel field-variant-1__input"
                                 type={type === 'numeric-double' ? 'number' : 'text'}
                                 value={value_2}
-                                onChange={onChange_2}
-                                onWheel={type === 'numeric-double' ? onWheel_2 : undefined}
+                                onChange={readOnly ? undefined : onChange_2}
+                                onWheel={readOnly ? undefined : type === 'numeric-double' ? onWheel_2 : undefined}
                                 {...(type === 'numeric-double' ? numericDoubleDefaults_2 : textDoubleDefaults_2)}
+                                readOnly={readOnly}
                             />
                         </div>
                     )}
                 </div>
             ) : (
-                <div className="field-sidebar">
-                    <label className="field-sidebar__label">{label}</label>
+                <div className="field-variant-2">
+                    <label className="field-variant-2__label">{label}</label>
 
                     {/* <input
-                        className="field-sidebar__input"
+                        className="field-variant-2__input"
                         type={type === 'numeric' ? 'number' : 'text'}
                         value={value}
                         onChange={onChange}
@@ -158,30 +175,33 @@ const BeautifulField: React.FC<BeautifulFieldProps> = ({
 
                     {type === 'text' || type === 'numeric' ? (
                         <input
-                            className="nopan nodrag nowheel field-sidebar__input"
+                            className="nopan nodrag nowheel field-variant-2__input"
                             type={type === 'numeric' ? 'number' : 'text'}
                             value={value}
-                            onChange={onChange}
-                            onWheel={type === 'numeric' ? onWheel : undefined}
+                            onChange={readOnly ? undefined : onChange}
+                            onWheel={readOnly ? undefined : type === 'numeric' ? onWheel : undefined}
                             {...(type === 'numeric' ? numericDefaults : textDefaults)}
+                            readOnly={readOnly}
                         />
                     ) : (
-                        <div className='field-sidebar__input-container'>
+                        <div className="field-variant-2__input-container">
                             <input
-                                className="nopan nodrag nowheel field-sidebar__input"
+                                className="nopan nodrag nowheel field-variant-2__input"
                                 type={type === 'numeric-double' ? 'number' : 'text'}
                                 value={value_1}
-                                onChange={onChange_1}
-                                onWheel={type === 'numeric-double' ? onWheel_1 : undefined}
+                                onChange={readOnly ? undefined : onChange_1}
+                                onWheel={readOnly ? undefined : type === 'numeric-double' ? onWheel_1 : undefined}
                                 {...(type === 'numeric-double' ? numericDoubleDefaults_1 : textDoubleDefaults_1)}
+                                readOnly={readOnly}
                             />
                             <input
-                                className="nopan nodrag nowheel field-sidebar__input"
+                                className="nopan nodrag nowheel field-variant-2__input"
                                 type={type === 'numeric-double' ? 'number' : 'text'}
                                 value={value_2}
-                                onChange={onChange_2}
-                                onWheel={type === 'numeric-double' ? onWheel_2 : undefined}
+                                onChange={readOnly ? undefined : onChange_2}
+                                onWheel={readOnly ? undefined : type === 'numeric-double' ? onWheel_2 : undefined}
                                 {...(type === 'numeric-double' ? numericDoubleDefaults_2 : textDoubleDefaults_2)}
+                                readOnly={readOnly}
                             />
                         </div>
                     )}

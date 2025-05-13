@@ -432,7 +432,7 @@ const Sidebar: React.FC = () => {
                 </BeautifulComboBox>
 
                 <BeautifulField
-                    root="sidebar"
+                    variant="variant-2"
                     value={epochs}
                     onChange={(e) => setEpochs(Number(e.target.value))}
                     onWheel={(e) => {
@@ -447,10 +447,11 @@ const Sidebar: React.FC = () => {
                     type="numeric"
                     label="Number of training epochs"
                     color={PAGE_COLOR}
+                    // readOnly={true}
                 />
 
                 <BeautifulField
-                    root="sidebar"
+                    variant="variant-2"
                     value={batch_size}
                     onChange={(e) => setBatchSize(Number(e.target.value))}
                     onWheel={(e) => {
