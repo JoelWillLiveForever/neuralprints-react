@@ -273,7 +273,7 @@ const PageTraining = () => {
                         </div>
                     </div>
 
-                    // TODO: если логов нет, обозначить текст юзеру, что тут будут логи
+                    {/* // TODO: если логов нет, обозначить текст юзеру, что тут будут логи */}
                     <div className="logs">
                         <Header4Container text="Logs" className="logs__header" />
                         <div className="logs__content"></div>
