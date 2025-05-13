@@ -24,6 +24,7 @@ import send_dataset_data from '../../api/SendDatasetData';
 import start_model_training from '../../api/StartModelTraining';
 import { useDatasetStore } from '../../store/DatasetStore';
 import { useArchitectureStore } from '../../store/ArchitectureStore';
+import BeautifulField from '../../components/beautiful_field/BeautifulField';
 
 // Регистрация компонентов графика
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Title);
@@ -38,6 +39,8 @@ interface ChartData {
     metric: { x: number; y: number }[];
     valMetric: { x: number; y: number }[];
 }
+
+const PAGE_COLOR = '#689f38';
 
 const PageTraining = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -262,14 +265,146 @@ const PageTraining = () => {
         <div className="page-training-container" ref={containerRef}>
             <PanelGroup autoSaveId="training_panels" direction="horizontal">
                 <Panel defaultSize={100 - (chartPanelRef.current?.getSize() ?? chartMaxSize)} className="main-content">
+                    <div className="status">
+                        <Header4Container text="Status" className="status__header" />
+                        <div className="status__content"></div>
+                    </div>
                     <div className="logs">
                         <Header4Container text="Logs" className="logs__header" />
                         <div className="logs__content"></div>
                     </div>
                     <div className="performance-metrics">
                         <Header4Container text="Performance metrics" className="performance-metrics__header" />
-                        <div className="performance-metrics__content"></div>
+                        <div className="performance-metrics__content">
+                            <div className="readonly-fields-block">
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="Train accuracy"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="Test accuracy"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="Validation accuracy"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                            </div>
+                            <div className="readonly-fields-block">
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="Train loss"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="Test loss"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="Validation loss"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                            </div>
+                            <div className="readonly-fields-block">
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="Precision"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="Recall"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="F1-score"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="AUC-ROC"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                            </div>
+                        </div>
                     </div>
+                    {/* <div className="confusion-matrix">
+                        <Header4Container text="Confusion matrix" className="confusion-matrix__header" />
+                        <div className="confusion-matrix__content">
+                            <div className="readonly-fields-block">
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="True positive (TP)"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="False negative (FN)"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                            </div>
+                            <div className="readonly-fields-block">
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="False positive (FP)"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                                <BeautifulField
+                                    variant="variant-2"
+                                    type="numeric"
+                                    label="True negative (TN)"
+                                    readOnly={true}
+                                    value={10}
+                                    color={PAGE_COLOR}
+                                />
+                            </div>
+                        </div>
+                    </div> */}
                     <div className="controls">
                         <Header4Container text="Controls" className="controls__header" />
                         <div className="controls__content">
@@ -329,7 +464,7 @@ const PageTraining = () => {
                         </div>
                         <div className="chart">
                             <Line
-                                key="metric-chart"
+                                key="user-metric-chart"
                                 data={{
                                     datasets: [
                                         {
