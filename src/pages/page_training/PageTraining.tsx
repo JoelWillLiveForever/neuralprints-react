@@ -37,24 +37,24 @@ import {
 // Регистрация компонентов графика
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Title);
 
-const DEFAULT_WIDTH_PX = 687.5;
-const MIN_WIDTH_PX = 575;
-const MAX_WIDTH_PX = 800;
+const DEFAULT_WIDTH_PX = 900;
+const MIN_WIDTH_PX = 800;
+const MAX_WIDTH_PX = 1200;
 
 const PAGE_COLOR = '#689f38';
 
 const PageTraining = () => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const chartPanelRef = useRef<ImperativePanelHandle>(null);
+    const mainPanelRef = useRef<ImperativePanelHandle>(null);
 
     const getPct = (px: number) => {
         const containerWidth = containerRef.current?.getBoundingClientRect().width ?? window.innerWidth;
         return (px / containerWidth) * 100;
     };
 
-    const [chartDefaultSize, setChartDefaultSize] = useState(getPct(DEFAULT_WIDTH_PX));
-    const [chartMinSize, setChartMinSize] = useState(getPct(MIN_WIDTH_PX));
-    const [chartMaxSize, setChartMaxSize] = useState(getPct(MAX_WIDTH_PX));
+    const [mainPanelDefaultSize, setMainPanelDefaultSize] = useState(getPct(DEFAULT_WIDTH_PX));
+    const [mainPanelMinSize, setMainPanelMinSize] = useState(getPct(MIN_WIDTH_PX));
+    const [mainPanelMaxSize, setMainPanelMaxSize] = useState(getPct(MAX_WIDTH_PX));
 
     const [socket, setSocket] = useState<WebSocket | null>(null);
 
@@ -95,39 +95,39 @@ const PageTraining = () => {
         setAucRoc,
         getAucRoc,
 
-        setChartDataTrainingLoss,
-        setChartDataValidationLoss,
-        setChartDataTrainingUserMetric,
-        getChartDataValidationUserMetric,
-
+        // setChartDataTrainingLoss,
+        // setChartDataValidationLoss,
+        // setChartDataTrainingUserMetric,
+        // setChartDataValidationUserMetric,
+        
         getChartDataTrainingLoss,
         getChartDataValidationLoss,
         getChartDataTrainingUserMetric,
-        setChartDataValidationUserMetric,
-
+        getChartDataValidationUserMetric,
+        
         addPointToTrainingLoss,
         addPointToValidationLoss,
         addPointToTrainingUserMetric,
         addPointToValidationUserMetric,
 
-        clearTrainingLoss,
-        clearValidationLoss,
-        clearTrainingUserMetric,
-        clearValidationUserMetric,
+        // clearTrainingLoss,
+        // clearValidationLoss,
+        // clearTrainingUserMetric,
+        // clearValidationUserMetric,
 
         resetAllValues,
     } = useMetricStore();
 
     useEffect(() => {
         // Обновляем размеры панели графика на основе ширины окна
-        const updateChartPanelSizes = () => {
-            setChartDefaultSize(getPct(DEFAULT_WIDTH_PX));
-            setChartMinSize(getPct(MIN_WIDTH_PX));
-            setChartMaxSize(getPct(MAX_WIDTH_PX));
+        const updateMainPanelSizes = () => {
+            setMainPanelDefaultSize(getPct(DEFAULT_WIDTH_PX));
+            setMainPanelMinSize(getPct(MIN_WIDTH_PX));
+            setMainPanelMaxSize(getPct(MAX_WIDTH_PX));
         };
 
-        window.addEventListener('resize', updateChartPanelSizes);
-        return () => window.removeEventListener('resize', updateChartPanelSizes);
+        window.addEventListener('resize', updateMainPanelSizes);
+        return () => window.removeEventListener('resize', updateMainPanelSizes);
     }, []);
 
     // Закрываем сокет при уходе со страницы
@@ -309,8 +309,14 @@ const PageTraining = () => {
 
                     addPointToTrainingLoss({ epoch: data.current_epoch, training_loss: data.training_loss });
                     addPointToValidationLoss({ epoch: data.current_epoch, validation_loss: data.validation_loss });
-                    addPointToTrainingUserMetric({ epoch: data.current_epoch, training_user_metric: data.training_user_metric });
-                    addPointToValidationUserMetric({ epoch: data.current_epoch, validation_user_metric: data.validation_user_metric });
+                    addPointToTrainingUserMetric({
+                        epoch: data.current_epoch,
+                        training_user_metric: data.training_user_metric,
+                    });
+                    addPointToValidationUserMetric({
+                        epoch: data.current_epoch,
+                        validation_user_metric: data.validation_user_metric,
+                    });
                 }
 
                 if (data.type === 'training_complete') {
@@ -357,7 +363,13 @@ const PageTraining = () => {
     return (
         <div className="page-training-container" ref={containerRef}>
             <PanelGroup autoSaveId="training_panels" direction="horizontal">
-                <Panel defaultSize={100 - (chartPanelRef.current?.getSize() ?? chartMaxSize)} className="main-content">
+                <Panel
+                    defaultSize={mainPanelDefaultSize}
+                    minSize={mainPanelMinSize}
+                    maxSize={mainPanelMaxSize}
+                    ref={mainPanelRef}
+                    className="main-content"
+                >
                     <div className="status">
                         <Header4Container text="Status" className="status__header" />
                         <div className="status__content">
@@ -535,13 +547,7 @@ const PageTraining = () => {
 
                 <PanelResizeHandle className="my-custom-resize-handle my-custom-resize-handle--training" />
 
-                <Panel
-                    defaultSize={chartDefaultSize}
-                    minSize={chartMinSize}
-                    maxSize={chartMaxSize}
-                    ref={chartPanelRef}
-                    className="charts-bar"
-                >
+                <Panel defaultSize={100 - (mainPanelRef.current?.getSize() ?? mainPanelMaxSize)} className="charts-bar">
                     <Header4Container className="charts-bar__header" text="Charts" />
                     <div className="charts-bar__content">
                         <div className="chart">
