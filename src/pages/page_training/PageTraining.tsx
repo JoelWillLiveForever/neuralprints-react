@@ -222,7 +222,7 @@ const PageTraining = () => {
                 },
                 y: {
                     min: 0,
-                    max: 1,
+                    // max: 1,
                     title: { display: true, text: 'Loss' },
                 },
             },
@@ -408,7 +408,7 @@ const PageTraining = () => {
                         <Header4Container text="Status" className="status__header" />
                         <div className="status__content">
                             <ProgressBar
-                                now={getCurrentEpoch()}
+                                now={getCurrentEpoch() * 100.0 / epochs}
                                 label={`Epoch ${getCurrentEpoch()} / ${epochs}`}
                                 className="my-custom-progress-bar"
                             />
