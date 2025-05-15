@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { LazyLog, ScrollFollow } from '@melloware/react-logviewer';
+import { LazyLog, Line as LLLine, LineNumber, LineContent, LinePart } from '@melloware/react-logviewer';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 import {
@@ -43,6 +43,30 @@ const MAX_WIDTH_PX = 1200;
 
 const PAGE_COLOR = '#689f38';
 
+// Стили для строки
+// LLLine.defaultProps.style = {
+//     backgroundColor: '#ffffff',
+//     transition: 'background 0.2s',
+// };
+
+// // Стили для номеров строк
+// LineNumber.defaultProps.style = {
+//     color: '#868e96',
+//     backgroundColor: '#f1f3f5',
+//     padding: '0 12px',
+//     borderRight: '1px solid #dee2e6',
+// };
+
+// // Стили для содержимого строки
+// LineContent.defaultProps.style = {
+//     paddingLeft: '8px',
+// };
+
+// // Стили для отдельных сегментов
+// LinePart.defaultProps.style = {
+//     textShadow: 'none',
+// };
+
 const PageTraining = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const mainPanelRef = useRef<ImperativePanelHandle>(null);
@@ -72,9 +96,9 @@ const PageTraining = () => {
         setCurrentEpoch,
         getCurrentEpoch,
 
-        setLogs,
+        // setLogs,
         getLogs,
-        getLogsAsString,
+        // getLogsAsString,
 
         setTrainAccuracy,
         getTrainAccuracy,
@@ -395,7 +419,15 @@ const PageTraining = () => {
                     <div className="logs">
                         <Header4Container text="Logs" className="logs__header" />
                         <div className="logs__content">
-                            <LazyLog text={getLogs().join('\n')} enableSearch={true} follow={true} selectableLines />
+                            <LazyLog
+                                text={getLogs().join('\n')}
+                                extraLines={1}
+                                follow={true}
+                                enableSearch
+                                caseInsensitive
+                                enableHotKeys
+                                selectableLines
+                            />
                         </div>
                     </div>
 

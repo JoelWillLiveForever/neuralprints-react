@@ -115,8 +115,64 @@
                 flex-grow: 1;
                 overflow-y: auto;
 
-                border: dashed 1px #121212;
-                border-radius: 6px;
+                // border: dashed 1px #121212;
+                // border-radius: 6px;
+
+                /* Основной контейнер */
+                .react-lazylog {
+                    --bg-color: #ffffff;
+                    --text-color: #343a40;
+                    --border-color: #e9ecef;
+                    --highlight-bg: #fff3bf;
+                }
+
+                // /* Скроллбар */
+                // .react-lazylog::-webkit-scrollbar {
+                //     width: 10px;
+                //     background: var(--bg-color);
+                // }
+
+                // .react-lazylog::-webkit-scrollbar-thumb {
+                //     background: #ced4da;
+                //     border-radius: 5px;
+                //     border: 2px solid var(--bg-color);
+                // }
+
+                // /* Ховер-эффекты */
+                // .react-lazylog div[role='list'] > div:hover {
+                //     background: #f8f9fa !important;
+                // }
+
+                // /* Поисковая панель */
+                // .react-lazylog-searchbar {
+                //     background: var(--bg-color) !important;
+                //     border-bottom: 1px solid var(--border-color) !important;
+                // }
+
+                // .react-lazylog-searchbar input {
+                //     color: var(--text-color) !important;
+                //     background: #f8f9fa !important;
+                // }
+
+                // /* Переопределение ANSI-палитры для светлой темы */
+                // .react-lazylog-ansi {
+                //     --ansi-black: #495057;
+                //     --ansi-red: #c92a2a;
+                //     --ansi-green: #2b8a3e;
+                //     --ansi-yellow: #e67700;
+                //     --ansi-blue: #1971c2;
+                //     --ansi-magenta: #a61e4d;
+                //     --ansi-cyan: #0b7285;
+                //     --ansi-white: #f8f9fa;
+                //     --ansi-bright-black: #868e96;
+                //     --ansi-bright-red: #f03e3e;
+                //     --ansi-bright-green: #37b24d;
+                //     --ansi-bright-yellow: #f59f00;
+                //     --ansi-bright-blue: #339af0;
+                //     --ansi-bright-magenta: #d6336c;
+                //     --ansi-bright-cyan: #15aabf;
+                //     --ansi-bright-white: #ffffff;
+                // }
             }
         }
 
