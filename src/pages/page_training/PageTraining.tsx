@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { LazyLog, Line as LLLine, LineNumber, LineContent, LinePart } from '@melloware/react-logviewer';
+import { LazyLog, Line as LLLine, LineNumber, LineContent, LinePart, ScrollFollow } from '@melloware/react-logviewer';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 import {
@@ -93,11 +93,13 @@ const PageTraining = () => {
     } = useArchitectureStore();
 
     const {
+        logs,
+
         setCurrentEpoch,
         getCurrentEpoch,
 
         // setLogs,
-        getLogs,
+        // getLogs,
         // getLogsAsString,
 
         setTrainAccuracy,
@@ -149,6 +151,8 @@ const PageTraining = () => {
 
         resetAllValues,
     } = useMetricStore();
+
+    const myLogText = useMemo(() => logs.join('\n'), [logs]);
 
     useEffect(() => {
         // Обновляем размеры панели графика на основе ширины окна
@@ -408,7 +412,7 @@ const PageTraining = () => {
                         <Header4Container text="Status" className="status__header" />
                         <div className="status__content">
                             <ProgressBar
-                                now={getCurrentEpoch() * 100.0 / epochs}
+                                now={(getCurrentEpoch() * 100.0) / epochs}
                                 label={`Epoch ${getCurrentEpoch()} / ${epochs}`}
                                 className="my-custom-progress-bar"
                             />
@@ -419,14 +423,50 @@ const PageTraining = () => {
                     <div className="logs">
                         <Header4Container text="Logs" className="logs__header" />
                         <div className="logs__content">
+                            {/* <ScrollFollow
+                                startFollowing={true}
+                                render={({ follow, onScroll }) => (
+                                    // <LazyLog url="http://example.log" stream follow={follow} onScroll={onScroll} />
+                                    <LazyLog
+                                        text={myLogText}
+                                        follow={follow}
+                                        onScroll={onScroll}
+                                        extraLines={1}
+                                        enableSearch
+                                        caseInsensitive
+                                        enableHotKeys
+                                        selectableLines
+                                        stream={false}
+                                        theme="light" // если используешь кастомную тему — можно удалить
+                                        containerStyle={{
+                                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                            borderRadius: '6px',
+                                            fontFamily: 'monospace',
+                                            fontSize: '13px',
+                                            backgroundColor: '#fff', // светлая тема
+                                            color: '#333',
+                                        }}
+                                    />
+                                )}
+                            /> */}
                             <LazyLog
-                                text={getLogs().join('\n')}
-                                extraLines={1}
+                                text={myLogText}
                                 follow={true}
+                                extraLines={1}
                                 enableSearch
                                 caseInsensitive
                                 enableHotKeys
                                 selectableLines
+                                stream={false}
+                                theme="light" // если используешь кастомную тему — можно удалить
+                                containerStyle={{
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                    borderRadius: '6px',
+                                    fontFamily: 'monospace',
+                                    fontSize: '13px',
+                                    backgroundColor: '#fff', // светлая тема
+                                    color: '#333',
+                                }}
                             />
                         </div>
                     </div>
