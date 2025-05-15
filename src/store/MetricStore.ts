@@ -123,6 +123,7 @@ interface MetricStore {
     getLogsAsString: () => string;
 }
 
+const MAX_LOGS = 1000;
 export const useMetricStore = create<MetricStore>((set, get) => ({
     current_epoch: 0,
 
@@ -151,6 +152,11 @@ export const useMetricStore = create<MetricStore>((set, get) => ({
     getCurrentEpoch: () => get().current_epoch,
 
     setLogs: (newLogs) => set({ logs: newLogs }),
+    // setLogs: (newLogs: string[]) => {
+    //     set(() => ({
+    //         logs: newLogs.length > MAX_LOGS ? newLogs.slice(newLogs.length - MAX_LOGS) : newLogs,
+    //     }));
+    // },
     getLogs: () => get().logs,
 
     setTrainAccuracy: (newTrainAccuracy) => set({ train_accuracy: newTrainAccuracy }),
@@ -200,6 +206,16 @@ export const useMetricStore = create<MetricStore>((set, get) => ({
         set((state) => ({
             logs: [...state.logs, log],
         })),
+
+    // addLog: (newLog: string) => {
+    //     set((state) => {
+    //         const updatedLogs = [...state.logs, newLog];
+    //         console.log('Adding log, length before:', state.logs.length, 'after:', updatedLogs.length);
+    //         return {
+    //             logs: updatedLogs.length > MAX_LOGS ? updatedLogs.slice(updatedLogs.length - MAX_LOGS) : updatedLogs,
+    //         };
+    //     });
+    // },
 
     addPointToTrainingLoss: (point: TrainingLossPoint) =>
         set((state) => ({
