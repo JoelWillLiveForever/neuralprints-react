@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { LazyLog, ScrollFollow } from '@melloware/react-logviewer';
+// import { LazyLog, ScrollFollow } from '@melloware/react-logviewer';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 import {
@@ -13,6 +13,7 @@ import {
     Legend,
     Title,
     ChartOptions,
+    ChartData,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 // import { WebSocket } from 'websocket';
@@ -22,10 +23,16 @@ import { Button } from 'react-bootstrap';
 import Header4Container from '../../components/header_4_container/Header4Container';
 import send_architecture_data from '../../api/SendArchitectureData';
 import send_dataset_data from '../../api/SendDatasetData';
-import start_model_training from '../../api/StartModelTraining';
 import { useDatasetStore } from '../../store/DatasetStore';
 import { useArchitectureStore } from '../../store/ArchitectureStore';
 import BeautifulField from '../../components/beautiful_field/BeautifulField';
+import {
+    TrainingLossPoint,
+    TrainingUserMetricPoint,
+    useMetricStore,
+    ValidationLossPoint,
+    ValidationUserMetricPoint,
+} from '../../store/MetricStore';
 
 // Регистрация компонентов графика
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Title);
@@ -33,13 +40,6 @@ ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip,
 const DEFAULT_WIDTH_PX = 687.5;
 const MIN_WIDTH_PX = 575;
 const MAX_WIDTH_PX = 800;
-
-interface ChartData {
-    loss: { x: number; y: number }[];
-    valLoss: { x: number; y: number }[];
-    metric: { x: number; y: number }[];
-    valMetric: { x: number; y: number }[];
-}
 
 const PAGE_COLOR = '#689f38';
 
@@ -56,17 +56,67 @@ const PageTraining = () => {
     const [chartMinSize, setChartMinSize] = useState(getPct(MIN_WIDTH_PX));
     const [chartMaxSize, setChartMaxSize] = useState(getPct(MAX_WIDTH_PX));
 
-    const [chartData, setChartData] = useState<ChartData>({
-        loss: [],
-        valLoss: [],
-        metric: [],
-        valMetric: [],
-    });
-
     const [socket, setSocket] = useState<WebSocket | null>(null);
-    const [isTraining, setIsTraining] = useState(false);
 
-    const [metricName, setMetricName] = useState('Metric');
+    const {
+        epochs,
+
+        // loss_function,
+        getLossFunctionDisplayName,
+
+        // quality_metric,
+        getQualityMetricDisplayName,
+    } = useArchitectureStore();
+
+    const {
+        setCurrentEpoch,
+        getCurrentEpoch,
+
+        setTrainAccuracy,
+        getTrainAccuracy,
+        setTestAccuracy,
+        getTestAccuracy,
+        setValidationAccuracy,
+        getValidationAccuracy,
+
+        setTrainLoss,
+        getTrainLoss,
+        setTestLoss,
+        getTestLoss,
+        setValidationLoss,
+        getValidationLoss,
+
+        setPrecision,
+        getPrecision,
+        setRecall,
+        getRecall,
+        setF1Score,
+        getF1Score,
+        setAucRoc,
+        getAucRoc,
+
+        setChartDataTrainingLoss,
+        setChartDataValidationLoss,
+        setChartDataTrainingUserMetric,
+        getChartDataValidationUserMetric,
+
+        getChartDataTrainingLoss,
+        getChartDataValidationLoss,
+        getChartDataTrainingUserMetric,
+        setChartDataValidationUserMetric,
+
+        addPointToTrainingLoss,
+        addPointToValidationLoss,
+        addPointToTrainingUserMetric,
+        addPointToValidationUserMetric,
+
+        clearTrainingLoss,
+        clearValidationLoss,
+        clearTrainingUserMetric,
+        clearValidationUserMetric,
+
+        resetAllValues,
+    } = useMetricStore();
 
     useEffect(() => {
         // Обновляем размеры панели графика на основе ширины окна
@@ -80,92 +130,138 @@ const PageTraining = () => {
         return () => window.removeEventListener('resize', updateChartPanelSizes);
     }, []);
 
-    // useEffect(() => {
-    //     const ws = new WebSocket('ws://localhost:8000/ws/train');
+    // Закрываем сокет при уходе со страницы
+    useEffect(() => {
+        return () => {
+            socket?.close();
+        };
+    }, [socket]);
 
-    //     ws.onmessage = (event) => {
-    //         const data = JSON.parse(event.data);
-
-    //         // Добавляем логирование для отладки
-    //         console.log('WebSocket message:', data);
-
-    //         if (data.type === 'training_update') {
-    //             setChartData((prev) => ({
-    //                 loss: [...prev.loss, { x: data.epoch, y: data.loss }],
-    //                 valLoss: [...prev.valLoss, { x: data.epoch, y: data.val_loss }],
-    //                 metric: [...prev.metric, { x: data.epoch, y: data.metric }],
-    //                 valMetric: [...prev.valMetric, { x: data.epoch, y: data.val_metric }],
-    //             }));
-
-    //             if (data.metric !== undefined && !metricName) {
-    //                 setMetricName(data.metric_name || 'Metric');
-    //             }
-    //         }
-
-    //         if (data.type === 'error') {
-    //             console.error('Training error: ', data.message);
-    //         }
-    //     };
-
-    //     setSocket(ws);
-    //     return () => ws.close();
-    // }, [metricName]);
-
-    // Изменяем способ создания данных для графиков
-    const getChartData = useCallback(
-        () => ({
-            loss: chartData.loss,
-            valLoss: chartData.valLoss,
-            metric: chartData.metric,
-            valMetric: chartData.valMetric,
-        }),
-        [chartData]
-    );
-
-    // // Данные для графика
-    // const data = {
-    //     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    //     datasets: [
-    //         {
-    //             label: 'Training Loss',
-    //             data: [0.9, 0.7, 0.5, 0.4, 0.35, 0.3],
-    //             fill: false,
-    //             borderColor: '#4f46e5',
-    //             tension: 0.3,
-    //         },
-    //     ],
-    // };
-
-    // Настроки графиков
-    const options: ChartOptions<'line'> = {
-        responsive: true,
-        // aspectRatio: 1,
-        maintainAspectRatio: false,
-        animation: {
-            duration: 0, // Убираем анимацию для мгновенного обновления
+    const lossMetricChart = (): {
+        data: ChartData<'line', TrainingLossPoint[] | ValidationLossPoint[]>;
+        options: ChartOptions<'line'>;
+    } => ({
+        data: {
+            datasets: [
+                {
+                    label: 'Training loss',
+                    data: getChartDataTrainingLoss(),
+                    fill: false,
+                    borderColor: 'rgba(25,118,210,1)',
+                    backgroundColor: 'rgba(25,118,210,0.38)',
+                    pointRadius: 0,
+                    tension: 0.35,
+                    parsing: {
+                        xAxisKey: 'epoch',
+                        yAxisKey: 'training_loss',
+                    },
+                },
+                {
+                    label: 'Validation loss',
+                    data: getChartDataValidationLoss(),
+                    fill: false,
+                    borderColor: 'rgba(211,47,47,1)',
+                    backgroundColor: 'rgba(211,47,47,0.38)',
+                    pointRadius: 0,
+                    tension: 0.35,
+                    parsing: {
+                        xAxisKey: 'epoch',
+                        yAxisKey: 'validation_loss',
+                    },
+                },
+            ],
         },
-        scales: {
-            x: {
-                type: 'linear',
-                title: { display: true, text: 'Epoch' },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 0,
             },
-            y: {
-                title: { display: true, text: 'Value' },
+            plugins: {
+                legend: { display: true, position: 'top' },
+                title: { display: true, text: `Training vs Validation Loss — ${getLossFunctionDisplayName()}` },
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    min: 1,
+                    max: getCurrentEpoch(),
+                    title: { display: true, text: 'Epoch' },
+                },
+                y: {
+                    min: 0,
+                    max: 1,
+                    title: { display: true, text: 'Loss' },
+                },
             },
         },
-        // plugins: {
-        //     legend: {
-        //         display: true,
-        //     },
-        //     title: {
-        //         display: true,
-        //         text: 'Training Progress',
-        //     },
-        // },
-    } as const;
+    });
+
+    const userMetricChart = (): {
+        data: ChartData<'line', TrainingUserMetricPoint[] | ValidationUserMetricPoint[]>;
+        options: ChartOptions<'line'>;
+    } => ({
+        data: {
+            datasets: [
+                {
+                    label: `Training ${getQualityMetricDisplayName(false)}`,
+                    data: getChartDataTrainingUserMetric(),
+                    fill: false,
+                    borderColor: 'rgba(0,121,107,1)',
+                    backgroundColor: 'rgba(0,121,107,0.38)',
+                    pointRadius: 0,
+                    tension: 0.35,
+                    parsing: {
+                        xAxisKey: 'epoch',
+                        yAxisKey: 'training_user_metric',
+                    },
+                },
+                {
+                    label: `Validation ${getQualityMetricDisplayName(false)}`,
+                    data: getChartDataValidationUserMetric(),
+                    fill: false,
+                    borderColor: 'rgba(123,31,162,1)',
+                    backgroundColor: 'rgba(123,31,162,0.38)',
+                    pointRadius: 0,
+                    tension: 0.35,
+                    parsing: {
+                        xAxisKey: 'epoch',
+                        yAxisKey: 'validation_user_metric',
+                    },
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 0,
+            },
+            plugins: {
+                legend: { display: true, position: 'top' },
+                title: { display: true, text: `Training vs Validation Metric — ${getQualityMetricDisplayName(true)}` },
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    min: 1,
+                    max: getCurrentEpoch(),
+                    title: { display: true, text: 'Epoch' },
+                },
+                y: {
+                    min: 0,
+                    max: 1,
+                    title: { display: true, text: `${getQualityMetricDisplayName(true)}` },
+                },
+            },
+        },
+    });
 
     const sendDatasetWithArchitectureAndStartModelTrain = async () => {
         try {
+            // Очистить старые данные, если они есть
+            resetAllValues();
+
             // Отправка данных
             await send_dataset_data();
             await send_architecture_data();
@@ -176,7 +272,6 @@ const PageTraining = () => {
             newSocket.onopen = () => {
                 console.log('WebSocket connected');
                 setSocket(newSocket);
-                setIsTraining(true);
 
                 // Подготовка данных для обучения
                 const dataset_file = useDatasetStore.getState().get_dataset_file();
@@ -210,39 +305,44 @@ const PageTraining = () => {
                 console.log('WebSocket message:', data);
 
                 if (data.type === 'training_update') {
-                    setChartData((prev) => ({
-                        loss: [...prev.loss, { x: data.epoch, y: data.loss }],
-                        valLoss: [...prev.valLoss, { x: data.epoch, y: data.val_loss }],
-                        metric: [...prev.metric, { x: data.epoch, y: data.metric }],
-                        valMetric: [...prev.valMetric, { x: data.epoch, y: data.val_metric }],
-                    }));
+                    setCurrentEpoch(data.current_epoch);
 
-                    if (!metricName && data.metric_name) {
-                        setMetricName(data.metric_name);
-                    }
+                    addPointToTrainingLoss({ epoch: data.current_epoch, training_loss: data.training_loss });
+                    addPointToValidationLoss({ epoch: data.current_epoch, validation_loss: data.validation_loss });
+                    addPointToTrainingUserMetric({ epoch: data.current_epoch, training_user_metric: data.training_user_metric });
+                    addPointToValidationUserMetric({ epoch: data.current_epoch, validation_user_metric: data.validation_user_metric });
                 }
 
                 if (data.type === 'training_complete') {
                     console.log('Training complete!');
-                    setIsTraining(false); // Завершаем обучение на клиенте
+
+                    setTrainAccuracy(data.final_train_accuracy);
+                    setTestAccuracy(data.final_test_accuracy);
+                    setValidationAccuracy(data.final_validation_accuracy);
+
+                    setTrainLoss(data.final_train_loss);
+                    setTestLoss(data.final_test_loss);
+                    setValidationLoss(data.final_validation_loss);
+
+                    setPrecision(data.final_precision);
+                    setRecall(data.final_recall);
+                    setF1Score(data.final_f1_score);
+                    setAucRoc(data.final_auc_roc);
                 }
 
                 if (data.type === 'error') {
                     console.error('Training error:', data.message);
-                    setIsTraining(false); // Завершаем обучение на клиенте
                 }
             };
 
             // Обработка ошибок WebSocket
             newSocket.onerror = (error) => {
                 console.error('WebSocket error:', error);
-                setIsTraining(false);
             };
 
             // Закрытие соединения
             newSocket.onclose = () => {
                 console.log('WebSocket closed');
-                setIsTraining(false);
                 setSocket(null);
             };
         } catch (error) {
@@ -251,16 +351,8 @@ const PageTraining = () => {
             if (socket) {
                 socket.close();
             }
-            setIsTraining(false);
         }
     };
-
-    // Закрываем сокет при уходе со страницы
-    useEffect(() => {
-        return () => {
-            socket?.close();
-        };
-    }, [socket]);
 
     return (
         <div className="page-training-container" ref={containerRef}>
@@ -269,7 +361,11 @@ const PageTraining = () => {
                     <div className="status">
                         <Header4Container text="Status" className="status__header" />
                         <div className="status__content">
-                            <ProgressBar now={10} label={`Epoch ${10} / ${100}`} className='my-custom-progress-bar' />
+                            <ProgressBar
+                                now={getCurrentEpoch()}
+                                label={`Epoch ${getCurrentEpoch()} / ${epochs}`}
+                                className="my-custom-progress-bar"
+                            />
                         </div>
                     </div>
 
@@ -285,86 +381,86 @@ const PageTraining = () => {
                             <div className="readonly-fields-block">
                                 <BeautifulField
                                     variant="variant-2"
-                                    type="numeric"
+                                    type="text"
                                     label="Train accuracy"
                                     readOnly={true}
-                                    value={10}
+                                    value={getTrainAccuracy() < 0 ? 'N/A' : getTrainAccuracy().toFixed(3)}
                                     color={PAGE_COLOR}
                                 />
                                 <BeautifulField
                                     variant="variant-2"
-                                    type="numeric"
+                                    type="text"
                                     label="Test accuracy"
                                     readOnly={true}
-                                    value={10}
+                                    value={getTestAccuracy() < 0 ? 'N/A' : getTestAccuracy().toFixed(3)}
                                     color={PAGE_COLOR}
                                 />
                                 <BeautifulField
                                     variant="variant-2"
-                                    type="numeric"
+                                    type="text"
                                     label="Validation accuracy"
                                     readOnly={true}
-                                    value={10}
+                                    value={getValidationAccuracy() < 0 ? 'N/A' : getValidationAccuracy().toFixed(3)}
                                     color={PAGE_COLOR}
                                 />
                             </div>
                             <div className="readonly-fields-block">
                                 <BeautifulField
                                     variant="variant-2"
-                                    type="numeric"
+                                    type="text"
                                     label="Train loss"
                                     readOnly={true}
-                                    value={10}
+                                    value={getTrainLoss() < 0 ? 'N/A' : getTrainLoss().toFixed(3)}
                                     color={PAGE_COLOR}
                                 />
                                 <BeautifulField
                                     variant="variant-2"
-                                    type="numeric"
+                                    type="text"
                                     label="Test loss"
                                     readOnly={true}
-                                    value={10}
+                                    value={getTestLoss() < 0 ? 'N/A' : getTestLoss().toFixed(3)}
                                     color={PAGE_COLOR}
                                 />
                                 <BeautifulField
                                     variant="variant-2"
-                                    type="numeric"
+                                    type="text"
                                     label="Validation loss"
                                     readOnly={true}
-                                    value={10}
+                                    value={getValidationLoss() < 0 ? 'N/A' : getValidationLoss().toFixed(3)}
                                     color={PAGE_COLOR}
                                 />
                             </div>
                             <div className="readonly-fields-block">
                                 <BeautifulField
                                     variant="variant-2"
-                                    type="numeric"
+                                    type="text"
                                     label="Precision"
                                     readOnly={true}
-                                    value={10}
+                                    value={getPrecision() < 0 ? 'N/A' : getPrecision().toFixed(3)}
                                     color={PAGE_COLOR}
                                 />
                                 <BeautifulField
                                     variant="variant-2"
-                                    type="numeric"
+                                    type="text"
                                     label="Recall"
                                     readOnly={true}
-                                    value={10}
+                                    value={getRecall() < 0 ? 'N/A' : getRecall().toFixed(3)}
                                     color={PAGE_COLOR}
                                 />
                                 <BeautifulField
                                     variant="variant-2"
-                                    type="numeric"
+                                    type="text"
                                     label="F1-score"
                                     readOnly={true}
-                                    value={10}
+                                    value={getF1Score() < 0 ? 'N/A' : getF1Score().toFixed(3)}
                                     color={PAGE_COLOR}
                                 />
                                 <BeautifulField
                                     variant="variant-2"
-                                    type="numeric"
+                                    type="text"
                                     label="AUC-ROC"
                                     readOnly={true}
-                                    value={10}
+                                    value={getAucRoc() < 0 ? 'N/A' : getAucRoc().toFixed(3)}
                                     color={PAGE_COLOR}
                                 />
                             </div>
@@ -449,48 +545,10 @@ const PageTraining = () => {
                     <Header4Container className="charts-bar__header" text="Charts" />
                     <div className="charts-bar__content">
                         <div className="chart">
-                            <Line
-                                key="loss-metric-chart"
-                                data={{
-                                    datasets: [
-                                        {
-                                            label: 'Training Loss',
-                                            data: getChartData().loss,
-                                            borderColor: 'rgb(255, 99, 132)',
-                                            tension: 0.1,
-                                        },
-                                        {
-                                            label: 'Validation Loss',
-                                            data: getChartData().valLoss,
-                                            borderColor: 'rgb(54, 162, 235)',
-                                            tension: 0.1,
-                                        },
-                                    ],
-                                }}
-                                options={options}
-                            />
+                            <Line key="loss-metric-chart" {...lossMetricChart()} />
                         </div>
                         <div className="chart">
-                            <Line
-                                key="user-metric-chart"
-                                data={{
-                                    datasets: [
-                                        {
-                                            label: `Training ${metricName}`,
-                                            data: getChartData().metric,
-                                            borderColor: 'rgb(75, 192, 192)',
-                                            tension: 0.1,
-                                        },
-                                        {
-                                            label: `Validation ${metricName}`,
-                                            data: getChartData().valMetric,
-                                            borderColor: 'rgb(153, 102, 255)',
-                                            tension: 0.1,
-                                        },
-                                    ],
-                                }}
-                                options={options}
-                            />
+                            <Line key="user-metric-chart" {...userMetricChart()} />
                         </div>
                     </div>
                 </Panel>
