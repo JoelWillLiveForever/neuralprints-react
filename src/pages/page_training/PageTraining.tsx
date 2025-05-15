@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-// import { LazyLog, ScrollFollow } from '@melloware/react-logviewer';
+import { LazyLog, ScrollFollow } from '@melloware/react-logviewer';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 import {
@@ -72,6 +72,10 @@ const PageTraining = () => {
         setCurrentEpoch,
         getCurrentEpoch,
 
+        setLogs,
+        getLogs,
+        getLogsAsString,
+
         setTrainAccuracy,
         getTrainAccuracy,
         setTestAccuracy,
@@ -99,12 +103,14 @@ const PageTraining = () => {
         // setChartDataValidationLoss,
         // setChartDataTrainingUserMetric,
         // setChartDataValidationUserMetric,
-        
+
         getChartDataTrainingLoss,
         getChartDataValidationLoss,
         getChartDataTrainingUserMetric,
         getChartDataValidationUserMetric,
-        
+
+        addLog,
+
         addPointToTrainingLoss,
         addPointToValidationLoss,
         addPointToTrainingUserMetric,
@@ -114,6 +120,8 @@ const PageTraining = () => {
         // clearValidationLoss,
         // clearTrainingUserMetric,
         // clearValidationUserMetric,
+
+        // clearLogs,
 
         resetAllValues,
     } = useMetricStore();
@@ -304,7 +312,12 @@ const PageTraining = () => {
                 const data = JSON.parse(event.data);
                 console.log('WebSocket message:', data);
 
-                if (data.type === 'training_update') {
+                if (data.type === 'training_started') {
+                    // clearLogs();
+                    addLog('Training started...');
+                } else if (data.type === 'log') {
+                    addLog(data.log_message);
+                } else if (data.type === 'training_update') {
                     setCurrentEpoch(data.current_epoch);
 
                     addPointToTrainingLoss({ epoch: data.current_epoch, training_loss: data.training_loss });
@@ -317,10 +330,9 @@ const PageTraining = () => {
                         epoch: data.current_epoch,
                         validation_user_metric: data.validation_user_metric,
                     });
-                }
-
-                if (data.type === 'training_complete') {
+                } else if (data.type === 'training_complete') {
                     console.log('Training complete!');
+                    addLog('Training complete!');
 
                     setTrainAccuracy(data.final_train_accuracy);
                     setTestAccuracy(data.final_test_accuracy);
@@ -334,9 +346,7 @@ const PageTraining = () => {
                     setRecall(data.final_recall);
                     setF1Score(data.final_f1_score);
                     setAucRoc(data.final_auc_roc);
-                }
-
-                if (data.type === 'error') {
+                } else if (data.type === 'error') {
                     console.error('Training error:', data.message);
                 }
             };
@@ -384,7 +394,9 @@ const PageTraining = () => {
                     {/* // TODO: если логов нет, обозначить текст юзеру, что тут будут логи */}
                     <div className="logs">
                         <Header4Container text="Logs" className="logs__header" />
-                        <div className="logs__content"></div>
+                        <div className="logs__content">
+                            <LazyLog text={getLogs().join('\n')} enableSearch={true} follow={true} selectableLines />
+                        </div>
                     </div>
 
                     <div className="performance-metrics">

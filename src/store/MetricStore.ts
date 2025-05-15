@@ -23,6 +23,8 @@ export type ValidationUserMetricPoint = {
 interface MetricStore {
     current_epoch: number;
 
+    logs: string[];
+
     train_accuracy: number;
     test_accuracy: number;
     validation_accuracy: number;
@@ -44,6 +46,9 @@ interface MetricStore {
 
     setCurrentEpoch: (newCurrentEpoch: number) => void;
     getCurrentEpoch: () => number;
+
+    setLogs: (newLogs: string[]) => void;
+    getLogs: () => string[];
 
     setTrainAccuracy: (newTrainAccuracy: number) => void;
     getTrainAccuracy: () => number;
@@ -87,11 +92,16 @@ interface MetricStore {
     getChartDataTrainingUserMetric: () => TrainingUserMetricPoint[];
     getChartDataValidationUserMetric: () => ValidationUserMetricPoint[];
 
-    // Методы для добавления одной точки
+    // Методы для добавления одного элемента
+    addLog: (log: string) => void;
+
     addPointToTrainingLoss: (point: TrainingLossPoint) => void;
     addPointToValidationLoss: (point: ValidationLossPoint) => void;
     addPointToTrainingUserMetric: (point: TrainingUserMetricPoint) => void;
     addPointToValidationUserMetric: (point: ValidationUserMetricPoint) => void;
+
+    // Методы для удаления одного элемента
+    removeLog: (log_index: number) => void;
 
     // Методы для удаления точки по epoch (или другому ключу)
     removePointFromTrainingLoss: (epoch: number) => void;
@@ -100,16 +110,23 @@ interface MetricStore {
     removePointFromValidationUserMetric: (epoch: number) => void;
 
     // Методы для очистки массива
+    clearLogs: () => void;
+
     clearTrainingLoss: () => void;
     clearValidationLoss: () => void;
     clearTrainingUserMetric: () => void;
     clearValidationUserMetric: () => void;
 
     resetAllValues: () => void;
+
+    /** Геттер: все логи как единая строка с разделителем "\n" */
+    getLogsAsString: () => string;
 }
 
 export const useMetricStore = create<MetricStore>((set, get) => ({
     current_epoch: 0,
+
+    logs: [],
 
     train_accuracy: -1,
     test_accuracy: -1,
@@ -132,6 +149,9 @@ export const useMetricStore = create<MetricStore>((set, get) => ({
 
     setCurrentEpoch: (newCurrentEpoch) => set({ current_epoch: newCurrentEpoch }),
     getCurrentEpoch: () => get().current_epoch,
+
+    setLogs: (newLogs) => set({ logs: newLogs }),
+    getLogs: () => get().logs,
 
     setTrainAccuracy: (newTrainAccuracy) => set({ train_accuracy: newTrainAccuracy }),
     getTrainAccuracy: () => get().train_accuracy,
@@ -176,6 +196,11 @@ export const useMetricStore = create<MetricStore>((set, get) => ({
     getChartDataTrainingUserMetric: () => get().chart_data_training_user_metric,
     getChartDataValidationUserMetric: () => get().chart_data_validation_user_metric,
 
+    addLog: (log: string) =>
+        set((state) => ({
+            logs: [...state.logs, log],
+        })),
+
     addPointToTrainingLoss: (point: TrainingLossPoint) =>
         set((state) => ({
             chart_data_training_loss: [...state.chart_data_training_loss, point],
@@ -197,6 +222,11 @@ export const useMetricStore = create<MetricStore>((set, get) => ({
             chart_data_validation_user_metric: [...state.chart_data_validation_user_metric, point],
         })),
 
+    removeLog: (log_index) =>
+        set((state) => ({
+            logs: state.logs.filter((_, idx) => idx !== log_index),
+        })),
+
     removePointFromTrainingLoss: (epoch) =>
         set((state) => ({
             chart_data_training_loss: state.chart_data_training_loss.filter((p) => p.epoch !== epoch),
@@ -214,6 +244,8 @@ export const useMetricStore = create<MetricStore>((set, get) => ({
             chart_data_validation_user_metric: state.chart_data_validation_user_metric.filter((p) => p.epoch !== epoch),
         })),
 
+    clearLogs: () => set({ logs: [] }),
+
     clearTrainingLoss: () => set({ chart_data_training_loss: [] }),
     clearValidationLoss: () => set({ chart_data_validation_loss: [] }),
     clearTrainingUserMetric: () => set({ chart_data_training_user_metric: [] }),
@@ -230,7 +262,7 @@ export const useMetricStore = create<MetricStore>((set, get) => ({
             train_loss: -1,
             test_loss: -1,
             validation_loss: -1,
-            
+
             precision: -1,
             recall: -1,
             f1_score: -1,
@@ -238,9 +270,16 @@ export const useMetricStore = create<MetricStore>((set, get) => ({
         });
 
         const state = get();
+        state.clearLogs();
+
         state.clearTrainingLoss();
         state.clearValidationLoss();
         state.clearTrainingUserMetric();
         state.clearValidationUserMetric();
+    },
+
+    getLogsAsString: () => {
+        const all = get().logs;
+        return all.length > 0 ? all.join('\n') : '';
     },
 }));
