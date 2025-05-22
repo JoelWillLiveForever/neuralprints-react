@@ -293,6 +293,14 @@ const PageTraining = () => {
         },
     });
 
+    // где‑то в начале модуля, рядом с константами
+    const host = window.location.hostname; // 'localhost' или '192.168.3.3' или 'myapp.com'
+    const WS_PORT = 8000; // порт вашего FastAPI
+    const WS_PATH = '/ws/train'; // путь вебсокета
+
+    // собрали URL
+    const socketUrl = `ws://${host}:${WS_PORT}${WS_PATH}`;
+
     const sendDatasetWithArchitectureAndStartModelTrain = async () => {
         try {
             // Очистить старые данные, если они есть
@@ -303,7 +311,8 @@ const PageTraining = () => {
             await send_architecture_data();
 
             // Открытие WebSocket соединения
-            const newSocket = new WebSocket('ws://localhost:8000/ws/train');
+            // const newSocket = new WebSocket('ws://localhost:8000/ws/train');
+             const newSocket = new WebSocket(socketUrl);
 
             newSocket.onopen = () => {
                 console.log('WebSocket connected');
@@ -397,6 +406,146 @@ const PageTraining = () => {
             }
         }
     };
+
+    // // Список возможных серверов
+    // const socketUrls = ['ws://localhost:8000/ws/train', 'ws://192.168.3.3:8000/ws/train'];
+
+    // // Функция подключения к первому доступному серверу
+    // const connectToFirstAvailable = (urls: string[], onSuccess: (socket: WebSocket) => void, onFailure: () => void) => {
+    //     if (urls.length === 0) {
+    //         console.error('Нет доступных WebSocket-серверов');
+    //         onFailure();
+    //         return;
+    //     }
+
+    //     const url = urls[0];
+    //     const socket = new WebSocket(url);
+
+    //     socket.onopen = () => {
+    //         console.log(`WebSocket connected: ${url}`);
+    //         onSuccess(socket);
+    //     };
+
+    //     socket.onerror = (err) => {
+    //         console.warn(`Ошибка подключения к ${url}`, err);
+    //         // пробуем следующий адрес
+    //         connectToFirstAvailable(urls.slice(1), onSuccess, onFailure);
+    //     };
+
+    //     socket.onclose = () => {
+    //         // если закрытие произошло до открытия — пробуем следующий
+    //         if (socket.readyState !== WebSocket.OPEN) {
+    //             connectToFirstAvailable(urls.slice(1), onSuccess, onFailure);
+    //         }
+    //     };
+    // };
+
+    // const sendDatasetWithArchitectureAndStartModelTrain = async () => {
+    //     // 1. Объявляем переменную до try/catch
+    //     let currentSocket: WebSocket | null = null;
+
+    //     try {
+    //         // Очистить старые данные, если они есть
+    //         resetAllValues();
+
+    //         // Отправка данных
+    //         await send_dataset_data();
+    //         await send_architecture_data();
+
+    //         // Подключаемся к первому доступному WebSocket-серверу
+    //         connectToFirstAvailable(
+    //             socketUrls,
+    //             (socket) => {
+    //                 currentSocket = socket;
+    //                 setSocket(socket);
+
+    //                 // Подготовка и отправка команды старта обучения
+    //                 const dataset_file = useDatasetStore.getState().get_dataset_file();
+    //                 const architecture_hash = useArchitectureStore.getState().get_architecture_hash();
+
+    //                 if (!dataset_file) {
+    //                     console.error('Файл датасета не выбран.');
+    //                     return;
+    //                 }
+    //                 if (!architecture_hash) {
+    //                     console.error('Архитектура не выбрана.');
+    //                     return;
+    //                 }
+
+    //                 const dataset_name = dataset_file.name.replace(/\.csv$/i, '');
+    //                 const payload = {
+    //                     type: 'start_training',
+    //                     dataset_name,
+    //                     architecture_hash,
+    //                 };
+    //                 socket.send(JSON.stringify(payload));
+
+    //                 // Обработка сообщений от сервера
+    //                 socket.onmessage = (event) => {
+    //                     const data = JSON.parse(event.data);
+    //                     console.log('WebSocket message:', data);
+
+    //                     switch (data.type) {
+    //                         case 'training_started':
+    //                             addLog('Training started...');
+    //                             break;
+    //                         case 'log':
+    //                             addLog(data.log_message);
+    //                             break;
+    //                         case 'training_update':
+    //                             setCurrentEpoch(data.current_epoch);
+    //                             addPointToTrainingLoss({
+    //                                 epoch: data.current_epoch,
+    //                                 training_loss: data.training_loss,
+    //                             });
+    //                             addPointToValidationLoss({
+    //                                 epoch: data.current_epoch,
+    //                                 validation_loss: data.validation_loss,
+    //                             });
+    //                             addPointToTrainingUserMetric({
+    //                                 epoch: data.current_epoch,
+    //                                 training_user_metric: data.training_user_metric,
+    //                             });
+    //                             addPointToValidationUserMetric({
+    //                                 epoch: data.current_epoch,
+    //                                 validation_user_metric: data.validation_user_metric,
+    //                             });
+    //                             break;
+    //                         case 'training_complete':
+    //                             addLog('Training complete!');
+    //                             setTrainAccuracy(data.final_train_accuracy);
+    //                             setTestAccuracy(data.final_test_accuracy);
+    //                             setValidationAccuracy(data.final_validation_accuracy);
+    //                             setTrainLoss(data.final_train_loss);
+    //                             setTestLoss(data.final_test_loss);
+    //                             setValidationLoss(data.final_validation_loss);
+    //                             setPrecision(data.final_precision);
+    //                             setRecall(data.final_recall);
+    //                             setF1Score(data.final_f1_score);
+    //                             setAucRoc(data.final_auc_roc);
+    //                             break;
+    //                         case 'error':
+    //                             console.error('Training error:', data.message);
+    //                             break;
+    //                     }
+    //                 };
+
+    //                 socket.onclose = () => {
+    //                     console.log('WebSocket closed');
+    //                     setSocket(null);
+    //                 };
+    //             },
+    //             () => {
+    //                 console.error('Не удалось подключиться ни к одному WebSocket-серверу.');
+    //             }
+    //         );
+    //     } catch (error) {
+    //         console.error('Ошибка:', (error as Error).message);
+    //         if (currentSocket !== null) {
+    //             currentSocket.close();
+    //         }
+    //     }
+    // };
 
     return (
         <div className="page-training-container" ref={containerRef}>

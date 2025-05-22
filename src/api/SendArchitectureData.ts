@@ -3,6 +3,9 @@ import md5 from 'md5';
 import { useArchitectureStore } from '../store/ArchitectureStore';
 
 import api from './API';
+// Импортируем пулл-запросов
+// import { requestWithPool } from './API';
+
 import { ArchitecturePayload } from './Types';
 import { build_architecture_data } from '../utils/BuildArchitectureData';
 
@@ -22,12 +25,14 @@ function sortObjectKeys(obj: unknown): unknown {
     } else if (obj !== null && typeof obj === 'object') {
         // Если это объект, сортируем ключи
         const sortedObj: AnyObject = {}; // Объект с отсортированными ключами
-        Object.keys(obj).sort().forEach(key => {
-            sortedObj[key] = sortObjectKeys((obj as AnyObject)[key]); // Рекурсивно сортируем значения
-        });
+        Object.keys(obj)
+            .sort()
+            .forEach((key) => {
+                sortedObj[key] = sortObjectKeys((obj as AnyObject)[key]); // Рекурсивно сортируем значения
+            });
         return sortedObj;
     }
-    return obj;  // Примитивы остаются без изменений
+    return obj; // Примитивы остаются без изменений
 }
 
 const send_architecture_data = async () => {
@@ -87,6 +92,15 @@ const send_architecture_data = async () => {
                 md5_client: payload_md5,
                 payload,
             });
+            // Вместо api.post — вызываем requestWithPool
+            // const response = await requestWithPool<{ md5_server: string }>({
+            //     url: '/api/architecture/upload',
+            //     method: 'POST',
+            //     data: {
+            //         md5_client: payload_md5,
+            //         payload,
+            //     },
+            // });
 
             const server_md5 = response.data?.md5_server;
 

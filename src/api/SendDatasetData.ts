@@ -2,7 +2,9 @@ import Papa from 'papaparse';
 import md5 from 'md5';
 
 import { useDatasetStore } from '../store/DatasetStore';
+
 import api from './API';
+// import { requestWithPool } from './API';
 
 // Функция для конвертации данных в CSV и отправки на сервер
 const send_dataset_data = async () => {
@@ -41,10 +43,19 @@ const send_dataset_data = async () => {
 
     while (!success && attempts < max_attempts) {
         try {
+
             const response = await api.post('/api/dataset/upload', {
                 md5_client: payload_md5,
                 payload,
             });
+            // const response = await requestWithPool<{ md5_server: string }>({
+            //     url: '/api/dataset/upload',
+            //     method: 'POST',
+            //     data: {
+            //         md5_client: payload_md5,
+            //         payload,
+            //     },
+            // });
 
             const server_md5 = response.data?.md5_server;
 
