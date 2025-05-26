@@ -16,6 +16,8 @@
     // color: #ffffff;
     color: #000;
 
+    overflow-y: auto;
+
     &__button {
         display: flex;
         flex-direction: row;
