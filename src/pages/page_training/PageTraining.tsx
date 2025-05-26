@@ -389,7 +389,7 @@ const PageTraining = () => {
 
     const getH5ModelFile = async () => {
         const modelHash = getModelHash();
-        console.log(`[getH5ModelFile()] --- Хэш модели: ${modelHash}`)
+        console.log(`[getH5ModelFile()] --- Хэш модели: ${modelHash}`);
 
         if (!modelHash) {
             alert('Не удалось вычислить хэш модели');
@@ -401,7 +401,7 @@ const PageTraining = () => {
                 responseType: 'blob',
             });
 
-            const blob = response.data;
+            const blob = new Blob([response.data], { type: 'application/octet-stream' });
             const fileName = `${modelHash}.h5`;
 
             // Сохраняем файл у пользователя
@@ -416,7 +416,63 @@ const PageTraining = () => {
         }
     };
 
-    const getSavedModelArchive = async () => {};
+    const getKerasModelFile = async () => {
+        const modelHash = getModelHash();
+        console.log(`[getH5ModelFile()] --- Хэш модели: ${modelHash}`);
+
+        if (!modelHash) {
+            alert('Не удалось вычислить хэш модели');
+            return;
+        }
+
+        try {
+            const response = await api.get(`/api/models/${modelHash}/download/keras`, {
+                responseType: 'blob',
+            });
+
+            const blob = new Blob([response.data], { type: 'application/octet-stream' });
+            const fileName = `${modelHash}.keras`;
+
+            // Сохраняем файл у пользователя
+            saveAs(blob, fileName);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('Ошибка при загрузке модели:', error);
+                alert('Ошибка при загрузке модели: ' + error.message);
+            } else {
+                alert('Произошла неизвестная ошибка!');
+            }
+        }
+    };
+
+    const getSavedModelArchive = async () => {
+        const modelHash = getModelHash();
+        console.log(`[getSavedModelArchive()] --- Хэш модели: ${modelHash}`);
+
+        if (!modelHash) {
+            alert('Не удалось вычислить хэш модели');
+            return;
+        }
+
+        try {
+            const response = await api.get(`/api/models/${modelHash}/download/savedmodel`, {
+                responseType: 'blob',
+            });
+
+            const blob = new Blob([response.data], { type: 'application/zip' });
+            const fileName = `${modelHash}_savedmodel.zip`;
+
+            // Сохраняем файл у пользователя
+            saveAs(blob, fileName);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('Ошибка при загрузке архива SavedModel:', error);
+                alert('Ошибка при загрузке архива SavedModel: ' + error.message);
+            } else {
+                alert('Произошла неизвестная ошибка!');
+            }
+        }
+    };
 
     return (
         <div className="page-training-container" ref={containerRef}>
@@ -620,19 +676,22 @@ const PageTraining = () => {
                         <Header4Container text="Controls" className="controls__header" />
                         <div className="controls__content">
                             <Button onClick={sendDatasetWithArchitectureAndStartModelTrain} id="button-start-training">
-                                START TRAINING
+                                START
+                                <br/>
+                                TRAINING
                             </Button>
 
                             <div className="separator"></div>
 
-                            <div className="buttons-block buttons-block--vertical">
+                            <div className="buttons-block buttons-block--vertical" id='export-functions'>
                                 <Button onClick={getH5ModelFile}>Get *.H5</Button>
+                                <Button onClick={getKerasModelFile}>Get *.KERAS</Button>
                                 <Button onClick={getSavedModelArchive}>Get *.SavedModel</Button>
                             </div>
 
                             <div className="separator"></div>
 
-                            <div className="buttons-block buttons-block--vertical">
+                            <div className="buttons-block buttons-block--vertical" id='compile-functions'>
                                 <Button disabled>Get *.PY</Button>
                                 <Button disabled>Get *.EXE</Button>
                             </div>
