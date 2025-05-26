@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { LazyLog, Line as LLLine, LineNumber, LineContent, LinePart, ScrollFollow } from '@melloware/react-logviewer';
+import { LazyLog } from '@melloware/react-logviewer';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import { saveAs } from 'file-saver'; // Установи через npm install file-saver
 
 import {
     Chart as ChartJS,
@@ -33,6 +34,8 @@ import {
     ValidationLossPoint,
     ValidationUserMetricPoint,
 } from '../../store/MetricStore';
+import { getModelHash } from '../../utils/GetModelHash';
+import api from '../../api/API';
 
 // Регистрация компонентов графика
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Title);
@@ -42,30 +45,6 @@ const MIN_WIDTH_PX = 800;
 const MAX_WIDTH_PX = 1200;
 
 const PAGE_COLOR = '#689f38';
-
-// Стили для строки
-// LLLine.defaultProps.style = {
-//     backgroundColor: '#ffffff',
-//     transition: 'background 0.2s',
-// };
-
-// // Стили для номеров строк
-// LineNumber.defaultProps.style = {
-//     color: '#868e96',
-//     backgroundColor: '#f1f3f5',
-//     padding: '0 12px',
-//     borderRight: '1px solid #dee2e6',
-// };
-
-// // Стили для содержимого строки
-// LineContent.defaultProps.style = {
-//     paddingLeft: '8px',
-// };
-
-// // Стили для отдельных сегментов
-// LinePart.defaultProps.style = {
-//     textShadow: 'none',
-// };
 
 const PageTraining = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -312,7 +291,7 @@ const PageTraining = () => {
 
             // Открытие WebSocket соединения
             // const newSocket = new WebSocket('ws://localhost:8000/ws/train');
-             const newSocket = new WebSocket(socketUrl);
+            const newSocket = new WebSocket(socketUrl);
 
             newSocket.onopen = () => {
                 console.log('WebSocket connected');
@@ -332,7 +311,8 @@ const PageTraining = () => {
                     return;
                 }
 
-                const dataset_name = dataset_file.name.replace(/\.csv$/i, '');
+                // const dataset_name = dataset_file.name.replace(/\.csv$/i, '');
+                const dataset_name = dataset_file.name;
 
                 const payload = {
                     type: 'start_training',
@@ -407,145 +387,36 @@ const PageTraining = () => {
         }
     };
 
-    // // Список возможных серверов
-    // const socketUrls = ['ws://localhost:8000/ws/train', 'ws://192.168.3.3:8000/ws/train'];
+    const getH5ModelFile = async () => {
+        const modelHash = getModelHash();
+        console.log(`[getH5ModelFile()] --- Хэш модели: ${modelHash}`)
 
-    // // Функция подключения к первому доступному серверу
-    // const connectToFirstAvailable = (urls: string[], onSuccess: (socket: WebSocket) => void, onFailure: () => void) => {
-    //     if (urls.length === 0) {
-    //         console.error('Нет доступных WebSocket-серверов');
-    //         onFailure();
-    //         return;
-    //     }
+        if (!modelHash) {
+            alert('Не удалось вычислить хэш модели');
+            return;
+        }
 
-    //     const url = urls[0];
-    //     const socket = new WebSocket(url);
+        try {
+            const response = await api.get(`/api/models/${modelHash}/download/h5`, {
+                responseType: 'blob',
+            });
 
-    //     socket.onopen = () => {
-    //         console.log(`WebSocket connected: ${url}`);
-    //         onSuccess(socket);
-    //     };
+            const blob = response.data;
+            const fileName = `${modelHash}.h5`;
 
-    //     socket.onerror = (err) => {
-    //         console.warn(`Ошибка подключения к ${url}`, err);
-    //         // пробуем следующий адрес
-    //         connectToFirstAvailable(urls.slice(1), onSuccess, onFailure);
-    //     };
+            // Сохраняем файл у пользователя
+            saveAs(blob, fileName);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('Ошибка при загрузке модели:', error);
+                alert('Ошибка при загрузке модели: ' + error.message);
+            } else {
+                alert('Произошла неизвестная ошибка!');
+            }
+        }
+    };
 
-    //     socket.onclose = () => {
-    //         // если закрытие произошло до открытия — пробуем следующий
-    //         if (socket.readyState !== WebSocket.OPEN) {
-    //             connectToFirstAvailable(urls.slice(1), onSuccess, onFailure);
-    //         }
-    //     };
-    // };
-
-    // const sendDatasetWithArchitectureAndStartModelTrain = async () => {
-    //     // 1. Объявляем переменную до try/catch
-    //     let currentSocket: WebSocket | null = null;
-
-    //     try {
-    //         // Очистить старые данные, если они есть
-    //         resetAllValues();
-
-    //         // Отправка данных
-    //         await send_dataset_data();
-    //         await send_architecture_data();
-
-    //         // Подключаемся к первому доступному WebSocket-серверу
-    //         connectToFirstAvailable(
-    //             socketUrls,
-    //             (socket) => {
-    //                 currentSocket = socket;
-    //                 setSocket(socket);
-
-    //                 // Подготовка и отправка команды старта обучения
-    //                 const dataset_file = useDatasetStore.getState().get_dataset_file();
-    //                 const architecture_hash = useArchitectureStore.getState().get_architecture_hash();
-
-    //                 if (!dataset_file) {
-    //                     console.error('Файл датасета не выбран.');
-    //                     return;
-    //                 }
-    //                 if (!architecture_hash) {
-    //                     console.error('Архитектура не выбрана.');
-    //                     return;
-    //                 }
-
-    //                 const dataset_name = dataset_file.name.replace(/\.csv$/i, '');
-    //                 const payload = {
-    //                     type: 'start_training',
-    //                     dataset_name,
-    //                     architecture_hash,
-    //                 };
-    //                 socket.send(JSON.stringify(payload));
-
-    //                 // Обработка сообщений от сервера
-    //                 socket.onmessage = (event) => {
-    //                     const data = JSON.parse(event.data);
-    //                     console.log('WebSocket message:', data);
-
-    //                     switch (data.type) {
-    //                         case 'training_started':
-    //                             addLog('Training started...');
-    //                             break;
-    //                         case 'log':
-    //                             addLog(data.log_message);
-    //                             break;
-    //                         case 'training_update':
-    //                             setCurrentEpoch(data.current_epoch);
-    //                             addPointToTrainingLoss({
-    //                                 epoch: data.current_epoch,
-    //                                 training_loss: data.training_loss,
-    //                             });
-    //                             addPointToValidationLoss({
-    //                                 epoch: data.current_epoch,
-    //                                 validation_loss: data.validation_loss,
-    //                             });
-    //                             addPointToTrainingUserMetric({
-    //                                 epoch: data.current_epoch,
-    //                                 training_user_metric: data.training_user_metric,
-    //                             });
-    //                             addPointToValidationUserMetric({
-    //                                 epoch: data.current_epoch,
-    //                                 validation_user_metric: data.validation_user_metric,
-    //                             });
-    //                             break;
-    //                         case 'training_complete':
-    //                             addLog('Training complete!');
-    //                             setTrainAccuracy(data.final_train_accuracy);
-    //                             setTestAccuracy(data.final_test_accuracy);
-    //                             setValidationAccuracy(data.final_validation_accuracy);
-    //                             setTrainLoss(data.final_train_loss);
-    //                             setTestLoss(data.final_test_loss);
-    //                             setValidationLoss(data.final_validation_loss);
-    //                             setPrecision(data.final_precision);
-    //                             setRecall(data.final_recall);
-    //                             setF1Score(data.final_f1_score);
-    //                             setAucRoc(data.final_auc_roc);
-    //                             break;
-    //                         case 'error':
-    //                             console.error('Training error:', data.message);
-    //                             break;
-    //                     }
-    //                 };
-
-    //                 socket.onclose = () => {
-    //                     console.log('WebSocket closed');
-    //                     setSocket(null);
-    //                 };
-    //             },
-    //             () => {
-    //                 console.error('Не удалось подключиться ни к одному WebSocket-серверу.');
-    //             }
-    //         );
-    //     } catch (error) {
-    //         console.error('Ошибка:', (error as Error).message);
-    //         if (currentSocket !== null) {
-    //             currentSocket.close();
-    //         }
-    //     }
-    // };
+    const getSavedModelArchive = async () => {};
 
     return (
         <div className="page-training-container" ref={containerRef}>
@@ -755,8 +626,8 @@ const PageTraining = () => {
                             <div className="separator"></div>
 
                             <div className="buttons-block buttons-block--vertical">
-                                <Button>Get *.H5</Button>
-                                <Button>Get *.SavedModel</Button>
+                                <Button onClick={getH5ModelFile}>Get *.H5</Button>
+                                <Button onClick={getSavedModelArchive}>Get *.SavedModel</Button>
                             </div>
 
                             <div className="separator"></div>
@@ -788,22 +659,3 @@ const PageTraining = () => {
 };
 
 export default PageTraining;
-
-{
-    /* <PanelGroup className="left-side-panel" direction="vertical">
-                        <Panel defaultSize={50}>
-                            <div className="inference-view-wrapper"></div>
-                        </Panel>
-                        <PanelResizeHandle className="my-custom-resize-handle my-custom-resize-handle--vertical my-custom-resize-handle--training" />
-                        <Panel defaultSize={50}>
-                            <div className="log-view-wrapper">
-                                <ScrollFollow
-                                    startFollowing={true}
-                                    render={({ follow, onScroll }) => (
-                                        <LazyLog url="http://example.log" stream follow={follow} onScroll={onScroll} />
-                                    )}
-                                />
-                            </div>
-                        </Panel>
-                    </PanelGroup> */
-}
