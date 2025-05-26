@@ -29,12 +29,12 @@
         //     border-color: darken($primary, 10%);
         // }
 
-        // &:disabled,
-        // &.disabled {
-        //     background-color: rgba($primary, $disabled-opacity);
-        //     border-color: rgba($primary, $disabled-opacity);
-        //     opacity: 1;
-        // }
+        &:disabled,
+        &.disabled {
+            background-color: rgba($primary, $disabled-opacity);
+            border-color: rgba($primary, $disabled-opacity);
+            opacity: 1;
+        }
     }
 
     // /* Outline кнопки */
@@ -121,13 +121,60 @@
                 // border: dashed 1px #121212;
                 // border-radius: 6px;
 
-                /* Основной контейнер */
-                .react-lazylog {
-                    --bg-color: #ffffff;
-                    --text-color: #343a40;
-                    --border-color: #e9ecef;
-                    --highlight-bg: #fff3bf;
+                .react-lazylog-searchbar {
+                    background-color: #fff !important;
+                    border: 1px solid #4e4e4e !important;
+                    font-size: 14px !important;
+                    height: 49px !important;
+
+                    input {
+                        background-color: #fff;
+                        color: #000;
+                    }
                 }
+
+                .react-lazylog {
+                    height: calc(100% - 50px) !important;
+
+                    background-color: #fff !important;
+                    color: #000 !important;
+
+                    border-top: none !important;
+                    border-left: 1px solid #4e4e4e !important;
+                    border-right: 1px solid #4e4e4e !important;
+                    border-bottom: 1px solid #4e4e4e !important;
+
+                    font-size: 14px !important;
+
+                    .log-line:hover {
+                        background-color: #a5d6a7;
+                    }
+
+                    // &::-webkit-scrollbar {
+                    //     width: 8px;
+                    // }
+
+                    // &::-webkit-scrollbar-track {
+                    //     background: #f1f1f1; // фон трека
+                    //     border-radius: 4px;
+                    // }
+
+                    // &::-webkit-scrollbar-thumb {
+                    //     background: #ccc; // сам ползунок
+                    //     border-radius: 4px;
+
+                    //     &:hover {
+                    //         background: #aaa; // при наведении
+                    //     }
+                    // }
+                }
+
+                // .react-lazylog {
+                //     --bg-color: #ffffff;
+                //     --text-color: #343a40;
+                //     --border-color: #e9ecef;
+                //     --highlight-bg: #fff3bf;
+                // }
 
                 // /* Скроллбар */
                 // .react-lazylog::-webkit-scrollbar {

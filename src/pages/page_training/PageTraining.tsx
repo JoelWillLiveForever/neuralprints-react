@@ -607,16 +607,6 @@ const PageTraining = () => {
                                 enableHotKeys
                                 selectableLines
                                 stream={false}
-                                theme="light" // если используешь кастомную тему — можно удалить
-                                containerStyle={{
-                                    height: '100%', // Чтобы занять всю высоту контейнера
-                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                                    borderRadius: '6px',
-                                    fontFamily: 'monospace',
-                                    fontSize: '13px',
-                                    backgroundColor: '#fff',
-                                    color: '#333',
-                                }}
                             />
                         </div>
                     </div>
@@ -772,8 +762,8 @@ const PageTraining = () => {
                             <div className="separator"></div>
 
                             <div className="buttons-block buttons-block--vertical">
-                                <Button>Get *.PY</Button>
-                                <Button>Get *.EXE</Button>
+                                <Button disabled>Get *.PY</Button>
+                                <Button disabled>Get *.EXE</Button>
                             </div>
                         </div>
                     </div>
