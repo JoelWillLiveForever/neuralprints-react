@@ -124,6 +124,25 @@
         }
     },
     "help": {
-        "title": "Help"
+        "title": "Help",
+        "steps": {
+            "step-1": {
+                "title": "Step 1",
+                "text": "Upload your dataset in CSV format containing input features and the target variable. Ensure the data is normalized, free of empty rows, and well-formatted. Assign a type to each column: “feature”, “target”, or “ignore”. Properly assigning types is essential for correct processing and successful model training."
+            },
+            "step-2": {
+                "title": "Step 2",
+                "text": "Drag and drop layers from the side panel onto the canvas to build your neural network. You can configure, connect, move, or delete each layer. Make sure to include an Input layer with the correct number of neurons — this must match the number of input features. Configure the final Output layer (typically a Dense layer) according to your task — e.g., binary or multiclass classification. You can also set training parameters such as the number of epochs, loss functions, evaluation metrics, and the dataset split ratio (training, validation, test)."
+            },
+            "step-3": {
+                "title": "Step 3",
+                "text": "Click the “Start Training” button to launch the training process. During training, you’ll see real-time logs and interactive charts of losses and metrics for both the training and validation datasets. You can toggle the dataset view on the chart by clicking on the legend. Until training completes, model export and packaging options remain unavailable."
+            },
+            "step-4": {
+                "title": "Step 4",
+                "text": "Once training is complete, final charts and logs become available. You can now export the trained model in HDF5, Keras, or SavedModel formats. Additionally, you can generate a standalone Python script for model inference — useful for integrating into other systems or running directly from your terminal."
+            }
+        },
+        "copyright": "© 2025 Vladimir Nikulin. All rights reserved."
     }
 }
