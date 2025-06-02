@@ -242,7 +242,7 @@ const DnDFlow: React.FC = () => {
                     tf_layer_use_bias: 1,
                 };
             case 'TF_FLATTEN_LAYER_NODE':
-                return;
+                return {};
             default:
                 return { label: type };
         }

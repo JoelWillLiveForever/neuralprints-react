@@ -150,7 +150,11 @@ export const build_architecture_data = (nodes: TypedNode[], edges: RFEdge[]): La
     }
 
     if (architecture.length !== nodes.length) {
-        const missing = nodes.filter((n) => !architecture.some((l) => l.data.tf_layer_name === n.data?.tf_layer_name));
+        // const missing = nodes.filter((n) => !architecture.some((l) => l.data.tf_layer_name === n.data?.tf_layer_name));
+        const missing = nodes.filter((n) => {
+            if (n.type === 'TF_FLATTEN_LAYER_NODE') return false; // Игнорируем Flatten узлы
+            return !architecture.some((l) => l.data.tf_layer_name === n.data?.tf_layer_name);
+        });
 
         throw new Error(
             `Обнаружены несоединенные слои: ${missing.map((n) => n.data?.tf_layer_name || 'unknown').join(', ')}`

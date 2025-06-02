@@ -8,7 +8,7 @@ import BeautifulComboBox from '../../beautiful_combo_box/BeautifulComboBox';
 import BeautifulField from '../../beautiful_field/BeautifulField';
 
 const Conv2DNode: React.FC<NodeProps<Conv2DNodeType>> = ({ id, data, selected }) => {
-    const { setNodes } = useReactFlow<Conv2DNodeType>();
+    const { setNodes, setEdges } = useReactFlow<Conv2DNodeType>();
 
     // // Устанавливаем начальное значение для tf_layer_neurons_count
     // useEffect(() => {
@@ -65,10 +65,20 @@ const Conv2DNode: React.FC<NodeProps<Conv2DNodeType>> = ({ id, data, selected })
         );
     };
 
+    const handleDeleteNode = () => {
+        setNodes((nodes) => nodes.filter((node) => node.id !== id));
+        setEdges((edges) => edges.filter((edge) => edge.source !== id && edge.target !== id));
+    };
+
     return (
         <div className={`tf-node-conv-2d ${selected ? 'border-blue-500' : 'border-gray-300'}`}>
             {/* Заголовок */}
-            <div className="tf-node-conv-2d__header">Conv2D</div>
+            <div className="tf-node-conv-2d__header">
+                <span>Conv2D</span>
+                <button onClick={handleDeleteNode} className="delete-btn" title="Delete node">
+                    <i className="bi bi-trash-fill"></i>
+                </button>
+            </div>
 
             {/* Поля */}
             <div className="tf-node-conv-2d__body">

@@ -14,6 +14,53 @@
         font-size: 18px;
         font-weight: 600;
         color: #fff;
+        position: relative; // для абсолютного позиционирования кнопки
+
+        .delete-btn {
+            position: absolute;
+
+            top: 50%;
+            right: 6px;
+
+            width: 28px;
+            height: 28px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            border-color: transparent;
+            background-color: transparent;
+
+            transition: background-color 0.2s ease;
+            transform: translateY(-50%);
+
+            line-height: 0; // 🔑 важно для иконок!
+            padding: 0; // 🔑 убрать, чтобы не растягивалось
+
+            cursor: pointer;
+            z-index: 1;
+
+            i {
+                color: white;
+                font-size: 16px;
+            }
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.38); // немного ярче, можно уменьшить до 0.2
+
+                // i {
+                //     color: black;
+                // }
+            }
+
+            &:active {
+                background-color: rgba(0, 0, 0, 0.38); // немного ярче, можно уменьшить до 0.2
+            }
+        }
     }
 
     &__body {

@@ -8,7 +8,7 @@ import BeautifulComboBox from '../../beautiful_combo_box/BeautifulComboBox';
 import BeautifulField from '../../beautiful_field/BeautifulField';
 
 const DenseNode: React.FC<NodeProps<DenseNodeType>> = ({ id, data, selected }) => {
-    const { setNodes } = useReactFlow<DenseNodeType>();
+    const { setNodes, setEdges } = useReactFlow<DenseNodeType>();
 
     // // Устанавливаем начальное значение для tf_layer_neurons_count
     // useEffect(() => {
@@ -38,10 +38,20 @@ const DenseNode: React.FC<NodeProps<DenseNodeType>> = ({ id, data, selected }) =
         );
     };
 
+    const handleDeleteNode = () => {
+        setNodes((nodes) => nodes.filter((node) => node.id !== id));
+        setEdges((edges) => edges.filter((edge) => edge.source !== id && edge.target !== id));
+    };
+
     return (
         <div className={`tf-node-dense ${selected ? 'border-blue-500' : 'border-gray-300'}`}>
             {/* Заголовок */}
-            <div className="tf-node-dense__header">Dense</div>
+            <div className="tf-node-dense__header">
+                <span>Dense</span>
+                <button onClick={handleDeleteNode} className="delete-btn" title="Delete node">
+                    <i className="bi bi-trash-fill"></i>
+                </button>
+            </div>
 
             {/* Поля */}
             <div className="tf-node-dense__body">
