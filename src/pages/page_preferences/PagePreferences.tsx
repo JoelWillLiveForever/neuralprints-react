@@ -1,9 +1,109 @@
-// import
+// import React from 'react';
+import { usePreferencesStore } from '../../store/PreferencesStore';
+import Header4Container from '../../components/header_4_container/Header4Container';
+
+import Flag from 'react-flagpack';
+import 'react-flagpack/dist/style.css';
+
+import './page_preferences.scss';
 
 const PagePreferences = () => {
-    return(
-        <h1>Preferences Page</h1>
-    )
-}
+    const { theme, setTheme, language, setLanguage } = usePreferencesStore();
 
-export default PagePreferences
+    return (
+        <div className="page-preferences-container">
+            {/* <h1>Настройки</h1> */}
+
+            <section>
+                <Header4Container text="Язык" />
+                <div className="custom-radio-group">
+                    <label className="custom-radio">
+                        <div className="custom-radio__circle-container">
+                            <input
+                                type="radio"
+                                name="language"
+                                value="en"
+                                checked={language === 'en'}
+                                onChange={() => setLanguage('en')}
+                            />
+                            <span className="custom-radio__circle"></span>
+                        </div>
+
+                        <div className="custom-radio__text-container">
+                            <strong>Русский, Россия</strong>
+                        </div>
+
+                        <div className="custom-radio__flag-container">
+                            <Flag className="flag" code="RU" hasBorder={false} hasBorderRadius />
+                        </div>
+                    </label>
+
+                    <label className="custom-radio">
+                        <div className="custom-radio__circle-container">
+                            <input
+                                type="radio"
+                                name="language"
+                                value="en"
+                                checked={language === 'en'}
+                                onChange={() => setLanguage('en')}
+                            />
+                            <span className="custom-radio__circle"></span>
+                        </div>
+
+                        <div className="custom-radio__text-container">
+                            <strong>English, USA</strong>
+                        </div>
+
+                        <div className="custom-radio__flag-container">
+                            <Flag className="flag" code="US" hasBorder={false} hasBorderRadius />
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <section>
+                <Header4Container text="Тема" />
+                <div className="custom-radio-group">
+                    {['light', 'dark', 'system'].map((mode) => (
+                        <label key={mode} className="custom-radio">
+                            <div className="custom-radio__circle-container">
+                                <input
+                                    type="radio"
+                                    name="theme"
+                                    value={mode}
+                                    checked={theme === mode}
+                                    onChange={() => setTheme(mode as any)}
+                                />
+                                <span className="custom-radio__circle"></span>
+                            </div>
+                            <div className="custom-radio__text-container">
+                                <strong>
+                                    {
+                                        {
+                                            light: 'Светлая',
+                                            dark: 'Тёмная',
+                                            system: 'Системная',
+                                        }[mode]
+                                    }
+                                </strong>
+                            </div>
+                            <div className='custom-radio__icon-container'>
+                                <i
+                                    className={
+                                        {
+                                            light: 'bi bi-sun-fill',
+                                            dark: 'bi bi-moon-fill',
+                                            system: 'bi bi-circle-half',
+                                        }[mode]
+                                    }
+                                ></i>
+                            </div>
+                        </label>
+                    ))}
+                </div>
+            </section>
+        </div>
+    );
+};
+
+export default PagePreferences;
