@@ -9,10 +9,12 @@ import BeautifulComboBox from '../beautiful_combo_box/BeautifulComboBox';
 import BeautifulField from '../beautiful_field/BeautifulField';
 
 import { Button } from 'react-bootstrap';
+import { Node as RFNode, Edge as RFEdge } from '@xyflow/react';
 
 import './sidebar.scss';
+import { build_architecture_data, TypedNode } from '../../utils/BuildArchitectureData';
 
-const PAGE_COLOR = "#E64A19";
+const PAGE_COLOR = '#E64A19';
 
 const Sidebar: React.FC = () => {
     const [, setType] = useDnD();
@@ -215,12 +217,112 @@ const Sidebar: React.FC = () => {
         updateSplits(newValue, type);
     };
 
+    const handleModelmport = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+
+        input.onchange = async (event: any) => {
+            const file = event.target.files?.[0];
+            if (!file) return;
+
+            try {
+                const text = await file.text();
+                const json = JSON.parse(text);
+
+                const { architecture, hyper_parameters } = json;
+
+                const nodes: RFNode[] = architecture.map((layer: any, index: number) => ({
+                    id: `node-${index}`,
+                    type: layer.type,
+                    data: layer.data,
+                    position: { x: 100 + index * 200, y: 100 }, // временно
+                }));
+
+                const edges: RFEdge[] = nodes.slice(0, -1).map((node, i) => ({
+                    id: `edge-${i}`,
+                    source: node.id,
+                    target: nodes[i + 1].id,
+                }));
+
+                const store = useArchitectureStore.getState();
+
+                store.setNodes(nodes);
+                store.setEdges(edges);
+
+                store.setTrainSplit(hyper_parameters.train_split);
+                store.setTestSplit(hyper_parameters.test_split);
+                store.setValidationSplit(hyper_parameters.validation_split);
+                store.setLossFunction(hyper_parameters.loss_function);
+                store.setOptimizer(hyper_parameters.optimizer);
+                store.setQualityMetric(hyper_parameters.quality_metric);
+                store.setEpochs(hyper_parameters.epochs);
+                store.setBatchSize(hyper_parameters.batch_size);
+                store.setEnableDatasetNormalization(hyper_parameters.enable_dataset_normalization);
+            } catch (err) {
+                alert('Ошибка импорта модели: ' + (err as Error).message);
+            }
+        };
+
+        input.click();
+    };
+
+    const handleModelExport = () => {
+        const {
+            nodes,
+            edges,
+            // train_split,
+            // test_split,
+            // validation_split,
+            // loss_function,
+            // optimizer,
+            // quality_metric,
+            // epochs,
+            // batch_size,
+            // enable_dataset_normalization,
+        } = useArchitectureStore.getState();
+
+        try {
+            const architecture = build_architecture_data(nodes as TypedNode[], edges);
+            const json = JSON.stringify(
+                {
+                    architecture,
+                    hyper_parameters: {
+                        train_split,
+                        test_split,
+                        validation_split,
+                        loss_function,
+                        optimizer,
+                        quality_metric,
+                        epochs,
+                        batch_size,
+                        enable_dataset_normalization,
+                    },
+                },
+                null,
+                2
+            );
+
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'model.json';
+            link.click();
+
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            alert('Ошибка экспорта модели: ' + (error as Error).message);
+        }
+    };
+
     return (
         <aside className="sidebar">
             <Header4Container className="model-controls-header" text="Model controls" />
             <div className="model-controls">
-                <Button />
-                <Button />
+                <Button onClick={handleModelmport}>Import</Button>
+                <Button onClick={handleModelExport}>Export</Button>
             </div>
 
             <Header4Container className="tensorflow-layers-header" text="TensorFlow layers" />

@@ -11,7 +11,7 @@ import { Conv2DNodeData } from '../components/nodes/conv_2d/Conv2DNodeProps';
 
 import { Layer } from '../api/Types';
 
-type TypedNode = RFNode<{ [key: string]: unknown }, Layer['type']>;
+export type TypedNode = RFNode<{ [key: string]: unknown }, Layer['type']>;
 
 function is_typed_node(node: RFNode): node is TypedNode {
     return typeof node.data === 'object' && node.data !== null;

@@ -7,12 +7,10 @@ import api from './API';
 // import { requestWithPool } from './API';
 
 import { ArchitecturePayload } from './Types';
-import { build_architecture_data } from '../utils/BuildArchitectureData';
+import { build_architecture_data, TypedNode } from '../utils/BuildArchitectureData';
 
 import { Node as RFNode } from '@xyflow/react';
 import { Layer } from '../api/Types';
-
-type TypedNode = RFNode<{ [key: string]: unknown }, Layer['type']>;
 
 // Тип для объекта с произвольными ключами и значениями
 type AnyObject = { [key: string]: unknown };

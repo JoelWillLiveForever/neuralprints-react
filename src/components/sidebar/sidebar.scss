@@ -23,8 +23,66 @@
 
     // min-width: 150px;
 
-    .tensorflow-layers-header {
+    .model-controls-header {
         margin-top: 0px;
+    }
+
+    .model-controls {
+        display: flex;
+        flex-direction: row;
+
+        gap: 7px;
+
+        margin-top: 7px;
+
+        button {
+            $primary: #ffa000;
+            $disabled-opacity: 0.65;
+
+            --bs-btn-color: #{$primary};
+
+            --bs-btn-bg: #00000000;
+            --bs-btn-border-color: #{$primary};
+
+            --bs-btn-hover-bg: #{$primary};
+            --bs-btn-hover-border-color: #{$primary};
+
+            --bs-btn-active-bg: #{darken($primary, 16%)};
+            --bs-btn-active-border-color: #{darken($primary, 16%)};
+
+            // background-color: $primary;
+            // border-color: $primary;
+
+            // &:hover,
+            // &:focus,
+            // &:active {
+            //     background-color: darken($primary, 10%);
+            //     border-color: darken($primary, 10%);
+            // }
+
+            &:disabled,
+            &.disabled {
+                background-color: rgba($primary, $disabled-opacity);
+                border-color: rgba($primary, $disabled-opacity);
+                opacity: 1;
+            }
+
+            width: 100%;
+
+            // background-color: transparent;
+            // border-color: #ffa000;
+
+            // color: #ffa000;
+
+            // &:hover {
+            //     background-color: #ffa000;
+            //     color: white;
+            // }
+        }
+    }
+
+    .tensorflow-layers-header {
+        margin-top: 10px;
     }
 
     .tensorflow-layers {
@@ -134,20 +192,20 @@
             }
 
             &__conv-2d {
-                background-color: #E64A1912;
-                border-color: #E64A19;
+                background-color: #e64a1912;
+                border-color: #e64a19;
 
                 &:hover {
-                    box-shadow: 0 0 0 2px #E64A19;
+                    box-shadow: 0 0 0 2px #e64a19;
                 }
             }
 
             &__flatten {
-                background-color: #AA00FF12;
-                border-color: #AA00FF;
+                background-color: #aa00ff12;
+                border-color: #aa00ff;
 
                 &:hover {
-                    box-shadow: 0 0 0 2px #AA00FF;
+                    box-shadow: 0 0 0 2px #aa00ff;
                 }
             }
         }
