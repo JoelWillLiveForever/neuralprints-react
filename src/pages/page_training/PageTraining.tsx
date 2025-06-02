@@ -38,7 +38,7 @@ import {
 } from '../../store/MetricStore';
 import { getModelHash } from '../../utils/GetModelHash';
 import api from '../../api/API';
-
+import { useTrainingStore } from '../../store/TrainingStore';
 
 // Регистрация компонентов графика
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Title);
@@ -51,7 +51,7 @@ const PAGE_COLOR = '#689f38';
 
 const PageTraining = () => {
     const { t, i18n } = useTranslation();
-    
+
     const containerRef = useRef<HTMLDivElement>(null);
     const mainPanelRef = useRef<ImperativePanelHandle>(null);
 
@@ -64,7 +64,20 @@ const PageTraining = () => {
     const [mainPanelMinSize, setMainPanelMinSize] = useState(getPct(MIN_WIDTH_PX));
     const [mainPanelMaxSize, setMainPanelMaxSize] = useState(getPct(MAX_WIDTH_PX));
 
-    const [socket, setSocket] = useState<WebSocket | null>(null);
+    // const [socket, setSocket] = useState<WebSocket | null>(null);
+
+    // const [isTraining, setIsTraining] = useState(false);
+    // const [isTrainingCompleted, setIsTrainingCompleted] = useState(false);
+
+    const {
+        // socket,
+        isTrainingCompleted,
+
+        // setSocket,
+        // closeSocket,
+
+        // setIsTrainingCompleted,
+    } = useTrainingStore();
 
     const {
         epochs,
@@ -151,11 +164,14 @@ const PageTraining = () => {
     }, []);
 
     // Закрываем сокет при уходе со страницы
-    useEffect(() => {
-        return () => {
-            socket?.close();
-        };
-    }, [socket]);
+    // useEffect(() => {
+    //     return () => {
+    //         socket?.close();
+
+    //         // setIsTraining(false);
+    //         setIsTrainingCompleted(false);
+    //     };
+    // }, [socket]);
 
     const lossMetricChart = (): {
         data: ChartData<'line', TrainingLossPoint[] | ValidationLossPoint[]>;
@@ -286,13 +302,51 @@ const PageTraining = () => {
     const socketUrl = `ws://${host}:${WS_PORT}${WS_PATH}`;
 
     const sendDatasetWithArchitectureAndStartModelTrain = async () => {
+        const trainingStore = useTrainingStore.getState(); // единоразовое обращение
+        const { setSocket, closeSocket, setIsTrainingCompleted } = trainingStore;
+
         try {
             // Очистить старые данные, если они есть
             resetAllValues();
 
-            // Отправка данных
-            await send_dataset_data();
-            await send_architecture_data();
+            // setIsTraining(true);
+            setIsTrainingCompleted(false);
+
+            // Проверка датасета перед отправкой
+            const dataset_file = useDatasetStore.getState().get_dataset_file();
+            if (!dataset_file) {
+                alert('Ошибка: файл датасета не выбран!');
+                // setIsTraining(false);
+                return;
+            }
+
+            // Отправка датасета
+            try {
+                await send_dataset_data();
+            } catch (e) {
+                alert('Ошибка при отправке данных датасета на сервер.');
+                console.error(e);
+                // setIsTraining(false);
+                return;
+            }
+
+            // Безопасная отправка архитектуры
+            try {
+                await send_architecture_data();
+            } catch (e) {
+                if (e instanceof Error) {
+                    alert(`Ошибка при отправке архитектуры: ${e.message}`);
+                    console.error(e.message);
+                } else {
+                    alert('Неизвестная ошибка при отправке архитектуры!');
+                    console.error(e);
+                }
+                // setIsTraining(false);
+                return;
+            }
+
+            // Закрыть предыдущий сокет, если вдруг не закрыт
+            closeSocket();
 
             // Открытие WebSocket соединения
             // const newSocket = new WebSocket('ws://localhost:8000/ws/train');
@@ -303,16 +357,11 @@ const PageTraining = () => {
                 setSocket(newSocket);
 
                 // Подготовка данных для обучения
-                const dataset_file = useDatasetStore.getState().get_dataset_file();
                 const architecture_hash = useArchitectureStore.getState().get_architecture_hash();
-
-                if (!dataset_file) {
-                    console.error('Файл датасета не выбран.');
-                    return;
-                }
-
                 if (!architecture_hash) {
+                    addLog('Не удалось получить архитектурный хэш!');
                     console.error('Архитектура не выбрана.');
+                    newSocket.close();
                     return;
                 }
 
@@ -334,58 +383,99 @@ const PageTraining = () => {
                 const data = JSON.parse(event.data);
                 console.log('WebSocket message:', data);
 
-                if (data.type === 'training_started') {
-                    // clearLogs();
-                    addLog('Training started...');
-                } else if (data.type === 'log') {
-                    addLog(data.log_message);
-                } else if (data.type === 'training_update') {
-                    setCurrentEpoch(data.current_epoch);
+                switch (data.type) {
+                    case 'training_started':
+                        // clearLogs();
+                        addLog('Training started...');
+                        break;
 
-                    addPointToTrainingLoss({ epoch: data.current_epoch, training_loss: data.training_loss });
-                    addPointToValidationLoss({ epoch: data.current_epoch, validation_loss: data.validation_loss });
-                    addPointToTrainingUserMetric({
-                        epoch: data.current_epoch,
-                        training_user_metric: data.training_user_metric,
-                    });
-                    addPointToValidationUserMetric({
-                        epoch: data.current_epoch,
-                        validation_user_metric: data.validation_user_metric,
-                    });
-                } else if (data.type === 'training_complete') {
-                    console.log('Training complete!');
-                    addLog('Training complete!');
+                    case 'log':
+                        addLog(data.log_message);
+                        break;
 
-                    setTrainAccuracy(data.final_train_accuracy);
-                    setTestAccuracy(data.final_test_accuracy);
-                    setValidationAccuracy(data.final_validation_accuracy);
+                    case 'training_update':
+                        setCurrentEpoch(data.current_epoch);
 
-                    setTrainLoss(data.final_train_loss);
-                    setTestLoss(data.final_test_loss);
-                    setValidationLoss(data.final_validation_loss);
+                        addPointToTrainingLoss({ epoch: data.current_epoch, training_loss: data.training_loss });
+                        addPointToValidationLoss({ epoch: data.current_epoch, validation_loss: data.validation_loss });
+                        addPointToTrainingUserMetric({
+                            epoch: data.current_epoch,
+                            training_user_metric: data.training_user_metric,
+                        });
+                        addPointToValidationUserMetric({
+                            epoch: data.current_epoch,
+                            validation_user_metric: data.validation_user_metric,
+                        });
 
-                    setPrecision(data.final_precision);
-                    setRecall(data.final_recall);
-                    setF1Score(data.final_f1_score);
-                    setAucRoc(data.final_auc_roc);
-                } else if (data.type === 'error') {
-                    console.error('Training error:', data.message);
+                        break;
+
+                    case 'training_complete':
+                        console.log('Training complete!');
+                        addLog('Training complete!');
+
+                        setTrainAccuracy(data.final_train_accuracy);
+                        setTestAccuracy(data.final_test_accuracy);
+                        setValidationAccuracy(data.final_validation_accuracy);
+
+                        setTrainLoss(data.final_train_loss);
+                        setTestLoss(data.final_test_loss);
+                        setValidationLoss(data.final_validation_loss);
+
+                        setPrecision(data.final_precision);
+                        setRecall(data.final_recall);
+                        setF1Score(data.final_f1_score);
+                        setAucRoc(data.final_auc_roc);
+
+                        // setIsTraining(false);
+                        setIsTrainingCompleted(true);
+                        break;
+
+                    case 'error':
+                        // console.error('Training error:', data.message);
+
+                        addLog(`SERVER_ERROR: ${data.message}`);
+                        console.error('Ошибка сервера:', data.message);
+
+                        // setIsTraining(false);
+                        setIsTrainingCompleted(false);
+
+                        break;
+
+                    default:
+                        console.warn('Неизвестный тип сообщения:', data);
+                        addLog(`UNKNOWN_ERROR: ${data.message}`);
+                        break;
                 }
             };
 
             // Обработка ошибок WebSocket
             newSocket.onerror = (error) => {
-                console.error('WebSocket error:', error);
+                const errorMessage = error instanceof Error ? error.message : String(error);
+
+                addLog(`ERROR: ${errorMessage}`);
+                console.error('Ошибка:', errorMessage);
+
+                // setIsTraining(false);
+                setIsTrainingCompleted(false);
             };
 
             // Закрытие соединения
             newSocket.onclose = () => {
                 console.log('WebSocket closed');
-                setSocket(null);
+
+                // setSocket(null);
+                useTrainingStore.getState().setSocket(null);
             };
         } catch (error) {
-            // Обработка ошибок
-            console.error('Ошибка:', error instanceof Error ? error.message : String(error));
+            const errorMessage = error instanceof Error ? error.message : String(error);
+
+            addLog(`SOCKET_CLOSE_ERROR: ${errorMessage}`);
+            console.error('Ошибка сокета:', errorMessage);
+
+            // setIsTraining(false);
+            setIsTrainingCompleted(false);
+
+            const socket = trainingStore.socket;
             if (socket) {
                 socket.close();
             }
@@ -531,6 +621,7 @@ const PageTraining = () => {
                                 )}
                             /> */}
                             <LazyLog
+                                key={getLogs().length === 0 ? 'empty' : 'filled'}
                                 text={getLogs().join('\n')}
                                 follow={true}
                                 extraLines={1}
@@ -544,7 +635,10 @@ const PageTraining = () => {
                     </div>
 
                     <div className="performance-metrics">
-                        <Header4Container text={t('training.performance-metrics')} className="performance-metrics__header" />
+                        <Header4Container
+                            text={t('training.performance-metrics')}
+                            className="performance-metrics__header"
+                        />
                         <div className="performance-metrics__content">
                             <div className="readonly-fields-block">
                                 <BeautifulField
@@ -682,22 +776,28 @@ const PageTraining = () => {
                         <div className="controls__content">
                             <Button onClick={sendDatasetWithArchitectureAndStartModelTrain} id="button-start-training">
                                 {t('training.buttons.start-training.part-1')}
-                                <br/>
+                                <br />
                                 {t('training.buttons.start-training.part-2')}
                             </Button>
 
                             <div className="separator"></div>
 
-                            <div className="buttons-block buttons-block--vertical" id='export-functions'>
-                                <Button onClick={getH5ModelFile}>{t('training.buttons.get-h5')}</Button>
-                                <Button onClick={getKerasModelFile}>{t('training.buttons.get-keras')}</Button>
-                                <Button onClick={getSavedModelArchive}>{t('training.buttons.get-savedmodel')}</Button>
+                            <div className="buttons-block buttons-block--vertical" id="export-functions">
+                                <Button disabled={!isTrainingCompleted} onClick={getH5ModelFile}>
+                                    {t('training.buttons.get-h5')}
+                                </Button>
+                                <Button disabled={!isTrainingCompleted} onClick={getKerasModelFile}>
+                                    {t('training.buttons.get-keras')}
+                                </Button>
+                                <Button disabled={!isTrainingCompleted} onClick={getSavedModelArchive}>
+                                    {t('training.buttons.get-savedmodel')}
+                                </Button>
                             </div>
 
                             <div className="separator"></div>
 
-                            <div className="buttons-block buttons-block--vertical" id='compile-functions'>
-                                <Button>{t('training.buttons.get-py')}</Button>
+                            <div className="buttons-block buttons-block--vertical" id="compile-functions">
+                                <Button disabled={!isTrainingCompleted}>{t('training.buttons.get-py')}</Button>
                                 <Button disabled>{t('training.buttons.get-exe')}</Button>
                             </div>
                         </div>
