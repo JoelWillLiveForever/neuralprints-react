@@ -1,0 +1,123 @@
+{
+    "dataset": {
+        "title": "Датасет",
+        "main-controls": {
+            "buttons": {
+                "dataset-management": {
+                    "title": "Управление датасетом",
+                    "items": {
+                        "upload": "Загрузка",
+                        "save": "Сохранить",
+                        "clear": "Очистить"
+                    },
+                    "placeholder": "Название вашего датасета отобразится здесь."
+                },
+                "normalize": "Нормализация",
+                "add-entry": "Добавить запись"
+            }
+        },
+        "table": {
+            "column_types": {
+                "feature": "Признак",
+                "target": "Целевой",
+                "ignored": "Игнор."
+            },
+            "actions-column": {
+                "title": "Действия",
+                "buttons": {
+                    "delete": "Удалить",
+                    "save": "Сохранить",
+                    "cancel": "Отмена"
+                }
+            }
+        },
+        "info-message": "Пожалуйста, загрузите ваш датасет в формате *.CSV!",
+        "pagination-controls": {
+            "page-size-selector": "Строк на странице: ",
+            "rows-count": {
+                "no-data": "Отображается строк 0-0 (нет данных)",
+                "data": "Отображается строк",
+                "out-of": "из"
+            }
+        }
+    },
+    "architecture": {
+        "title": "Архитектура",
+        "model-controls": {
+            "title": "Управление моделью",
+            "buttons": {
+                "import": "Импорт",
+                "export": "Экспорт"
+            }
+        },
+        "tf-layers": "Слои TensorFlow",
+        "dataset-splitting-options": {
+            "title": "Опции разбивки датасета",
+            "sliders": {
+                "training-sample-size": "Размер обучающей выборки",
+                "test-sample-size": "Размер тестовой выборки",
+                "validation-sample-size": "Размер валидационной выборки"
+            }
+        },
+        "ai-model-options": {
+            "title": "Гиперпараметры модели ИИ",
+            "comboboxes": {
+                "loss-function": "Функция потерь",
+                "optimizer": "Оптимизатор",
+                "quality-metric": "Метрика качества"
+            },
+            "fields": {
+                "number-of-training-epochs": "Количество эпох обучения",
+                "mini-batch-size": "Размер мини-батча"
+            }
+        },
+        "additional-options": {
+            "title": "Дополнительные опции",
+            "comboboxes": {
+                "enable-dataset-normalization": {
+                    "title": "Включить нормализацию датасета",
+                    "values": {
+                        "disable": "Выключено",
+                        "enable": "Включено"
+                    }
+                }
+            }
+        }
+    },
+    "training": {
+        "title": "Настройки",
+        "status": {
+            "title": "Статус",
+            "epoch": "Эпоха"
+        },
+        "logs": "Логи",
+        "performance-metrics": "Метрики качества",
+        "controls": "Управление",
+        "buttons": {
+            "start-training": {
+                "part-1": "ЗАПУСК",
+                "part-2": "ОБУЧЕНИЯ"
+            },
+            "get-h5": "Экспорт *.H5",
+            "get-keras": "Экспорт *.KERAS",
+            "get-savedmodel": "Экспорт *.SavedModel",
+            "get-py": "Экспорт *.PY",
+            "get-exe": "Экспорт *.EXE"
+        },
+        "charts": "Графики"
+    },
+    "preferences": {
+        "title": "Настройки",
+        "language": "Язык",
+        "theme": "Тема",
+        "themes": {
+            "light": "Светлая",
+            "dark": "Тёмная",
+            "system": "Системная"
+        },
+        "languages": {
+            "ru-ru": "Русский, Россия",
+            "en-us": "Английский, США"
+        }
+    }
+}

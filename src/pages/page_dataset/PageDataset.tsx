@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import React, { useState, useEffect, useRef } from 'react';
 
 import { useDatasetStore } from '../../store/DatasetStore';
@@ -8,6 +10,8 @@ import { Dropdown, DropdownButton, Form, InputGroup, Pagination, Table, Button }
 import './page_dataset.scss';
 
 const PageDataset: React.FC = () => {
+    const { t, i18n } = useTranslation();
+    
     const {
         dataset_file,
         dataset,
@@ -288,23 +292,25 @@ const PageDataset: React.FC = () => {
                     <DropdownButton
                         className="main-controls__dataset-dropdown-button"
                         variant="outline-primary"
-                        title="Dataset management"
+                        title={t('dataset.main-controls.buttons.dataset-management.title')}
                     >
-                        <Dropdown.Item onClick={action_dataset_upload_handler}>Upload</Dropdown.Item>
+                        <Dropdown.Item onClick={action_dataset_upload_handler}>
+                            {t('dataset.main-controls.buttons.dataset-management.items.upload')}
+                        </Dropdown.Item>
                         <Dropdown.Item onClick={action_dataset_save_handler} disabled={!dataset.length}>
-                            Save
+                            {t('dataset.main-controls.buttons.dataset-management.items.save')}
                         </Dropdown.Item>
                         <Dropdown.Divider />
                         <Dropdown.Item onClick={action_dataset_clear_handler} disabled={!dataset.length}>
-                            Clear
+                            {t('dataset.main-controls.buttons.dataset-management.items.clear')}
                         </Dropdown.Item>
                     </DropdownButton>
                     <Form.Control
                         className="main-controls__dataset-filename-field"
                         type="text"
                         readOnly
-                        placeholder="The file name of your dataset will be displayed here."
-                        aria-label="The file name of your dataset will be displayed here."
+                        placeholder={t('dataset.main-controls.buttons.dataset-management.placeholder')}
+                        aria-label={t('dataset.main-controls.buttons.dataset-management.placeholder')}
                         value={dataset_file !== null ? dataset_file.name : ''}
                     />
                     <input
@@ -318,7 +324,7 @@ const PageDataset: React.FC = () => {
                     />
                 </InputGroup>
                 <Button variant="primary" id="normalize_button" disabled={dataset === null || dataset.length === 0}>
-                    Normalize
+                    {t('dataset.main-controls.buttons.normalize')}
                 </Button>
                 <div className="separator"></div>
                 <Button
@@ -327,7 +333,7 @@ const PageDataset: React.FC = () => {
                     onClick={action_dataset_add_entry_handler}
                     disabled={headers.length === 0}
                 >
-                    Add entry
+                    {t('dataset.main-controls.buttons.add-entry')}
                 </Button>
             </div>
 
@@ -372,15 +378,15 @@ const PageDataset: React.FC = () => {
                                                 onChange={(e) => handle_column_type_change(index, e.target.value)}
                                                 className="my-custom-thead__column-type"
                                             >
-                                                <option value="feature">Feature</option>
-                                                <option value="target">Target</option>
-                                                <option value="ignored">Ignored</option>
+                                                <option value="feature">{t('dataset.table.column_types.feature')}</option>
+                                                <option value="target">{t('dataset.table.column_types.target')}</option>
+                                                <option value="ignored">{t('dataset.table.column_types.ignored')}</option>
                                             </Form.Select>
                                         </div>
                                     </th>
                                 ))}
                                 <th>
-                                    <div className="my-custom-thead">Actions</div>
+                                    <div className="my-custom-thead">{t('dataset.table.actions-column.title')}</div>
                                 </th>
                             </tr>
                         </thead>
@@ -420,7 +426,7 @@ const PageDataset: React.FC = () => {
                                             }}
                                         >
                                             <i className="bi bi-floppy2-fill me-2"></i>
-                                            Save
+                                            {t('dataset.table.actions-column.buttons.save')}
                                         </Button>
                                         <Button
                                             id="add_entry_cancel_button"
@@ -429,7 +435,7 @@ const PageDataset: React.FC = () => {
                                             onClick={() => set_is_adding_entry(false)}
                                         >
                                             <i className="bi bi-x-circle me-2"></i>
-                                            Cancel
+                                            {t('dataset.table.actions-column.buttons.cancel')}
                                         </Button>
                                     </td>
                                 </tr>
@@ -458,7 +464,7 @@ const PageDataset: React.FC = () => {
                                             onClick={() => action_dataset_delete_row_handler(row_index)}
                                         >
                                             <i className="bi bi-trash-fill me-2"></i>
-                                            Delete
+                                            {t('dataset.table.actions-column.buttons.delete')}
                                         </Button>
                                     </td>
                                 </tr>
@@ -470,7 +476,7 @@ const PageDataset: React.FC = () => {
                 // <Alert className="table-block__info-message" variant="primary">
                 //     Загрузите датасет в *.CSV формате!
                 // </Alert>
-                <strong className="info-message-block">Please, upload Your dataset in *.CSV file format!</strong>
+                <strong className="info-message-block">{t('dataset.info-message')}</strong>
 
                 // <div className='info-message-block'>
                 //     <strong className="info-message-block__content">Please, upload Your dataset in *.CSV file format!</strong>
@@ -481,7 +487,7 @@ const PageDataset: React.FC = () => {
                 <div className="pagination-controls__current-page-size-selector-block">
                     {/* <span>Rows per page: </span> */}
                     <Form.Label htmlFor="current_page_size_selector" className="mine-bootstrap-label">
-                        Rows per page:{' '}
+                        {t('dataset.pagination-controls.page-size-selector')}
                     </Form.Label>
                     <Form.Select
                         id="current_page_size_selector"
@@ -506,8 +512,8 @@ const PageDataset: React.FC = () => {
 
                 <span>
                     {dataset_file !== null
-                        ? `Rows ${getStartIndex() + 1}-${getEndIndex()} (out of ${dataset.length})`
-                        : 'Rows 0–0 (no data)'}
+                        ? `${t('dataset.pagination-controls.rows-count.data')} ${getStartIndex() + 1}-${getEndIndex()} (${t('dataset.pagination-controls.rows-count.out-of')} ${dataset.length})`
+                        : t('dataset.pagination-controls.rows-count.no-data')}
                 </span>
 
                 <Pagination className="pagination-controls__page-selector-block">

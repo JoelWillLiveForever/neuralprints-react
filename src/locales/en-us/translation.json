@@ -1,0 +1,123 @@
+{
+    "dataset": {
+        "title": "Dataset",
+        "main-controls": {
+            "buttons": {
+                "dataset-management": {
+                    "title": "Dataset management",
+                    "items": {
+                        "upload": "Upload",
+                        "save": "Save",
+                        "clear": "Clear"
+                    },
+                    "placeholder": "The file name of your dataset will be displayed here."
+                },
+                "normalize": "Normalize",
+                "add-entry": "Add entry"
+            }
+        },
+        "table": {
+            "column_types": {
+                "feature": "Feature",
+                "target": "Target",
+                "ignored": "Ignored"
+            },
+            "actions-column": {
+                "title": "Actions",
+                "buttons": {
+                    "delete": "Delete",
+                    "save": "Save",
+                    "cancel": "Cancel"
+                }
+            }
+        },
+        "info-message": "Please, upload Your dataset in *.CSV file format!",
+        "pagination-controls": {
+            "page-size-selector": "Rows per page: ",
+            "rows-count": {
+                "no-data": "Rows 0-0 (no data)",
+                "data": "Rows",
+                "out-of": "out of"
+            }
+        }
+    },
+    "architecture": {
+        "title": "Architecture",
+        "model-controls": {
+            "title": "Model controls",
+            "buttons": {
+                "import": "Import",
+                "export": "Export"
+            }
+        },
+        "tf-layers": "TensorFlow layers",
+        "dataset-splitting-options": {
+            "title": "Dataset splitting options",
+            "sliders": {
+                "training-sample-size": "Training sample size",
+                "test-sample-size": "Test sample size",
+                "validation-sample-size": "Validation sample size"
+            }
+        },
+        "ai-model-options": {
+            "title": "AI model options",
+            "comboboxes": {
+                "loss-function": "Loss function",
+                "optimizer": "Optimizer",
+                "quality-metric": "Quality metric"
+            },
+            "fields": {
+                "number-of-training-epochs": "Number of training epochs",
+                "mini-batch-size": "Mini-batch size"
+            }
+        },
+        "additional-options": {
+            "title": "Additional options",
+            "comboboxes": {
+                "enable-dataset-normalization": {
+                    "title": "Enable dataset normalization",
+                    "values": {
+                        "disable": "Disable",
+                        "enable": "Enable"
+                    }
+                }
+            }
+        }
+    },
+    "training": {
+        "title": "Training",
+        "status": {
+            "title": "Status",
+            "epoch": "Epoch"
+        },
+        "logs": "Logs",
+        "performance-metrics": "Performance metrics",
+        "controls": "Controls",
+        "buttons": {
+            "start-training": {
+                "part-1": "START",
+                "part-2": "TRAINING"
+            },
+            "get-h5": "Get *.H5",
+            "get-keras": "Get *.KERAS",
+            "get-savedmodel": "Get *.SavedModel",
+            "get-py": "Get *.PY",
+            "get-exe": "Get *.EXE"
+        },
+        "charts": "Charts"
+    },
+    "preferences": {
+        "title": "Preferences",
+        "language": "Language",
+        "theme": "Theme",
+        "themes": {
+            "light": "Light",
+            "dark": "Dark",
+            "system": "System"
+        },
+        "languages": {
+            "ru-ru": "Russian, Russia",
+            "en-us": "English, USA"
+        }
+    }
+}

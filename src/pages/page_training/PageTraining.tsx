@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { useEffect, useRef, useState } from 'react';
 import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { LazyLog } from '@melloware/react-logviewer';
@@ -37,16 +39,19 @@ import {
 import { getModelHash } from '../../utils/GetModelHash';
 import api from '../../api/API';
 
+
 // Регистрация компонентов графика
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Title);
 
-const DEFAULT_WIDTH_PX = 900;
-const MIN_WIDTH_PX = 800;
-const MAX_WIDTH_PX = 1200;
+const DEFAULT_WIDTH_PX = 920;
+const MIN_WIDTH_PX = 860;
+const MAX_WIDTH_PX = 1400;
 
 const PAGE_COLOR = '#689f38';
 
 const PageTraining = () => {
+    const { t, i18n } = useTranslation();
+    
     const containerRef = useRef<HTMLDivElement>(null);
     const mainPanelRef = useRef<ImperativePanelHandle>(null);
 
@@ -485,11 +490,11 @@ const PageTraining = () => {
                     className="main-content"
                 >
                     <div className="status">
-                        <Header4Container text="Status" className="status__header" />
+                        <Header4Container text={t('training.status.title')} className="status__header" />
                         <div className="status__content">
                             <ProgressBar
                                 now={(getCurrentEpoch() * 100.0) / epochs}
-                                label={`Epoch ${getCurrentEpoch()} / ${epochs}`}
+                                label={`${t('training.status.epoch')} ${getCurrentEpoch()} / ${epochs}`}
                                 className="my-custom-progress-bar"
                             />
                         </div>
@@ -497,7 +502,7 @@ const PageTraining = () => {
 
                     {/* // TODO: если логов нет, обозначить текст юзеру, что тут будут логи */}
                     <div className="logs">
-                        <Header4Container text="Logs" className="logs__header" />
+                        <Header4Container text={t('training.logs')} className="logs__header" />
                         <div className="logs__content">
                             {/* <ScrollFollow
                                 startFollowing={true}
@@ -539,7 +544,7 @@ const PageTraining = () => {
                     </div>
 
                     <div className="performance-metrics">
-                        <Header4Container text="Performance metrics" className="performance-metrics__header" />
+                        <Header4Container text={t('training.performance-metrics')} className="performance-metrics__header" />
                         <div className="performance-metrics__content">
                             <div className="readonly-fields-block">
                                 <BeautifulField
@@ -673,27 +678,27 @@ const PageTraining = () => {
                     </div> */}
 
                     <div className="controls">
-                        <Header4Container text="Controls" className="controls__header" />
+                        <Header4Container text={t('training.controls')} className="controls__header" />
                         <div className="controls__content">
                             <Button onClick={sendDatasetWithArchitectureAndStartModelTrain} id="button-start-training">
-                                START
+                                {t('training.buttons.start-training.part-1')}
                                 <br/>
-                                TRAINING
+                                {t('training.buttons.start-training.part-2')}
                             </Button>
 
                             <div className="separator"></div>
 
                             <div className="buttons-block buttons-block--vertical" id='export-functions'>
-                                <Button onClick={getH5ModelFile}>Get *.H5</Button>
-                                <Button onClick={getKerasModelFile}>Get *.KERAS</Button>
-                                <Button onClick={getSavedModelArchive}>Get *.SavedModel</Button>
+                                <Button onClick={getH5ModelFile}>{t('training.buttons.get-h5')}</Button>
+                                <Button onClick={getKerasModelFile}>{t('training.buttons.get-keras')}</Button>
+                                <Button onClick={getSavedModelArchive}>{t('training.buttons.get-savedmodel')}</Button>
                             </div>
 
                             <div className="separator"></div>
 
                             <div className="buttons-block buttons-block--vertical" id='compile-functions'>
-                                <Button disabled>Get *.PY</Button>
-                                <Button disabled>Get *.EXE</Button>
+                                <Button disabled>{t('training.buttons.get-py')}</Button>
+                                <Button disabled>{t('training.buttons.get-exe')}</Button>
                             </div>
                         </div>
                     </div>
@@ -702,7 +707,7 @@ const PageTraining = () => {
                 <PanelResizeHandle className="my-custom-resize-handle my-custom-resize-handle--training" />
 
                 <Panel defaultSize={100 - (mainPanelRef.current?.getSize() ?? mainPanelMaxSize)} className="charts-bar">
-                    <Header4Container className="charts-bar__header" text="Charts" />
+                    <Header4Container className="charts-bar__header" text={t('training.charts')} />
                     <div className="charts-bar__content">
                         <div className="chart">
                             <Line key="loss-metric-chart" {...lossMetricChart()} />

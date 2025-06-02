@@ -4,6 +4,15 @@ import { BrowserRouter } from 'react-router-dom';
 
 import App from './App.tsx';
 
+// languages
+import './locales/i18n';
+import i18n from 'i18next';
+
+const savedLanguage = localStorage.getItem('language');
+if (savedLanguage) {
+    i18n.changeLanguage(savedLanguage);
+}
+
 // styles
 import './styles/_custom_bootstrap.scss';
 import './index.scss';

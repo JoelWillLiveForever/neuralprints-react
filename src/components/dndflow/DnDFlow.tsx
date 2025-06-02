@@ -72,8 +72,8 @@ const nodeTypes: NodeTypes = {
 let id = 0;
 const getId = () => `tensorflow_node_${id++}`;
 
-const SIDEBAR_DEFAULT_SIZE_IN_PX = 375;
-const SIDEBAR_MIN_SIZE_IN_PX = 300;
+const SIDEBAR_DEFAULT_SIZE_IN_PX = 415;
+const SIDEBAR_MIN_SIZE_IN_PX = 375;
 const SIDEBAR_MAX_SIZE_IN_PX = 500;
 
 const DnDFlow: React.FC = () => {

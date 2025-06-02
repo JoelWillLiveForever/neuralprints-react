@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import React from 'react';
 import { useDnD } from '../../context/DnDContext';
 import { useArchitectureStore } from '../../store/ArchitectureStore';
@@ -17,6 +19,8 @@ import { build_architecture_data, TypedNode } from '../../utils/BuildArchitectur
 const PAGE_COLOR = '#E64A19';
 
 const Sidebar: React.FC = () => {
+    const { t, i18n } = useTranslation();
+
     const [, setType] = useDnD();
 
     // Забираем данные из Zustand
@@ -319,13 +323,13 @@ const Sidebar: React.FC = () => {
 
     return (
         <aside className="sidebar">
-            <Header4Container className="model-controls-header" text="Model controls" />
+            <Header4Container className="model-controls-header" text={t('architecture.model-controls.title')} />
             <div className="model-controls">
-                <Button onClick={handleModelmport}>Import</Button>
-                <Button onClick={handleModelExport}>Export</Button>
+                <Button onClick={handleModelmport}>{t('architecture.model-controls.buttons.import')}</Button>
+                <Button onClick={handleModelExport}>{t('architecture.model-controls.buttons.export')}</Button>
             </div>
 
-            <Header4Container className="tensorflow-layers-header" text="TensorFlow layers" />
+            <Header4Container className="tensorflow-layers-header" text={t('architecture.tf-layers')} />
             <div className="tensorflow-layers">
                 <div
                     className="tf-layer tf-layer__input"
@@ -384,7 +388,7 @@ const Sidebar: React.FC = () => {
                 </div>
             </div>
 
-            <Header4Container className="dataset-splitting-options-header" text="Dataset splitting options" />
+            <Header4Container className="dataset-splitting-options-header" text={t('architecture.dataset-splitting-options.title')} />
             <div className="dataset-splitting-options">
                 <BeautifulSlider
                     value={train_split}
@@ -395,7 +399,7 @@ const Sidebar: React.FC = () => {
                     step={0.001}
                     color={PAGE_COLOR}
                     root="sidebar"
-                    label="Training sample size"
+                    label={t('architecture.dataset-splitting-options.sliders.training-sample-size')}
                 />
 
                 <BeautifulSlider
@@ -407,7 +411,7 @@ const Sidebar: React.FC = () => {
                     step={0.001}
                     color={PAGE_COLOR}
                     root="sidebar"
-                    label="Test sample size"
+                    label={t('architecture.dataset-splitting-options.sliders.test-sample-size')}
                 />
 
                 <BeautifulSlider
@@ -419,17 +423,17 @@ const Sidebar: React.FC = () => {
                     step={0.001}
                     color={PAGE_COLOR}
                     root="sidebar"
-                    label="Validation sample size"
+                    label={t('architecture.dataset-splitting-options.sliders.validation-sample-size')}
                 />
             </div>
 
-            <Header4Container className="ai-model-options-header" text="AI model options" />
+            <Header4Container className="ai-model-options-header" text={t('architecture.ai-model-options.title')} />
             <div className="ai-model-options">
                 <BeautifulComboBox
                     value={loss_function}
                     onChange={(e) => setLossFunction(e.target.value)}
                     root="sidebar"
-                    label="Loss function"
+                    label={t('architecture.ai-model-options.comboboxes.loss-function')}
                     placeholder="Select loss function"
                     color={PAGE_COLOR}
                 >
@@ -459,7 +463,7 @@ const Sidebar: React.FC = () => {
                     value={optimizer}
                     onChange={(e) => setOptimizer(e.target.value)}
                     root="sidebar"
-                    label="Optimizer"
+                    label={t('architecture.ai-model-options.comboboxes.optimizer')}
                     placeholder="Select optimizer"
                     color={PAGE_COLOR}
                 >
@@ -481,7 +485,7 @@ const Sidebar: React.FC = () => {
                     value={quality_metric}
                     onChange={(e) => setQualityMetric(e.target.value)}
                     root="sidebar"
-                    label="Quality metric"
+                    label={t('architecture.ai-model-options.comboboxes.quality-metric')}
                     placeholder="Select quality metric"
                     color={PAGE_COLOR}
                 >
@@ -555,7 +559,7 @@ const Sidebar: React.FC = () => {
                     max={1000}
                     step={1}
                     type="numeric"
-                    label="Number of training epochs"
+                    label={t('architecture.ai-model-options.fields.number-of-training-epochs')}
                     color={PAGE_COLOR}
                     // readOnly={true}
                 />
@@ -574,22 +578,22 @@ const Sidebar: React.FC = () => {
                     max={256}
                     step={8}
                     type="numeric"
-                    label="Mini-batch size"
+                    label={t('architecture.ai-model-options.fields.mini-batch-size')}
                     color={PAGE_COLOR}
                 />
             </div>
 
-            <Header4Container className="additional-options-header" text="Additional options" />
+            <Header4Container className="additional-options-header" text={t('architecture.additional-options.title')} />
             <div className="additional-options">
                 <BeautifulComboBox
                     value={enable_dataset_normalization ? 'on' : 'off'}
                     onChange={(e) => setEnableDatasetNormalization(e.target.value === 'on' ? true : false)}
                     root="sidebar"
-                    label="Enable dataset normalization"
+                    label={t('architecture.additional-options.comboboxes.enable-dataset-normalization.title')}
                     color={PAGE_COLOR}
                 >
-                    <option value="off">Disable</option>
-                    <option value="on">Enable</option>
+                    <option value="off">{t('architecture.additional-options.comboboxes.enable-dataset-normalization.values.disable')}</option>
+                    <option value="on">{t('architecture.additional-options.comboboxes.enable-dataset-normalization.values.enable')}</option>
                 </BeautifulComboBox>
             </div>
         </aside>
