@@ -85,7 +85,7 @@
         }
     },
     "training": {
-        "title": "Настройки",
+        "title": "Обучение",
         "status": {
             "title": "Статус",
             "epoch": "Эпоха"
