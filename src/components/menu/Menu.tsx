@@ -43,13 +43,13 @@ const Menu = ({ isCollapsed }: { isCollapsed: boolean }) => {
                 {!isCollapsed && <span className="menu__button__text">Training</span>}
             </NavLink>
 
-            <NavLink
+            {/* <NavLink
                 to="/inference"
                 className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--inference' })}
             >
                 <i className="bi bi-rocket-takeoff-fill menu__button__icon"></i>
                 {!isCollapsed && <span className="menu__button__text">Inference</span>}
-            </NavLink>
+            </NavLink> */}
 
             <NavLink
                 to="/preferences"

@@ -1,14 +1,16 @@
 import React from 'react';
 import { useDnD } from '../../context/DnDContext';
+import { useArchitectureStore } from '../../store/ArchitectureStore';
 
 import Header4Container from '../header_4_container/Header4Container';
 
-import './sidebar.scss';
 import BeautifulSlider from '../beautiful_slider/BeautifulSlider';
-
-import { useArchitectureStore } from '../../store/ArchitectureStore';
 import BeautifulComboBox from '../beautiful_combo_box/BeautifulComboBox';
 import BeautifulField from '../beautiful_field/BeautifulField';
+
+import { Button } from 'react-bootstrap';
+
+import './sidebar.scss';
 
 const PAGE_COLOR = "#E64A19";
 
@@ -215,6 +217,12 @@ const Sidebar: React.FC = () => {
 
     return (
         <aside className="sidebar">
+            <Header4Container className="model-controls-header" text="Model controls" />
+            <div className="model-controls">
+                <Button />
+                <Button />
+            </div>
+
             <Header4Container className="tensorflow-layers-header" text="TensorFlow layers" />
             <div className="tensorflow-layers">
                 <div

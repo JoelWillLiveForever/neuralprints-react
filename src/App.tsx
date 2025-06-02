@@ -7,7 +7,7 @@ import Menu from './components/menu/Menu';
 
 import PageHelp from './pages/page_help/PageHelp';
 import PagePreferences from './pages/page_preferences/PagePreferences';
-import PageInference from './pages/page_inference/PageInference';
+// import PageInference from './pages/page_inference/PageInference';
 import PageTraining from './pages/page_training/PageTraining';
 import PageArchitecture from './pages/page_architecture/PageArchitecture';
 import PageDataset from './pages/page_dataset/PageDataset';
@@ -106,7 +106,7 @@ const App = () => {
                             <Route path="/dataset" element={<PageDataset />} />
                             <Route path="/architecture" element={<PageArchitecture />} />
                             <Route path="/training" element={<PageTraining />} />
-                            <Route path="/inference" element={<PageInference />} />
+                            {/* <Route path="/inference" element={<PageInference />} /> */}
                             <Route path="/preferences" element={<PagePreferences />} />
                             <Route path="/help" element={<PageHelp />} />
                         </Routes>
