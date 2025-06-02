@@ -569,6 +569,73 @@ const PageTraining = () => {
         }
     };
 
+    const getNumberOfFeatures = (): number => {
+        const columnTypes = useDatasetStore.getState().column_types;
+        return columnTypes.filter((type) => type === 'feature').length;
+    };
+
+    // const getPythonFile = async () => {
+    //     const modelHash = getModelHash();
+    //     const nFeatures = getNumberOfFeatures(); // Получи количество признаков из своего стора или стейта
+
+    //     console.log(`[getPythonFile()] --- Хэш модели: ${modelHash}`);
+    //     console.log(`[getPythonFile()] --- Кол-во признаков: ${nFeatures}`);
+
+    //     if (!modelHash || !nFeatures) {
+    //         alert('Не удалось вычислить хэш модели или число признаков');
+    //         return;
+    //     }
+
+    //     try {
+    //         const response = await api.get(`/api/executables/${modelHash}/download/python`, {
+    //             responseType: 'blob',
+    //             params: {
+    //                 n_features: nFeatures,
+    //             },
+    //         });
+
+    //         const blob = new Blob([response.data], { type: 'text/x-python' });
+    //         const fileName = `${modelHash}_inference.py`;
+
+    //         saveAs(blob, fileName);
+    //     } catch (error) {
+    //         if (error instanceof Error) {
+    //             console.error('Ошибка при загрузке Python-файла модели:', error);
+    //             alert('Ошибка при загрузке Python-файла модели: ' + error.message);
+    //         } else {
+    //             alert('Произошла неизвестная ошибка!');
+    //         }
+    //     }
+    // };
+
+    const getPythonFile = async () => {
+        const modelHash = getModelHash();
+        const nFeatures = getNumberOfFeatures();
+
+        console.log(`[getPythonFile()] --- Хэш модели: ${modelHash}`);
+        console.log(`[getPythonFile()] --- Кол-во признаков: ${nFeatures}`);
+
+        if (!modelHash || !nFeatures) {
+            alert('Не удалось вычислить хэш модели или число признаков');
+            return;
+        }
+
+        try {
+            const response = await api.get(`/api/executables/${modelHash}/download/python`, {
+                params: { n_features: nFeatures },
+                responseType: 'blob',
+            });
+
+            const blob = new Blob([response.data], { type: 'application/zip' });
+            const fileName = `${modelHash}_inference_bundle.zip`;
+
+            saveAs(blob, fileName);
+        } catch (error) {
+            alert('Ошибка при загрузке архива для инференса');
+            console.error(error);
+        }
+    };
+
     return (
         <div className="page-training-container" ref={containerRef}>
             <PanelGroup autoSaveId="training_panels" direction="horizontal">
@@ -797,7 +864,9 @@ const PageTraining = () => {
                             <div className="separator"></div>
 
                             <div className="buttons-block buttons-block--vertical" id="compile-functions">
-                                <Button disabled={!isTrainingCompleted}>{t('training.buttons.get-py')}</Button>
+                                <Button disabled={!isTrainingCompleted} onClick={getPythonFile}>
+                                    {t('training.buttons.get-py')}
+                                </Button>
                                 <Button disabled>{t('training.buttons.get-exe')}</Button>
                             </div>
                         </div>
