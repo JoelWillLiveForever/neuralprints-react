@@ -132,7 +132,7 @@
             },
             "step-2": {
                 "title": "Step 2",
-                "text": "Drag and drop layers from the side panel onto the canvas to build your neural network. You can configure, connect, move, or delete each layer. Make sure to include an Input layer with the correct number of neurons — this must match the number of input features. Configure the final Output layer (typically a Dense layer) according to your task — e.g., binary or multiclass classification. You can also set training parameters such as the number of epochs, loss functions, evaluation metrics, and the dataset split ratio (training, validation, test)."
+                "text": "Drag and drop layers from the side panel into the workspace to construct your neural network architecture. Each layer can be configured, connected, moved, and removed as needed. Make sure to add an \"Input\" layer — its number of neurons should match the number of input features. The final \"Output\" layer (usually a \"Dense\" layer) must also be properly configured: the number of neurons depends on your task (e.g., binary or multiclass classification). At this stage, you can also set training parameters: number of epochs, loss functions, metrics, and dataset split proportions for training, validation, and testing. Additionally, the side panel includes an \"Export\" button, which allows you to save the architecture and hyperparameters to a JSON file. You can later import this file (\"Import\" button) to restore your project or continue working with a similar configuration."
             },
             "step-3": {
                 "title": "Step 3",
