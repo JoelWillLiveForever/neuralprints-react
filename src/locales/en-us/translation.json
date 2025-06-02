@@ -106,6 +106,9 @@
         },
         "charts": "Charts"
     },
+    "inference": {
+        "title": "Inference"
+    },
     "preferences": {
         "title": "Preferences",
         "language": "Language",
@@ -119,5 +122,8 @@
             "ru-ru": "Russian, Russia",
             "en-us": "English, USA"
         }
+    },
+    "help": {
+        "title": "Help"
     }
 }
