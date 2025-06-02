@@ -697,7 +697,7 @@ const PageTraining = () => {
                             <div className="separator"></div>
 
                             <div className="buttons-block buttons-block--vertical" id='compile-functions'>
-                                <Button disabled>{t('training.buttons.get-py')}</Button>
+                                <Button>{t('training.buttons.get-py')}</Button>
                                 <Button disabled>{t('training.buttons.get-exe')}</Button>
                             </div>
                         </div>
