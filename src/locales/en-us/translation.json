@@ -144,5 +144,9 @@
             }
         },
         "copyright": "© 2025 Vladimir Nikulin. All rights reserved."
+    },
+    "main": {
+        "title": "Main",
+        "copyright": "© 2025 Vladimir Nikulin. All rights reserved."
     }
 }

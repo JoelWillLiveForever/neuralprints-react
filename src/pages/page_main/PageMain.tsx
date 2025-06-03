@@ -15,7 +15,7 @@ const PageMain = () => {
 
             <footer className="main-footer">
                 <hr className="footer-separator" />
-                <div className="footer-copy">© 2025 Vladimir Nikulin. All rights reserved.</div>
+                <div className="footer-copy">{t('main.copyright')}</div>
             </footer>
         </div>
     );

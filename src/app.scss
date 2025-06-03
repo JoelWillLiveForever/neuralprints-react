@@ -79,12 +79,12 @@
 
         &--main {
             &::before {
-                background-color: #616161de;
+                background-color: #424242de;
             }
 
             &:hover::before,
             &:active::before {
-                background-color: #616161ff;
+                background-color: #424242ff;
             }
         }
 
