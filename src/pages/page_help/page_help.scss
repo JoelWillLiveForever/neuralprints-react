@@ -47,6 +47,8 @@
 
                 img {
                     width: 100%;
+                    height: auto; // например, фиксированная высота
+                    // object-fit: cover; // или cover — зависит от желаемого вида
                     border-radius: 12px;
                     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
                 }

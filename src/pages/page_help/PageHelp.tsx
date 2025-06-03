@@ -54,7 +54,7 @@ const PageHelp = () => {
                             <p>{step.text}</p>
                         </div>
                         <div className="help-image">
-                            <img src={step.image} alt={`Step ${index + 1}`} />
+                            <img loading="eager" src={step.image} alt={`Step ${index + 1}`} style={{ opacity: 0, transition: 'opacity 0.5s' }} onLoad={(e) => e.currentTarget.style.opacity = '1'} />
                         </div>
                     </section>
                 ))}
