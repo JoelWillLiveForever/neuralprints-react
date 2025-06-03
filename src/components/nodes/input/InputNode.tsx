@@ -7,7 +7,7 @@ import './input_node.scss';
 import BeautifulField from '../../beautiful_field/BeautifulField';
 
 const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) => {
-    const { setNodes } = useReactFlow<InputNodeType>(); // Типизируем useReactFlow
+    const { setNodes, setEdges } = useReactFlow<InputNodeType>(); // Типизируем useReactFlow
 
     const handleChange = (field: keyof InputNodeData, value: string | number) => {
         setNodes((nodes) =>
@@ -15,10 +15,20 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
         );
     };
 
+    const handleDeleteNode = () => {
+        setNodes((nodes) => nodes.filter((node) => node.id !== id));
+        setEdges((edges) => edges.filter((edge) => edge.source !== id && edge.target !== id));
+    };
+
     return (
         <div className={`tf-node-input ${selected ? 'border-blue-500' : 'border-gray-300'}`}>
             {/* Заголовок */}
-            <div className="tf-node-input__header">Input</div>
+            <div className="tf-node-input__header">
+                <span>Input</span>
+                <button onClick={handleDeleteNode} className="delete-btn" title="Delete node">
+                    <i className="bi bi-trash-fill"></i>
+                </button>
+            </div>
 
             {/* Поля */}
             <div className="tf-node-input__body">
@@ -27,8 +37,8 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
                     onChange={(e) => handleChange('tf_layer_name', e.target.value)}
                     type="text"
                     label="Name"
-                    placeholder='Input layer name'
-                    color='#D32F2F'
+                    placeholder="Input layer name"
+                    color="#D32F2F"
                 />
 
                 {/* <div className="property">
@@ -57,7 +67,7 @@ const InputNode: React.FC<NodeProps<InputNodeType>> = ({ id, data, selected }) =
                     step={1}
                     type="numeric"
                     label="Neurons"
-                    color='#D32F2F'
+                    color="#D32F2F"
                 />
 
                 {/* <div className="property">

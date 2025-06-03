@@ -10,7 +10,8 @@ import {
     useReactFlow,
     Background,
     Connection,
-    Edge,
+    Node as RFNode,
+    Edge as RFEdge,
     BackgroundVariant,
     MiniMap,
 } from '@xyflow/react';
@@ -26,11 +27,13 @@ import DropoutNode from '../nodes/dropout/DropoutNode';
 import GaussianDropoutNode from '../nodes/gaussian_dropout/GaussianDropoutNode';
 import GaussianNoiseNode from '../nodes/gaussian_noise/GaussianNoiseNode';
 import FlattenNode from '../nodes/flatten/FlattenNode';
+import Conv2DNode from '../nodes/conv_2d/Conv2DNode';
+
+import { useArchitectureStore } from '../../store/ArchitectureStore';
 
 /* import styles */
 import '@xyflow/react/dist/style.css';
 import './dnd_flow.scss';
-import Conv2DNode from '../nodes/conv_2d/Conv2DNode';
 
 const proOptions = { hideAttribution: false };
 
@@ -54,24 +57,37 @@ const nodeTypes: NodeTypes = {
     TF_FLATTEN_LAYER_NODE: FlattenNode,
 };
 
-const initialNodes = [
-    {
-        id: '1',
-        type: 'TF_INPUT_LAYER_NODE' as const,
-        position: { x: 0, y: 0 },
-        data: {
-            tf_layer_name: 'input_layer',
-            tf_layer_neurons_count: 128,
-        },
-    },
-];
+// const initialNodes = [
+//     {
+//         id: '1',
+//         type: 'TF_INPUT_LAYER_NODE' as const,
+//         position: { x: 0, y: 0 },
+//         data: {
+//             tf_layer_name: 'input_layer',
+//             tf_layer_neurons_count: 128,
+//         },
+//     },
+// ];
 
 let id = 0;
 const getId = () => `tensorflow_node_${id++}`;
 
+const SIDEBAR_DEFAULT_SIZE_IN_PX = 415;
+const SIDEBAR_MIN_SIZE_IN_PX = 375;
+const SIDEBAR_MAX_SIZE_IN_PX = 500;
+
 const DnDFlow: React.FC = () => {
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const {
+        nodes,
+        edges,
+        setNodes,
+        setEdges,
+        onNodesChange,
+        onEdgesChange
+    } = useArchitectureStore();
+
+    // const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+    // const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
     const { screenToFlowPosition } = useReactFlow();
 
@@ -84,21 +100,29 @@ const DnDFlow: React.FC = () => {
     const { fitView } = useReactFlow();
     const [isFitViewExecuted, setIsFitViewExecuted] = useState(false);
 
-    // const CURRENT_MENU_SIZE_IN_PX = menuSize / 100.0 * window.innerWidth;
-    const PAGE_CONTAINER_WIDTH = dndFlowWrapper.current?.getBoundingClientRect().width || window.innerWidth;
+    const getPct = (px: number) => {
+        const containerWidth = dndFlowWrapper.current?.getBoundingClientRect().width ?? window.innerWidth;
+        return (px / containerWidth) * 100;
+    };
 
-    const SIDEBAR_DEFAULT_SIZE_IN_PX = 375;
-    const [sidebarDefaultSize, setMenuDefaultSize] = useState(
-        (SIDEBAR_DEFAULT_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100
-    );
+    const [sidebarDefaultSize, setMenuDefaultSize] = useState(getPct(SIDEBAR_DEFAULT_SIZE_IN_PX));
+    const [sidebarMinSize, setMenuMinSize] = useState(getPct(SIDEBAR_MIN_SIZE_IN_PX));
+    const [sidebarMaxSize, setMenuMaxSize] = useState(getPct(SIDEBAR_MAX_SIZE_IN_PX));
 
-    const SIDEBAR_MIN_SIZE_IN_PX = 300;
-    const [sidebarMinSize, setMenuMinSize] = useState((SIDEBAR_MIN_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
-    const SIDEBAR_MAX_SIZE_IN_PX = 500;
-    const [sidebarMaxSize, setMenuMaxSize] = useState((SIDEBAR_MAX_SIZE_IN_PX / PAGE_CONTAINER_WIDTH) * 100);
+    useEffect(() => {
+        // Обновляем размеры sidebar на основе ширины окна
+        const updateSidebarPanelSizes = () => {
+            setMenuDefaultSize(getPct(SIDEBAR_DEFAULT_SIZE_IN_PX));
+            setMenuMinSize(getPct(SIDEBAR_MIN_SIZE_IN_PX));
+            setMenuMaxSize(getPct(SIDEBAR_MAX_SIZE_IN_PX));
+        };
 
-    // Обновляем размер меню при изменении окна
+        window.addEventListener('resize', updateSidebarPanelSizes);
+        return () => window.removeEventListener('resize', updateSidebarPanelSizes);
+    }, []);
+
     useEffect(() => {
         // вызвать один раз при первом рендеринге страницы
         // центрирование диаграммы
@@ -109,27 +133,18 @@ const DnDFlow: React.FC = () => {
 
             setIsFitViewExecuted(true);
         }
-
-        const handleResize = () => {
-            const dndFlowWidth = dndFlowWrapper.current?.getBoundingClientRect().width || window.innerWidth;
-            // console.log('Текущая ширина меню:', dndFlowWidth);
-
-            setMenuDefaultSize((SIDEBAR_DEFAULT_SIZE_IN_PX / dndFlowWidth) * 100);
-
-            setMenuMinSize((SIDEBAR_MIN_SIZE_IN_PX / dndFlowWidth) * 100);
-            setMenuMaxSize((SIDEBAR_MAX_SIZE_IN_PX / dndFlowWidth) * 100);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => window.removeEventListener('resize', handleResize);
     }, [fitView, isFitViewExecuted]);
 
     const onConnect = useCallback(
         (params: Connection) => {
-            setEdges((edges) => addEdge(params, edges));
+            const newEdge = {
+                ...params,
+                id: `${params.source}-${params.target}`
+            };
+            // setEdges((edges) => addEdge(params, edges));
+            setEdges(addEdge(newEdge, edges));
         },
-        [setEdges]
+        [edges, setEdges]
     );
 
     const onDragOver = useCallback((event: React.DragEvent) => {
@@ -179,9 +194,10 @@ const DnDFlow: React.FC = () => {
                 data: getNodeData(type),
             };
 
-            setNodes((nodes) => nodes.concat(newNode));
+            // setNodes((nodes) => nodes.concat(newNode));
+            setNodes([...nodes, newNode]);
         },
-        [screenToFlowPosition, setNodes, type]
+        [nodes, setNodes, type, screenToFlowPosition]
     );
 
     const getNodeData = (type: string) => {
@@ -226,7 +242,7 @@ const DnDFlow: React.FC = () => {
                     tf_layer_use_bias: 1,
                 };
             case 'TF_FLATTEN_LAYER_NODE':
-                return;
+                return {};
             default:
                 return { label: type };
         }
@@ -234,8 +250,8 @@ const DnDFlow: React.FC = () => {
 
     return (
         <div className="dnd-flow" ref={dndFlowWrapper}>
-            <PanelGroup autoSaveId="persistence" direction="horizontal">
-                <Panel defaultSize={100 - (sidebarWrapper.current?.getSize() || sidebarMaxSize)}>
+            <PanelGroup autoSaveId="architecture_sidebar" direction="horizontal">
+                <Panel defaultSize={100 - (sidebarWrapper.current?.getSize() ?? sidebarMaxSize)}>
                     <div className="react-flow-wrapper">
                         <ReactFlow
                             nodes={nodes}
@@ -256,13 +272,16 @@ const DnDFlow: React.FC = () => {
                         </ReactFlow>
                     </div>
                 </Panel>
-                <PanelResizeHandle />
+                <PanelResizeHandle className={`my-custom-resize-handle my-custom-resize-handle--architecture ${isSidebarCollapsed ? 'my-custom-resize-handle--collapsed' : ''}`} />
                 <Panel
                     collapsible
                     defaultSize={sidebarDefaultSize}
                     minSize={sidebarMinSize}
                     maxSize={sidebarMaxSize}
                     ref={sidebarWrapper}
+
+                    onCollapse={() => setIsSidebarCollapsed(true)}
+                    onExpand={() => setIsSidebarCollapsed(false)}
                 >
                     <Sidebar />
                 </Panel>
@@ -272,125 +291,3 @@ const DnDFlow: React.FC = () => {
 };
 
 export default DnDFlow;
-
-// import React, { useCallback, useState, type ChangeEventHandler } from 'react';
-// import {
-//   ReactFlow,
-//   addEdge,
-//   useNodesState,
-//   useEdgesState,
-//   MiniMap,
-//   Background,
-//   BackgroundVariant,
-//   Controls,
-//   Connection,
-//   Panel,
-//   Position,
-//   type Node,
-//   type Edge,
-//   type ColorMode,
-//   type OnConnect,
-// } from '@xyflow/react';
-
-// import '@xyflow/react/dist/style.css';
-// import './page_training.scss';
-
-// // const initialNodes = [
-// //   { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
-// //   { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
-// // ];
-// // const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
-
-// const nodeDefaults = {
-//   sourcePosition: Position.Right,
-//   targetPosition: Position.Left,
-// };
-
-// const initialNodes: Node[] = [
-//   {
-//     id: 'A',
-//     type: 'input',
-//     position: { x: 0, y: 150 },
-//     data: { label: 'A' },
-//     ...nodeDefaults,
-//   },
-//   {
-//     id: 'B',
-//     position: { x: 250, y: 0 },
-//     data: { label: 'B' },
-//     ...nodeDefaults,
-//   },
-//   {
-//     id: 'C',
-//     position: { x: 250, y: 150 },
-//     data: { label: 'C' },
-//     ...nodeDefaults,
-//   },
-//   {
-//     id: 'D',
-//     position: { x: 250, y: 300 },
-//     data: { label: 'D' },
-//     ...nodeDefaults,
-//   },
-// ];
-
-// const initialEdges: Edge[] = [
-//   {
-//     id: 'A-B',
-//     source: 'A',
-//     target: 'B',
-//   },
-//   {
-//     id: 'A-C',
-//     source: 'A',
-//     target: 'C',
-//   },
-//   {
-//     id: 'A-D',
-//     source: 'A',
-//     target: 'D',
-//   },
-// ];
-
-// const PageTraining = () => {
-//   const [colorMode, setColorMode] = useState<ColorMode>('light');
-//   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-//   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-//   const onConnect = useCallback(
-//     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-//     [setEdges],
-//   );
-
-//   const onChange: ChangeEventHandler<HTMLSelectElement> = (evt) => {
-//     setColorMode(evt.target.value as ColorMode);
-//   };
-
-//   return (
-//     <div style={{ width: '100%', height: '100%' }}>
-//       <ReactFlow
-//         nodes={nodes}
-//         edges={edges}
-//         onNodesChange={onNodesChange}
-//         onEdgesChange={onEdgesChange}
-//         onConnect={onConnect}
-//         colorMode={colorMode}
-//         fitView
-//       >
-//         <Controls />
-//         <MiniMap />
-//         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-
-//         {/* <Panel position="top-right">
-//           <select onChange={onChange} data-testid="colormode-select">
-//             <option value="dark">dark</option>
-//             <option value="light">light</option>
-//             <option value="system">system</option>
-//           </select>
-//         </Panel> */}
-//       </ReactFlow>
-//     </div>
-//   )
-// }
-
-// export default PageTraining;

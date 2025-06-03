@@ -1,9 +1,11 @@
 export interface BeautifulFieldBaseProps {
-    root?: 'node' | 'sidebar';
+    variant?: 'variant-1' | 'variant-2';
     className?: string;
 
     color?: string;
     label?: string;
+
+    readOnly?: boolean;
 }
 
 export interface BeautifulFieldTextProps extends BeautifulFieldBaseProps {
@@ -12,7 +14,7 @@ export interface BeautifulFieldTextProps extends BeautifulFieldBaseProps {
     value: string;
     placeholder?: string;
 
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface BeautifulFieldNumericProps extends BeautifulFieldBaseProps {
@@ -24,8 +26,8 @@ export interface BeautifulFieldNumericProps extends BeautifulFieldBaseProps {
     max?: number;
     step?: number;
 
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onWheel: (e: React.WheelEvent) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onWheel?: (e: React.WheelEvent) => void;
 }
 
 export interface BeautifulFieldTextDoubleProps extends BeautifulFieldBaseProps {
@@ -37,8 +39,8 @@ export interface BeautifulFieldTextDoubleProps extends BeautifulFieldBaseProps {
     value_2: string;
     placeholder_2?: string;
 
-    onChange_1: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onChange_2: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange_1?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange_2?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface BeautifulFieldNumericDoubleProps extends BeautifulFieldBaseProps {
@@ -56,11 +58,15 @@ export interface BeautifulFieldNumericDoubleProps extends BeautifulFieldBaseProp
     max_2?: number;
     step_2?: number;
 
-    onChange_1: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onWheel_1: (e: React.WheelEvent) => void;
+    onChange_1?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onWheel_1?: (e: React.WheelEvent) => void;
 
-    onChange_2: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onWheel_2: (e: React.WheelEvent) => void;
+    onChange_2?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onWheel_2?: (e: React.WheelEvent) => void;
 }
 
-export type BeautifulFieldProps = BeautifulFieldTextProps | BeautifulFieldNumericProps | BeautifulFieldTextDoubleProps | BeautifulFieldNumericDoubleProps;
+export type BeautifulFieldProps =
+    | BeautifulFieldTextProps
+    | BeautifulFieldNumericProps
+    | BeautifulFieldTextDoubleProps
+    | BeautifulFieldNumericDoubleProps;

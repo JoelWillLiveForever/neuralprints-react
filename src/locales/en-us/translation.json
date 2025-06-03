@@ -1,0 +1,152 @@
+{
+    "dataset": {
+        "title": "Dataset",
+        "main-controls": {
+            "buttons": {
+                "dataset-management": {
+                    "title": "Dataset management",
+                    "items": {
+                        "upload": "Upload",
+                        "save": "Save",
+                        "clear": "Clear"
+                    },
+                    "placeholder": "The file name of your dataset will be displayed here."
+                },
+                "normalize": "Normalize",
+                "add-entry": "Add entry"
+            }
+        },
+        "table": {
+            "column_types": {
+                "feature": "Feature",
+                "target": "Target",
+                "ignored": "Ignored"
+            },
+            "actions-column": {
+                "title": "Actions",
+                "buttons": {
+                    "delete": "Delete",
+                    "save": "Save",
+                    "cancel": "Cancel"
+                }
+            }
+        },
+        "info-message": "Please, upload Your dataset in *.CSV file format!",
+        "pagination-controls": {
+            "page-size-selector": "Rows per page: ",
+            "rows-count": {
+                "no-data": "Rows 0-0 (no data)",
+                "data": "Rows",
+                "out-of": "out of"
+            }
+        }
+    },
+    "architecture": {
+        "title": "Architecture",
+        "model-controls": {
+            "title": "Model controls",
+            "buttons": {
+                "import": "Import",
+                "export": "Export"
+            }
+        },
+        "tf-layers": "TensorFlow layers",
+        "dataset-splitting-options": {
+            "title": "Dataset splitting options",
+            "sliders": {
+                "training-sample-size": "Training sample size",
+                "test-sample-size": "Test sample size",
+                "validation-sample-size": "Validation sample size"
+            }
+        },
+        "ai-model-options": {
+            "title": "AI model options",
+            "comboboxes": {
+                "loss-function": "Loss function",
+                "optimizer": "Optimizer",
+                "quality-metric": "Quality metric"
+            },
+            "fields": {
+                "number-of-training-epochs": "Number of training epochs",
+                "mini-batch-size": "Mini-batch size"
+            }
+        },
+        "additional-options": {
+            "title": "Additional options",
+            "comboboxes": {
+                "enable-dataset-normalization": {
+                    "title": "Enable dataset normalization",
+                    "values": {
+                        "disable": "Disable",
+                        "enable": "Enable"
+                    }
+                }
+            }
+        }
+    },
+    "training": {
+        "title": "Training",
+        "status": {
+            "title": "Status",
+            "epoch": "Epoch"
+        },
+        "logs": "Logs",
+        "performance-metrics": "Performance metrics",
+        "controls": "Controls",
+        "buttons": {
+            "start-training": {
+                "part-1": "START",
+                "part-2": "TRAINING"
+            },
+            "get-h5": "Get *.H5",
+            "get-keras": "Get *.KERAS",
+            "get-savedmodel": "Get *.SavedModel",
+            "get-py": "Get *.PY",
+            "get-exe": "Get *.EXE"
+        },
+        "charts": "Charts"
+    },
+    "inference": {
+        "title": "Inference"
+    },
+    "preferences": {
+        "title": "Preferences",
+        "language": "Language",
+        "theme": "Theme",
+        "themes": {
+            "light": "Light",
+            "dark": "Dark",
+            "system": "System"
+        },
+        "languages": {
+            "ru-ru": "Russian, Russia",
+            "en-us": "English, USA"
+        }
+    },
+    "help": {
+        "title": "Help",
+        "steps": {
+            "step-1": {
+                "title": "Step 1",
+                "text": "Upload your dataset in CSV format containing input features and the target variable. Ensure the data is normalized, free of empty rows, and well-formatted. Assign a type to each column: “feature”, “target”, or “ignore”. Properly assigning types is essential for correct processing and successful model training."
+            },
+            "step-2": {
+                "title": "Step 2",
+                "text": "Drag and drop layers from the side panel into the workspace to construct your neural network architecture. Each layer can be configured, connected, moved, and removed as needed. Make sure to add an \"Input\" layer — its number of neurons should match the number of input features. The final \"Output\" layer (usually a \"Dense\" layer) must also be properly configured: the number of neurons depends on your task (e.g., binary or multiclass classification). At this stage, you can also set training parameters: number of epochs, loss functions, metrics, and dataset split proportions for training, validation, and testing. Additionally, the side panel includes an \"Export\" button, which allows you to save the architecture and hyperparameters to a JSON file. You can later import this file (\"Import\" button) to restore your project or continue working with a similar configuration."
+            },
+            "step-3": {
+                "title": "Step 3",
+                "text": "Click the “Start Training” button to launch the training process. During training, you’ll see real-time logs and interactive charts of losses and metrics for both the training and validation datasets. You can toggle the dataset view on the chart by clicking on the legend. Until training completes, model export and packaging options remain unavailable."
+            },
+            "step-4": {
+                "title": "Step 4",
+                "text": "Once training is complete, final charts and logs become available. You can now export the trained model in HDF5, Keras, or SavedModel formats. Additionally, you can generate a standalone Python script for model inference — useful for integrating into other systems or running directly from your terminal."
+            }
+        },
+        "copyright": "© 2025 Vladimir Nikulin. All rights reserved."
+    },
+    "main": {
+        "title": "Main",
+        "copyright": "© 2025 Vladimir Nikulin. All rights reserved."
+    }
+}

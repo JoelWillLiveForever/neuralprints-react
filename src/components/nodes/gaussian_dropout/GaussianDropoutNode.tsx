@@ -8,18 +8,28 @@ import BeautifulSlider from '../../beautiful_slider/BeautifulSlider';
 import BeautifulField from '../../beautiful_field/BeautifulField';
 
 const GaussianDropoutNode: React.FC<NodeProps<GaussianDropoutNodeType>> = ({ id, data, selected }) => {
-    const { setNodes } = useReactFlow<GaussianDropoutNodeType>(); // Типизируем useReactFlow
+    const { setNodes, setEdges } = useReactFlow<GaussianDropoutNodeType>(); // Типизируем useReactFlow
 
     const handleChange = (field: keyof GaussianDropoutNodeData, value: string | number) => {
         setNodes((nodes) =>
             nodes.map((node) => (node.id === id ? { ...node, data: { ...node.data, [field]: value } } : node))
         );
     };
+
+    const handleDeleteNode = () => {
+        setNodes((nodes) => nodes.filter((node) => node.id !== id));
+        setEdges((edges) => edges.filter((edge) => edge.source !== id && edge.target !== id));
+    };
     
     return (
         <div className={`tf-node-gaussian-dropout ${selected ? 'border-blue-500' : 'border-gray-300'}`}>
             {/* Заголовок */}
-            <div className="tf-node-gaussian-dropout__header">Gaussian Dropout</div>
+            <div className="tf-node-gaussian-dropout__header">
+                <span>Gaussian Dropout</span>
+                <button onClick={handleDeleteNode} className="delete-btn" title="Delete node">
+                    <i className="bi bi-trash-fill"></i>
+                </button>
+            </div>
 
             {/* Поля */}
             <div className="tf-node-gaussian-dropout__body">

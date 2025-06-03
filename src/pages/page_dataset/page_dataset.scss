@@ -1,4 +1,173 @@
 .page-dataset-container {
+    $primary: #c2185b;
+    $disabled-opacity: 0.65;
+
+    /* Основные цвета и базовые настройки */
+    --bs-primary: #{$primary};
+    --bs-primary-rgb: #{red($primary)}, #{green($primary)}, #{blue($primary)};
+
+    /* Кнопки */
+    .btn-primary {
+        --bs-btn-bg: #{$primary};
+        --bs-btn-border-color: #{$primary};
+
+        --bs-btn-hover-bg: #{darken($primary, 10%)};
+        --bs-btn-hover-border-color: #{darken($primary, 10%)};
+
+        --bs-btn-active-bg: #{darken($primary, 20%)};
+        --bs-btn-active-border-color: #{darken($primary, 20%)};
+
+        // background-color: $primary;
+        // border-color: $primary;
+
+        // &:hover,
+        // &:focus,
+        // &:active {
+        //     background-color: darken($primary, 10%);
+        //     border-color: darken($primary, 10%);
+        // }
+
+        // &:disabled,
+        // &.disabled {
+        //     background-color: rgba($primary, $disabled-opacity);
+        //     border-color: rgba($primary, $disabled-opacity);
+        //     opacity: 1;
+        // }
+    }
+
+    /* Outline кнопки */
+    .btn-outline-primary {
+        --bs-btn-color: #{$primary};
+        --bs-btn-border-color: #{$primary};
+        --bs-btn-hover-bg: #{$primary};
+        --bs-btn-hover-border-color: #{$primary};
+        --bs-btn-active-bg: #{darken($primary, 10%)};
+        --bs-btn-active-border-color: #{darken($primary, 10%)};
+
+        &:disabled,
+        &.disabled {
+            color: rgba($primary, $disabled-opacity);
+            border-color: rgba($primary, $disabled-opacity);
+            opacity: 1;
+        }
+    }
+
+    /* Формы */
+    .form-control:focus,
+    .form-select:focus {
+        border-color: rgba($primary, 0.5);
+        box-shadow: 0 0 0 0.25rem rgba($primary, 0.25);
+    }
+
+    .form-select {
+        --bs-form-select-focus-border-color: #{$primary};
+        --bs-form-select-focus-box-shadow: 0 0 0 0.25rem rgba($primary, 0.25);
+    }
+
+    .form-control:disabled,
+    .form-select:disabled {
+        background-color: rgba($primary, 0.1);
+        border-color: rgba($primary, 0.2);
+        opacity: 1;
+
+        &::placeholder {
+            color: rgba($primary, 0.4);
+        }
+    }
+
+    /* Пагинация */
+    .pagination {
+        --bs-pagination-color: #{$primary};
+        // --bs-pagination-border-color: #{$primary};
+        --bs-pagination-active-bg: #{$primary};
+        --bs-pagination-active-border-color: #{$primary};
+        // --bs-pagination-active-color: #fff; // Белый цвет для активной цифры
+        --bs-pagination-focus-color: #{$primary};
+        --bs-pagination-focus-bg: tint-color(#{$primary}, 80%) !important;
+        --bs-pagination-hover-color: #{$primary};
+        // --bs-pagination-hover-border-color: #{$primary};
+
+        // --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba($primary, 0.25) !important;
+        // box-shadow: 0 0 0 0.25rem rgba($primary, 0.25);
+
+        // Явное указание box-shadow для фокуса
+        .page-link:focus {
+            box-shadow: 0 0 0 0.25rem rgba($primary, 0.25) !important;
+            // border-color: $primary !important;
+            // background-color: rgba($primary, 0.1);
+            // z-index: 2000;
+        }
+
+        .page-item.disabled .page-link {
+            background-color: rgba($primary, 0.1);
+            border-color: rgba($primary, 0.2);
+        }
+    }
+
+    /* Выпадающие меню */
+    .dropdown-menu {
+        --bs-dropdown-link-active-bg: #{$primary};
+        --bs-dropdown-link-color: #{$primary}; // Цвет текста элементов
+        --bs-dropdown-link-hover-color: #fff; // Цвет текста при наведении
+        --bs-dropdown-link-hover-bg: #{$primary}; // Фон при наведении
+
+        .dropdown-item:disabled {
+            background-color: rgba($primary, 0.1);
+            color: rgba($primary, 0.5);
+        }
+    }
+
+    /* Таблицы */
+    .table {
+        --bs-table-hover-color: #{rgba($primary, 0.1)};
+        --bs-table-active-bg: #{rgba($primary, 0.2)};
+
+        td input:focus {
+            border-color: rgba($primary, 0.5);
+            box-shadow: 0 0 0 0.25rem rgba($primary, 0.25);
+        }
+    }
+
+    /* Аккордеон (если используется) */
+    .accordion-button:not(.collapsed) {
+        background-color: rgba($primary, 0.1);
+        color: $primary;
+
+        &::after {
+            filter: brightness(0) saturate(100%) invert(20%) sepia(98%) saturate(2760%) hue-rotate(315deg)
+                brightness(85%) contrast(85%);
+        }
+    }
+
+    /* Кастомные элементы */
+    .adding-entry-row {
+        td {
+            background-color: rgba($primary, 0.05) !important;
+
+            input {
+                border-color: rgba($primary, 0.3) !important;
+            }
+        }
+    }
+
+    .actions-buttons-container .btn:disabled {
+        opacity: $disabled-opacity;
+        border-color: transparent;
+    }
+
+    /* Кастомная обводка для элементов */
+    .table-default {
+        &.adding-entry-row {
+            outline: 2px solid rgba($primary, 0.3);
+        }
+    }
+
+    /* Информационное сообщение */
+    .info-message-block {
+        border-color: rgba($primary, 0.3);
+        color: rgba($primary, 0.8);
+    }
+
     // 80px - 16px (app-container-padding)
     // padding-top: 64px;
     // padding-bottom: 80px;
@@ -14,7 +183,7 @@
 
     // padding: 16px;
 
-    gap: 16px;
+    // gap: 10px;
 
     .main-controls {
         flex-shrink: 0;
@@ -28,6 +197,8 @@
 
         display: flex;
         flex-direction: row;
+
+        gap: 7px;
 
         // position: fixed !important;
 
@@ -49,6 +220,8 @@
         }
 
         #normalize_button {
+            display: none;
+
             margin-left: 10px;
             width: 250px;
         }
@@ -61,7 +234,8 @@
     .table-container {
         // max-height: calc(100vh - 64px - 96px - 16px);
 
-        padding: 0 16px;
+        // padding: 0 16px;
+        padding: 0 16px 16px 16px;
 
         overflow-y: auto;
         overflow-x: auto;
@@ -87,9 +261,9 @@
         //     background: #6c757d;
         // }
 
-        /* Для Firefox */
-        scrollbar-width: auto;
-        scrollbar-color: #adb5bd #f8f9fa;
+        // /* Для Firefox */
+        // scrollbar-width: auto;
+        // scrollbar-color: #adb5bd #f8f9fa;
 
         // border-bottom: 1px solid #e0e0e0;
 
@@ -113,9 +287,87 @@
             //     z-index: 1;
             // }
 
+            thead {
+                tr {
+                    // height: 120px;
+                    // padding: 10px;
+
+                    th {
+                        height: 100%;
+                        position: relative;
+
+                        vertical-align: middle;
+
+                        padding: 14px 14px;
+
+                        .my-custom-thead {
+                            height: 100%;
+                            
+                            display: flex;
+                            flex-direction: column;
+
+                            justify-content: center;
+
+                            gap: 14px;
+
+                            &__chas {
+                                display: flex;
+
+                                align-items: center;
+                                justify-content: center;
+
+                                width: 100%;
+
+                                position: relative;
+
+                                // padding-right: 25px;
+
+                                &__column-header {
+                                    text-align: center;
+                                    flex-grow: 1;
+
+                                    line-height: 1.5;
+                                }
+
+                                &__column-sort {
+                                    position: absolute;
+
+                                    width: 24px;
+                                    height: 24px;
+                                    
+                                    right: 0;
+                                    top: 50%;
+
+                                    transform: translateY(-50%);
+
+                                    cursor: pointer;
+
+                                    display: flex;
+
+                                    align-items: center;
+                                    justify-content: center;
+
+                                    padding: 0;
+                                    margin: 0;
+
+                                    font-size: 0.9rem;
+                                }
+                            }
+
+                            &__column-type {
+                                width: 100%;
+                                height: fit-content;
+
+                                font-size: 0.9rem;
+                                margin-top: auto;
+                            }
+                        }
+                    }
+                }
+            }
+
             // Стиль для строки при наведении
             tbody {
-
                 // стили для обычных строк
                 tr {
                     td {
@@ -132,8 +384,8 @@
                             &:focus {
                                 // background-color: rgba(255, 87, 34, 0.02);
 
-                                border: solid 2px rgb(255, 87, 34);
-                                box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.25); // Тень при фокусе
+                                border: solid 2px $primary;
+                                box-shadow: 0 0 0 4px rgba($primary, 0.25); // Тень при фокусе
                             }
                         }
 
@@ -178,15 +430,15 @@
                     &:hover {
                         // background-color: #FFCCBC !important; // Цвет фона при наведении
 
-                        outline: 0px solid transparent;     // обводка при наведении
-                        outline-offset: 0px;                // Чтобы обводка была внутри элемента, обводка при наведении
+                        outline: 0px solid transparent; // обводка при наведении
+                        outline-offset: 0px; // Чтобы обводка была внутри элемента, обводка при наведении
 
                         cursor: pointer; // Изменение курсора на указатель
                     }
 
                     td {
                         background-color: inherit !important;
-                        
+
                         vertical-align: middle;
                         padding: 16px !important;
 
@@ -198,11 +450,11 @@
 
                             text-align: center;
 
-                            border: solid 2px #FF5722;
+                            border: solid 2px $primary;
 
                             &:focus {
-                                border: solid 2px rgb(255, 87, 34);
-                                box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.25); // Тень при фокусе
+                                border: solid 2px $primary;
+                                box-shadow: 0 0 0 4px rgba($primary, 0.25); // Тень при фокусе
                             }
                         }
                     }
@@ -219,7 +471,7 @@
 
                         #add_entry_save_button {
                             display: inline-flex !important;
-                            
+
                             justify-content: center;
                             align-items: center;
 
@@ -251,11 +503,29 @@
     .info-message-block {
         display: block;
 
-        width: 100%;
+        width: auto;
         height: 100%;
 
         text-align: center;
         align-content: center;
+
+        box-sizing: border-box;
+
+        border: 1px dashed black;
+        border-radius: 6px;
+
+        margin: 0 16px 16px 16px;
+
+        // &__content {
+        //     display: block;
+
+        //     width: 100%;
+        //     height: 100%;
+
+        //     box-sizing: border-box;
+
+        //     border: 1px solid black;
+        // }
     }
 
     .pagination-controls {
@@ -292,7 +562,7 @@
 
         // &__current-page-range {
         //     position: absolute;
-            
+
         //     left: 50%;
         //     transform: translateX(-50%);
         // }

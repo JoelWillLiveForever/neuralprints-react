@@ -1,9 +1,15 @@
+import { useTranslation } from 'react-i18next';
+
 import { NavLink } from 'react-router-dom';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { IconGeometry } from '@tabler/icons-react';
+
 import './menu.scss';
 
 const Menu = ({ isCollapsed }: { isCollapsed: boolean }) => {
+    const { t, i18n } = useTranslation();
+
     const setMasterClasses = ({ isActive, baseClass }: { isActive: boolean; baseClass: string }) => {
         return `menu__button ${baseClass} ${isActive ? 'menu__button--active' : ''} ${
             isCollapsed ? 'menu__button--collapsed' : ''
@@ -17,15 +23,20 @@ const Menu = ({ isCollapsed }: { isCollapsed: boolean }) => {
                 className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--dataset' })}
             >
                 <i className="bi bi-file-earmark-text-fill menu__button__icon"></i>
-                {!isCollapsed && <span className="menu__button__text">Dataset</span>}
+                {!isCollapsed && <span className="menu__button__text">{t('dataset.title')}</span>}
             </NavLink>
 
             <NavLink
-                to="/design"
-                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--design' })}
+                to="/architecture"
+                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--architecture' })}
             >
-                <i className="bi bi-sliders menu__button__icon"></i>
-                {!isCollapsed && <span className="menu__button__text">Design</span>}
+                {({ isActive }) => (
+                    <>
+                        {/* <i className="bi bi-sliders menu__button__icon"></i> */}
+                        <IconGeometry size={isActive ? 28 : 24} />
+                        {!isCollapsed && <span className="menu__button__text">{t('architecture.title')}</span>}
+                    </>
+                )}
             </NavLink>
 
             <NavLink
@@ -33,31 +44,32 @@ const Menu = ({ isCollapsed }: { isCollapsed: boolean }) => {
                 className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--training' })}
             >
                 <i className="bi bi-mortarboard-fill menu__button__icon"></i>
-                {!isCollapsed && <span className="menu__button__text">Training</span>}
+                {!isCollapsed && <span className="menu__button__text">{t('training.title')}</span>}
             </NavLink>
 
-            <NavLink
+            {/* <NavLink
                 to="/inference"
                 className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--inference' })}
             >
                 <i className="bi bi-rocket-takeoff-fill menu__button__icon"></i>
-                {!isCollapsed && <span className="menu__button__text">Inference</span>}
-            </NavLink>
+                {!isCollapsed && <span className="menu__button__text">{t('inference.title')}</span>}
+            </NavLink> */}
 
             <NavLink
                 to="/preferences"
                 className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--preferences' })}
             >
                 <i className="bi bi-gear-fill menu__button__icon"></i>
-                {!isCollapsed && <span className="menu__button__text">Preferences</span>}
+                {!isCollapsed && <span className="menu__button__text">{t('preferences.title')}</span>}
             </NavLink>
 
             <NavLink
-                to="/about"
-                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--about' })}
+                to="/help"
+                className={({ isActive }) => setMasterClasses({ isActive, baseClass: 'menu__button--help' })}
             >
-                <i className="bi bi-info-circle-fill menu__button__icon"></i>
-                {!isCollapsed && <span className="menu__button__text">About</span>}
+                {/* <i className="bi bi-info-circle-fill menu__button__icon"></i> */}
+                <i className="bi bi-question-circle-fill menu__button__icon"></i>
+                {!isCollapsed && <span className="menu__button__text">{t('help.title')}</span>}
             </NavLink>
         </nav>
     );

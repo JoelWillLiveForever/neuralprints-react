@@ -1,0 +1,53 @@
+.page-main-container {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+    align-items: center;
+
+    font-family: 'Inter', sans-serif;
+
+    padding: 16px;
+
+    .main-center-content {
+        text-align: center;
+
+        margin-top: auto;
+        margin-bottom: auto;
+
+        .app-title {
+            font-size: 3rem;
+            font-family: 'Pacifico', cursive;
+
+            color: #333;
+        }
+
+        .app-version {
+            font-size: 1.2rem;
+            color: #757575;
+
+            margin-top: 0.5rem;
+        }
+    }
+
+    .main-footer {
+        text-align: center;
+        padding: 1rem 0;
+        width: 100%;
+
+        .footer-separator {
+            border: none;
+            border-top: 1px solid #212121;
+            // width: 50%;
+            // margin: 1rem auto;
+        }
+
+        .footer-copy {
+            font-size: 0.85rem;
+            color: #9e9e9e;
+            margin-top: 0.5rem;
+        }
+    }
+}

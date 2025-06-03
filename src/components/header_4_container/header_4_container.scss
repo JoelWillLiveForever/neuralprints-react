@@ -9,15 +9,38 @@
         margin: 0;
 
         letter-spacing: 0.05em;
+
+        // TODO: выключить, если надо
+        padding: 0 4px;
     }
 
     .header-separator-line {
         height: 1px;
-
         margin-top: 4px;
-        // margin-bottom: 10px;
-
         background-color: #121212;
-        border-radius: 100%;
+        position: relative;
+
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+
+            top: 0;
+            
+            width: 8px;
+            height: 1px;
+
+            background-color: #121212;
+
+            border-radius: 50%;
+        }
+
+        // &::before {
+        //     left: -4px;
+        // }
+
+        // &::after {
+        //     right: -4px;
+        // }
     }
 }

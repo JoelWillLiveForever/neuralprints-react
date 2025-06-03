@@ -8,7 +8,7 @@ import BeautifulSlider from '../../beautiful_slider/BeautifulSlider';
 import BeautifulField from '../../beautiful_field/BeautifulField';
 
 const DropoutNode: React.FC<NodeProps<DropoutNodeType>> = ({ id, data, selected }) => {
-    const { setNodes } = useReactFlow<DropoutNodeType>(); // Типизируем useReactFlow
+    const { setNodes, setEdges } = useReactFlow<DropoutNodeType>(); // Типизируем useReactFlow
 
     const handleChange = (field: keyof DropoutNodeData, value: string | number) => {
         setNodes((nodes) =>
@@ -20,10 +20,20 @@ const DropoutNode: React.FC<NodeProps<DropoutNodeType>> = ({ id, data, selected 
     //     data.tf_layer_strength = 0.5;
     // });
 
+    const handleDeleteNode = () => {
+        setNodes((nodes) => nodes.filter((node) => node.id !== id));
+        setEdges((edges) => edges.filter((edge) => edge.source !== id && edge.target !== id));
+    };
+
     return (
         <div className={`tf-node-dropout ${selected ? 'border-blue-500' : 'border-gray-300'}`}>
             {/* Заголовок */}
-            <div className="tf-node-dropout__header">Dropout</div>
+            <div className="tf-node-dropout__header">
+                <span>Gaussian Noise</span>
+                <button onClick={handleDeleteNode} className="delete-btn" title="Delete node">
+                    <i className="bi bi-trash-fill"></i>
+                </button>
+            </div>
 
             {/* Поля */}
             <div className="tf-node-dropout__body">
@@ -32,8 +42,8 @@ const DropoutNode: React.FC<NodeProps<DropoutNodeType>> = ({ id, data, selected 
                     onChange={(e) => handleChange('tf_layer_name', e.target.value)}
                     type="text"
                     label="Name"
-                    placeholder='Input layer name'
-                    color='#1976D2'
+                    placeholder="Input layer name"
+                    color="#1976D2"
                 />
 
                 <BeautifulSlider
@@ -53,8 +63,8 @@ const DropoutNode: React.FC<NodeProps<DropoutNodeType>> = ({ id, data, selected 
                     min={0}
                     max={1}
                     step={0.001}
-                    color='#1976D2'
-                    label='Strength'
+                    color="#1976D2"
+                    label="Strength"
                 />
 
                 {/* 
@@ -87,7 +97,6 @@ const DropoutNode: React.FC<NodeProps<DropoutNodeType>> = ({ id, data, selected 
                         </div>
                     </div>
                 </div> */}
-
             </div>
 
             {/* Входной пин */}
