@@ -77,6 +77,17 @@
             transform: translateX(-50%) scaleX(2);
         }
 
+        &--main {
+            &::before {
+                background-color: #616161de;
+            }
+
+            &:hover::before,
+            &:active::before {
+                background-color: #616161ff;
+            }
+        }
+
         // Стили для активных страниц
         &--dataset {
             &::before {

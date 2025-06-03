@@ -62,6 +62,8 @@ const PageHelp = () => {
 
             <footer className="footer">
                 <div className="footer-title">Neural Prints</div>
+                <div className="footer-version">v1.0.0</div>
+                <hr className="footer-separator" />
                 <div className="footer-copy">© 2025 Vladimir Nikulin. All rights reserved.</div>
             </footer>
         </div>

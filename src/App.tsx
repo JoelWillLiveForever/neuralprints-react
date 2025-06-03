@@ -5,12 +5,13 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 
 import Menu from './components/menu/Menu';
 
-import PageHelp from './pages/page_help/PageHelp';
-import PagePreferences from './pages/page_preferences/PagePreferences';
-// import PageInference from './pages/page_inference/PageInference';
-import PageTraining from './pages/page_training/PageTraining';
-import PageArchitecture from './pages/page_architecture/PageArchitecture';
+import PageMain from './pages/page_main/PageMain';
 import PageDataset from './pages/page_dataset/PageDataset';
+import PageArchitecture from './pages/page_architecture/PageArchitecture';
+import PageTraining from './pages/page_training/PageTraining';
+// import PageInference from './pages/page_inference/PageInference';
+import PagePreferences from './pages/page_preferences/PagePreferences';
+import PageHelp from './pages/page_help/PageHelp';
 
 import './app.scss';
 import './pages/pages.scss';
@@ -48,6 +49,8 @@ const App = () => {
 
     const determineHandleClass = useCallback(() => {
         switch (location.pathname) {
+            case '/':
+                return 'my-custom-resize-handle--main';
             case '/dataset':
                 return 'my-custom-resize-handle--dataset';
             case '/architecture':
@@ -103,6 +106,7 @@ const App = () => {
                 <Panel defaultSize={100 - (menuRef.current?.getSize() ?? menuMaxSize)}>
                     <div className="page-container">
                         <Routes>
+                            <Route path="/" element={<PageMain />} />
                             <Route path="/dataset" element={<PageDataset />} />
                             <Route path="/architecture" element={<PageArchitecture />} />
                             <Route path="/training" element={<PageTraining />} />
